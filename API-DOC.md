@@ -2,7 +2,6 @@
 
 ## Table of Contents
 - [Overview](#overview)
-- [Authentication](#authentication)
 - [Base URL](#base-url)
 - [Endpoints](#endpoints)
   - [Authentication](#authentication-1)
@@ -12,15 +11,6 @@
 ## Overview
 This API doc provides endpoints to interact with skill-swap FE and BE.
 
-## Authentication
-To access the API, you need an API key. You can obtain an API key by registering on our platform.
-
-- **API Key**: Pass your API key in the `Authorization` header as `Bearer YOUR_API_KEY`.
-
-Example:
-```bash
-Authorization: Bearer YOUR_API_KEY
-```
 ## Base URL
 - On development environment
 ```bash
