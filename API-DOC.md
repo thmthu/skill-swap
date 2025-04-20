@@ -37,18 +37,10 @@ https://localhost:8080/api/
 
 | Method | Path | Request | Response |
 | --- | --- | --- | --- |
-| POST | `/register` | `username`: String - User's username (Required)<br>`email`: String - User's email (Required)<br>`password`: String - User's password (Required)<br>`firstName`: String - User's first name (Required)<br>`lastName`: String - User's last name (Required) | `userId`: String - Unique user identifier (Required)<br>`username`: String - User's username (Required)<br>`email`: String - User's email (Required)<br>`message`: String - Success message (Required) |
+| POST | `/register` | `username`: String - User's username (Required)<br>`email`: String - User's email (Required)<br>`password`: String - User's password (Required) | `userId`: String - Unique user identifier (Required)<br>`username`: String - User's username (Required)<br>`email`: String - User's email (Required)<br>`message`: String - Success message (Required) |
 | POST | `/login` | `username`: String - Username (Required)<br>`password`: String - User's password (Required) | `token`: String - JWT token for authentication (Required)<br>`userId`: String - Unique user identifier (Required)<br>`username`: String - User's username (Required) |
-| GET | `/user` | None | `userId`: String - Unique user identifier (Required)<br>`username`: String - User's username (Required)<br>`email`: String - User's email (Required)<br>`firstName`: String - User's first name (Required)<br>`lastName`: String - User's last name (Required) |
-
-### Home: User List View
-```bash
-/users-list
-```
-
-| Method | Path | Request | Response |
-| --- | --- | --- | --- |
-| POST | `/` | Query Parameters:<br>`name`: String - Filter users by name (Optional)<br>`skills`: String - Filter users by skills (Optional)<br> | `userId`: String - Unique user identifier (Required)<br>`username`: String - User's username (Required)<br>`learn`: List - Fields user wants to learn<br>`teach`: List - Fields user can teach<br>`message`: String - Success message (Required) |
+| POST | `/logout` | None | `message`:  |
+| POST | `/refresh` | None | `message`: String - message |
 
 ### Connect & Accept & Reject 
 ```bash
@@ -57,16 +49,17 @@ https://localhost:8080/api/
 | Method | Path | Request | Response |
 | --- | --- | --- | --- |
 | POST | `/` | `userId`: String - User's username (Required) | `idConnect`: String - id of the connection created<br>`message`: String - Success message (Required) |
-| POST | `/accept` | `idConnect`: String - Connection request ID (Required)<br> | `message`: String - Success message (Required) |
-| POST | `/reject` | `idConnect`: String - Connection request ID (Required)<br> | `message`: String - Success message (Required) |
+| PATCH | `/respond` | `idConnect`: String - Connection request ID (Required)<br>`action`: String - accept or reject | `message`: String - Success message (Required) |
 
 ### Profile page
 ```bash
-/user
+/users
 ```
 | Method | Path | Request | Response |
 | --- | --- | --- | --- |
-| POST | `/skills` | `skillName`: String - Skill|`message`: String - Success message (Required) |
-| DELETE | `/skills` | `skillName`: String - Skill | `message`: String - Success message (Required) |
-| POST | `/learn` | `learnName`: String - Learn|`message`: String - Success message (Required) |
-| DELETE | `/learn` | `learnName`: String - Learn | `message`: String - Success message (Required) |
+| GET | `/` | Query Parameters:<br>`name`: String - Filter users by name (Optional)<br>`skills`: String - Filter users by skills (Optional)<br> | `userId`: String - Unique user identifier (Required)<br>`username`: String - User's username (Required)<br>`learn`: List - Fields user wants to learn<br>`teach`: List - Fields user can teach<br>`message`: String - Success message (Required) |
+| GET | `/:userId` | None | `userId`: String - Unique user identifier (Required)<br>`username`: String - User's username (Required)<br>`email`: String - User's email (Required)<br>`firstName`: String - User's first name (Required)<br>`lastName`: String - User's last name (Required) |
+| POST | `/:userId/skills` | `skillName`: String - Skill|`message`: String - Success message (Required) |
+| DELETE | `/:userId/skills` | `skillName`: String - Skill | `message`: String - Success message (Required) |
+| POST | `/:userId/learn` | `learnName`: String - Learn|`message`: String - Success message (Required) |
+| DELETE | `/:userId/learn` | `learnName`: String - Learn | `message`: String - Success message (Required) |

@@ -1,0 +1,61 @@
+version: '3.8'
+services:
+  mongo:
+    image: mongo:6
+    container_name: mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:  
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 123
+    healthcheck:
+      test: ["CMD", "mongosh", "admin", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: ./backend
+    container_name: backend
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    depends_on:
+      mongo:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - MONGO_URI=mongodb://root:123@mongo:27017/skill_swap?authSource=admin
+    ports:
+      - "3000:3000"
+  # frontend:
+  #   build: ./frontend
+  #   container_name: frontend
+  #   volumes:
+  #     - ./frontend:/app
+  #     - /app/node_modules
+  #   ports:
+  #     - "3001:3000"  
+  #   environment:
+  #     - REACT_APP_API_URL=http://backend:3000  
+  #   depends_on:
+  #     - backend
+  #   restart: always
