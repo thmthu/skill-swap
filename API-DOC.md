@@ -48,8 +48,10 @@ https://localhost:8080/api/
 ```
 | Method | Path | Request | Response |
 | --- | --- | --- | --- |
-| POST | `/` | `userId`: String - User's username (Required) | `idConnect`: String - id of the connection created<br>`message`: String - Success message (Required) |
+| GET | `/` | None | `connectId`: String - Connection id that has status "pending"<br>`sender`: Object - sender user information<br> |
+| POST | `/send` | `userId`: String - User's username (Required) | `idConnect`: String - id of the connection created<br>`message`: String - Success message (Required) |
 | PATCH | `/respond` | `idConnect`: String - Connection request ID (Required)<br>`action`: String - accept or reject | `message`: String - Success message (Required) |
+| GET | `/responded-requests` | None | `users`: Array[Object] - List of users that we had accepted or rejected 3 days recently |
 
 ### Profile page
 ```bash
