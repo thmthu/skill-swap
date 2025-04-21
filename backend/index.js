@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
@@ -7,26 +8,17 @@ import {
     userRouters,
     connectionRouters
 } from './routes/routes.js';
-import dotenv from 'dotenv';
+import connectMongo from './config/mongo.js';
+import redisClient from './config/redis.js';
 
-dotenv.config();
+connectMongo();
 
 const app = express();
 const port = process.env.PORT || 3000;
 app.use(express.json());
 app.use(cookieParser());
 
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('Connected to MongoDB'))
-  .catch(err => console.error('MongoDB connection error:', err));
-
-const redisClient = createClient({
-  url: `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`
-});
-
-redisClient.connect()
-  .then(() => console.log('Connected to Redis'))
-  .catch(err => console.error('Redis connection error:', err));
+// redisClient.connect();
 
 // app.use('/api', authRouters, userRouters, connectionRouters);
 app.use('/api/auth', authRouters);
