@@ -40,6 +40,9 @@ https://localhost:8080/api/
 | POST | `/register` | `username`: String - User's username (Required)<br>`email`: String - User's email (Required)<br>`password`: String - User's password (Required) | `userId`: String - Unique user identifier (Required)<br>`username`: String - User's username (Required)<br>`email`: String - User's email (Required)<br>`message`: String - Success message (Required) |
 | POST | `/login` | `username`: String - Username (Required)<br>`password`: String - User's password (Required) | `token`: String - JWT token for authentication (Required)<br>`userId`: String - Unique user identifier (Required)<br>`username`: String - User's username (Required) |
 | POST | `/logout` | None | `message`:  |
+| POST | `/forgot-pass` | `email`: String - user's email | `message`: String - success message if sending OTP successfully |
+| POST | `/otp` | `otp`: String - otp sent by user | `message`: String - message whether otp is correct or not |
+
 | POST | `/refresh` | None | `message`: String - message |
 
 ### Connect & Accept & Reject 
@@ -49,7 +52,7 @@ https://localhost:8080/api/
 | Method | Path | Request | Response |
 | --- | --- | --- | --- |
 | GET | `/` | None | `connectId`: String - Connection id that has status "pending"<br>`sender`: Object - sender user information<br> |
-| POST | `/send` | `userId`: String - User's username (Required) | `idConnect`: String - id of the connection created<br>`message`: String - Success message (Required) |
+| POST | `/send` | None | `idConnect`: String - id of the connection created<br>`message`: String - Success message (Required) |
 | PATCH | `/respond` | `idConnect`: String - Connection request ID (Required)<br>`action`: String - accept or reject | `message`: String - Success message (Required) |
 | GET | `/responded-requests` | None | `users`: Array[Object] - List of users that we had accepted or rejected 3 days recently |
 
