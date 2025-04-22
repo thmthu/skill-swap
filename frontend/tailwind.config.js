@@ -1,41 +1,37 @@
-const tailwindcssConfig = {
-	content: [
-		"./index.html",
-		"./src/**/*.{js,ts,jsx,tsx}", // Adjust paths to your project files
-	],
-	theme: {
-		extend: {
+import defaultTheme from 'tailwindcss/defaultTheme'
+
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    './index.html',
+    './src/**/*.{js,ts,jsx,tsx}',
+  ],
+  theme: {
+    extend: {
       colors: {
         primary: '#AA0000',
-        primaryVariant: {
-          dark: '#3D0000',
-          medium: '#D14444',
-          light: '#E6A38B',
-          extraLight: '#F5DFCF',
-        },
-        secondary: {
-          redPink: '#BB4630',
-          lightPink: '#F9EEEB',
-        },
-        semantic: {
-          green: '#699A23',
-          blue: '#0B66E4',
-          orange: '#FAA53D',
-        },
-        gradient: {
-          start: '#893C3E',
-          mid: '#430D0D',
-          end: '#1B0705',
-        },
-        text: {
-          light: '#000000',
-          dark: '#FFFFFF',
-        },
-        background: {
-          light: '#F9FAFB',
-          popup: '#979797',
-          dark: '#1F1F1F',
-        },
+        'primary-dark': '#3D0000',
+        'primary-medium': '#D14444',
+        'primary-light': '#E6A38B',
+        'primary-extraLight': '#F5DFCF',
+
+        'secondary-redPink': '#BB4630',
+        'secondary-lightPink': '#F9EEEB',
+
+        'semantic-green': '#699A23',
+        'semantic-blue': '#0B66E4',
+        'semantic-orange': '#FAA53D',
+
+        'gradient-start': '#893C3E',
+        'gradient-mid': '#430D0D',
+        'gradient-end': '#1B0705',
+
+        'text-light': '#000000',
+        'text-dark': '#FFFFFF',
+
+        'bg-light': '#F9FAFB',
+        'bg-popup': '#979797',
+        'bg-dark': '#1F1F1F',
       },
       fontFamily: {
         heading: ['Poppins', ...defaultTheme.fontFamily.sans],
@@ -54,13 +50,11 @@ const tailwindcssConfig = {
         btn2: ['0.875rem', { lineHeight: '1.4' }],        // 14px
       },
       fontWeight: {
-        medium: 500,
-        semibold: 600,
-        bold: 700,
+        medium: '500',
+        semibold: '600',
+        bold: '700',
       },
     },
-	},
-	plugins: [],
-};
-
-export default tailwindcssConfig;
+  },
+  plugins: [],
+}
