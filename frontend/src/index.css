@@ -4,6 +4,10 @@
 	--font-poppins: Poppins, sans-serif;
 }
 
+.bg-gradient-tech {
+	background: linear-gradient(90deg, #893C3E 0%, #430D0D 69%, #1B0705 100%);
+  }
+
 :root {
 	font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
 	line-height: 1.5;
