@@ -13,10 +13,9 @@ export default {
         'primary-dark': '#3D0000',
         'primary-medium': '#D14444',
         'primary-light': '#E6A38B',
-        'primary-extraLight': '#F5DFCF',
-
-        'secondary-redPink': '#BB4630',
-        'secondary-lightPink': '#F9EEEB',
+        'primary-extra-light': '#F5DFCF',
+        'secondary-red-pink': '#BB4630',
+        'secondary-light-pink': '#F9EEEB',
 
         'semantic-green': '#699A23',
         'semantic-blue': '#0B66E4',

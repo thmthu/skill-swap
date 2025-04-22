@@ -1,16 +1,9 @@
 @import "tailwindcss";
-/* @tailwind base;
-@tailwind components;
-@tailwind utilities; */
 @config "../tailwind.config.js";
 
-@theme {
-	--font-poppins: Poppins, sans-serif;
-}
-
 .bg-gradient-tech {
-	background: linear-gradient(90deg, #893C3E 0%, #430D0D 69%, #1B0705 100%);
-  }
+	background: linear-gradient(90deg, #893c3e 0%, #430d0d 69%, #1b0705 100%);
+}
 
 :root {
 	font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;

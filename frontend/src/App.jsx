@@ -1,6 +1,3 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 
 function ColorTest() {
@@ -12,10 +9,10 @@ function ColorTest() {
       <p className="text-primary-dark">text-primary-dark</p>
       <p className="text-primary-medium">text-primary-medium</p>
       <p className="text-primary-light">text-primary-light</p>
-      <p className="text-primary-extraLight">text-primary-extraLight</p>
+      <p className="text-primary-extra-light">text-primary-extraLight</p>
 
-      <p className="text-secondary-redPink">text-secondary-redPink</p>
-      <p className="text-secondary-lightPink">text-secondary-lightPink</p>
+      <p className="text-secondary-red-pink">text-secondary-redPink</p>
+      <p className="text-secondary-light-pink">text-secondary-lightPink</p>
 
       <p className="text-semantic-green">text-semantic-green</p>
       <p className="text-semantic-blue">text-semantic-blue</p>
