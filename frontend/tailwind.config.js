@@ -37,29 +37,92 @@ export default {
 			// Apply mobile-first styles and override with md: like this:
 			// <h1 class="text-h1 md:text-display font-bold font-heading">Title</h1>
 			fontSize: {
-				display: ["2rem", { lineHeight: "1.2" }], // Mobile: 32px
-				h1: ["1.5rem", { lineHeight: "1.25" }], // Mobile: 24px
-				h2: ["1.25rem", { lineHeight: "1.3" }], // Mobile: 20px
-				h3: ["1.125rem", { lineHeight: "1.4" }], // Mobile: 18px
-				subtitle1: ["1rem", { lineHeight: "1.5" }], // Mobile: 16px
-				subtitle2: ["0.875rem", { lineHeight: "1.4" }], // Mobile: 14px
-				body1: ["0.875rem", { lineHeight: "1.6" }], // Mobile: 14px
-				body2: ["0.75rem", { lineHeight: "1.5" }], // Mobile: 12px
-				btn1: ["0.875rem", { lineHeight: "1.4" }], // Mobile: 14px
-				btn2: ["0.75rem", { lineHeight: "1.4" }], // Mobile: 12px
-
-				// Desktop overrides
-				"md:display": ["2rem", { lineHeight: "1.2" }], // Desktop: 32px
-				"md:h1": ["1.5rem", { lineHeight: "1.25" }], // Desktop: 24px
-				"md:h2": ["1.25rem", { lineHeight: "1.3" }], // Desktop: 20px
-				"md:h3": ["1.125rem", { lineHeight: "1.4" }], // Desktop: 18px
-				"md:subtitle1": ["1rem", { lineHeight: "1.5" }], // Desktop: 16px
-				"md:subtitle2": ["0.875rem", { lineHeight: "1.4" }], // Desktop: 14px
-				"md:body1": ["0.875rem", { lineHeight: "1.6" }], // Desktop: 14px
-				"md:body2": ["0.75rem", { lineHeight: "1.5" }], // Desktop: 12px
-				"md:btn1": ["0.875rem", { lineHeight: "1.4" }], // Desktop: 14px
-				"md:btn2": ["0.75rem", { lineHeight: "1.4" }], // Desktop: 12px
-			},
+        display: [
+          '2rem', // 32px for mobile
+          {
+            lineHeight: '1.2',
+            '@screen md': {
+              fontSize: '3rem', // 48px for desktop
+            },
+          },
+        ],
+        h1: [
+          '1.5rem', // 24px mobile
+          {
+            lineHeight: '1.25',
+            '@screen md': {
+              fontSize: '2rem', // 32px desktop
+            },
+          },
+        ],
+        h2: [
+          '1.25rem', // 20px mobile
+          {
+            lineHeight: '1.3',
+            '@screen md': {
+              fontSize: '1.75rem', // 28px desktop
+            },
+          },
+        ],
+        h3: [
+          '1.125rem', // 18px mobile
+          {
+            lineHeight: '1.4',
+            '@screen md': {
+              fontSize: '1.125rem', // 18px desktop
+            },
+          },
+        ],
+        subtitle1: [
+          '1rem', // 16px
+          {
+            lineHeight: '1.5',
+          },
+        ],
+        subtitle2: [
+          '0.875rem', // 14px
+          {
+            lineHeight: '1.4',
+          },
+        ],
+        body1: [
+          '0.875rem', // 14px
+          {
+            lineHeight: '1.6',
+            '@screen md': {
+              fontSize: '1rem', // 16px desktop
+            },
+          },
+        ],
+        body2: [
+          '0.75rem', // 12px
+          {
+            lineHeight: '1.5',
+            '@screen md': {
+              fontSize: '0.875rem', // 14px desktop
+            },
+          },
+        ],
+        btn1: [
+          '0.875rem', // 14px
+          {
+            lineHeight: '1.4',
+            '@screen md': {
+              fontSize: '1rem', // 16px desktop
+            },
+          },
+        ],
+        btn2: [
+          '0.75rem', // 12px
+          {
+            lineHeight: '1.4',
+            '@screen md': {
+              fontSize: '0.875rem', // 14px desktop
+            },
+          },
+        ],
+      }
+      ,
 			fontWeight: {
 				medium: "500",
 				semibold: "600",
