@@ -1,5 +1,6 @@
-import './App.css'
-
+import "./App.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Chat from "./pages/private/Chat/page";
 function ColorTest() {
   return (
     <div className="space-y-4 p-6">
@@ -27,10 +28,13 @@ function ColorTest() {
 
 function App() {
   return (
-    <div className="min-h-screen bg-bg-light p-10">
-      <ColorTest />
-    </div>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Chat />} />
+          <Route path="/chat" element={<Chat />} />
+        </Routes>
+      </BrowserRouter>
   );
 }
 
-export default App
+export default App;
