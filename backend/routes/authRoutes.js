@@ -3,7 +3,7 @@ import {
     register, 
     login, 
     logout, 
-    refreshToken 
+    refreshToken
 } from '../controllers/authControllers.js';
 import { authMiddleware } from '../middlewares/authMiddlewares.js';
 
