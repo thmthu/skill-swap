@@ -1,30 +1,24 @@
-import { Button } from "@/components/ui/button";
+import { AnimatedGridPattern } from "@/components/magicui/animated-grid-pattern";
+import { RetroGrid } from "@/components/magicui/retro-grid";
 
-export default function HomePage() {
-    return (
-        <div className="flex flex-col items-center justify-center min-h-[85vh] px-4 text-center">
-            <div className="max-w-3xl space-y-8">
-                <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
-                    Build a website that{" "}
-                    <span className="text-primary bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-500">
-                        grows
-                    </span>
-                </h1>
+export default function Hero() {
+  return (
+    <section className="relative overflow-hidden flex flex-col items-center justify-center min-h-screen bg-white">
+      {/* Animated Grid Background */}
+      <div className="relative h-[500px] w-full inset-0 -z-10 opacity-50 ">
+  <RetroGrid />
+</div>
 
-                <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
-                    Empower marketers to release on-brand pages fast while using your tech stack.
-                    The headless page builder for Next.js, Nuxt, and SvelteKit sites.
-                </p>
-
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <Button size="lg" className="font-semibold">
-                        Get started
-                    </Button>
-                    <Button variant="outline" size="lg" className="font-semibold">
-                        Try editor
-                    </Button>
-                </div>
-            </div>
-        </div>
-    );
+      {/* Hero Content */}
+      <div className="relative  text-center px-6">
+        <h1 className="text-5xl font-bold mb-4">
+          Find your perfect mentor
+        </h1>
+        <p className="text-lg text-gray-600">
+          Learn from experts anytime, anywhere.
+        </p>
+      </div>
+    </section>
+  )
 }
+
