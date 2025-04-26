@@ -1,5 +1,5 @@
 import Connection  from '../models/Connection.js';
-import { getUserByReq } from '../utils/user.js';
+import { getUserByReq, getUserById } from '../utils/user.js';
 
 export const createConnection = async (req, res) => {
     try {
@@ -29,6 +29,14 @@ export const respondConnection = async (req, res) => {
         }
         connection.status = action;
         connection.updatedAt = Date.now();
+        const receiver = await getUserById(connection.receiver);
+        const sender = await getUserById(connection.sender);
+        if (action === 'accept') {
+            receiver.connections.push(sender._id);
+            sender.connections.push(receiver._id);
+            await receiver.save();
+            await sender.save();
+        }
         await connection.save();
         return res.status(200).json({ message: `Connection ${action}ed` });
     } catch (error) {
