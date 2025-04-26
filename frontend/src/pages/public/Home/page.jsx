@@ -1,14 +1,15 @@
 import { Button } from "@/components/ui/button";
-
+import { RetroGrid } from "@/components/magicui/retro-grid";
 export default function HomePage() {
     return (
-        <div className="flex flex-col items-center justify-center min-h-[85vh] px-4 text-center">
-            <div className="max-w-3xl space-y-8">
+      
+             <div className=" flex h-screen w-full flex-col items-center justify-center overflow-hidden rounded-lg  bg-background">
+             <div className="max-w-4xl space-y-8 z-10">
                 <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
                     Build a website that{" "}
-                    <span className="text-primary bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-500">
+                    <span className="whitespace-pre-wrap bg-clip-text  text-transparent bg-gradient-to-r from-blue-500 to-purple-500">
                         grows
-                    </span>
+                    </span> 
                 </h1>
 
                 <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
@@ -25,6 +26,10 @@ export default function HomePage() {
                     </Button>
                 </div>
             </div>
-        </div>
+
+      <RetroGrid className="h-full w-full"/>
+    </div>
+            
+        
     );
 }
