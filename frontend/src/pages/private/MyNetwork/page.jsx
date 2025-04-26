@@ -1,6 +1,7 @@
 import React from "react";
 import ReceivedCard from "./components/ReceivedCard";
 import SentCard from "./components/SentCard";
+import ConnectionCard from "./components/ConnectionCard";
 
 const MyNetworkPage = () => {
 	const fakeData = [
@@ -34,7 +35,7 @@ const MyNetworkPage = () => {
 		<div>
 			<div className="flex flex-col w-[84vw]">
 				{fakeData.map((item, index) => (
-					<SentCard data={item} key={index} />
+					<ConnectionCard data={item} key={index} />
 				))}
 			</div>
 		</div>

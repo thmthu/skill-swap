@@ -1,7 +1,7 @@
 import React from "react";
 import {
 	XMarkIcon,
-	CheckIcon,
+	UserGroupIcon,
 	ChatBubbleOvalLeftIcon,
 } from "@heroicons/react/24/solid";
 
@@ -28,7 +28,9 @@ const ConnectionCard = ({ data }) => {
 						<div className="text-text-light font-semibold">
 							{data.department}
 						</div>
-						<div className="text-text-light font-normal">Received {data.timestamp}</div>
+						<div className="text-text-light font-normal">
+							Received {data.timestamp}
+						</div>
 					</div>
 				</div>
 				<div className="w-14 h-14 relative">
@@ -39,11 +41,6 @@ const ConnectionCard = ({ data }) => {
 				<div className="w-14 h-14 relative">
 					<div className="w-14 h-14 flex justify-center items-center border-primary border-2 rounded-full">
 						<XMarkIcon className="w-8 text-primary" />
-					</div>
-				</div>
-				<div className="w-14 h-14 relative bg-white">
-					<div className="flex justify-center items-center w-14 h-14 border-semantic-green border-2 rounded-full">
-						<CheckIcon className="w-8 text-semantic-green" />
 					</div>
 				</div>
 			</div>
