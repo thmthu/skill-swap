@@ -1,5 +1,6 @@
 import "./App.css";
 import MyNetworkPage from "./pages/private/MyNetwork/page";
+import HomePage from "./pages/public/Home/page";
 
 function ColorTest() {
 	return (
@@ -30,7 +31,7 @@ function App() {
 	return (
 		<div>
 			{/* <ColorTest /> */}
-			<MyNetworkPage />
+			<HomePage />
 		</div>
 	);
 }

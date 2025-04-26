@@ -3,10 +3,10 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
 import { createClient } from 'redis';
-import { 
-    authRouters,
-    userRouters,
-    connectionRouters
+import {
+  authRouters,
+  userRouters,
+  connectionRouters
 } from './routes/routes.js';
 import connectMongo from './config/mongo.js';
 import redisClient from './config/redis.js';
