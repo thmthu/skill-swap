@@ -1,6 +1,6 @@
 import React from "react";
 import {
-	XMarkIcon,
+	SlashIcon,
 	UserGroupIcon,
 	ChatBubbleOvalLeftIcon,
 } from "@heroicons/react/24/solid";
@@ -40,7 +40,8 @@ const ConnectionCard = ({ data }) => {
 				</div>
 				<div className="w-14 h-14 relative">
 					<div className="w-14 h-14 flex justify-center items-center border-primary border-2 rounded-full">
-						<XMarkIcon className="w-8 text-primary" />
+						<UserGroupIcon className="w-8 text-primary" />
+						<SlashIcon className="absolute w-12 text-primary rotate-12" />
 					</div>
 				</div>
 			</div>

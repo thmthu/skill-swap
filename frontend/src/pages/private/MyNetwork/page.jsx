@@ -1,9 +1,12 @@
 import React from "react";
+import { useState } from "react";
 import ReceivedCard from "./components/ReceivedCard";
 import SentCard from "./components/SentCard";
 import ConnectionCard from "./components/ConnectionCard";
+import Header from "../../../components/Header/Header";
 
 const MyNetworkPage = () => {
+	const [activeTab, setActiveTab] = useState("Sent");
 	const fakeData = [
 		{
 			name: "Qui Huynh",
@@ -32,11 +35,37 @@ const MyNetworkPage = () => {
 		},
 	];
 	return (
-		<div>
-			<div className="flex flex-col w-[84vw]">
-				{fakeData.map((item, index) => (
-					<ConnectionCard data={item} key={index} />
+		<div className="w-[100vw]">
+			<Header />
+			<div className="flex w-[84vw]">
+				{["Sent", "Received", "New Connections"].map((item, index) => (
+					<div
+						className="w-[33%] inline-flex flex-col justify-start items-center gap-1"
+						onClick={() => setActiveTab(item)}
+						key={index}
+					>
+						<div className="text-center justify-start text-black text-3xl font-semibold font-['Poppins']">
+							{item}
+						</div>
+						<div
+							className={`self-stretch h-1 rounded-sm ${
+								activeTab === item ? "bg-red-800" : "bg-[#D9D9D9]"
+							}`}
+						/>
+					</div>
 				))}
+				<div className="absolute bottom-0 self-stretch h-1 rounded-sm bg-[#D9D9D9]" />
+			</div>
+			<div className="flex flex-col w-[84vw]">
+				{fakeData.map((item, index) =>
+					activeTab === "Sent" ? (
+						<SentCard data={item} key={index} />
+					) : activeTab === "Received" ? (
+						<ReceivedCard data={item} key={index} />
+					) : (
+						<ConnectionCard data={item} key={index} />
+					)
+				)}
 			</div>
 		</div>
 	);
