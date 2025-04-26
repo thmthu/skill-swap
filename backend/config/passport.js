@@ -18,13 +18,14 @@ const setupPassport = () => {
     async (req, accessToken, refreshToken, profile, done) => {
         try {
         const isSignUpFlow = req.query.state === 'signup';
+        // console.log("isSignUpFlow", isSignUpFlow)
         const user = await User.findOne({
             $or: [
                 { googleId: profile.id },
                 { email: profile.emails[0].value }
             ]
         });
-    
+        // console.log("user", user)
         if (isSignUpFlow) {
             if (user) {
             return done(null, false, { 
@@ -37,13 +38,11 @@ const setupPassport = () => {
                 email: profile.emails[0].value,
                 username: profile.displayName,
                 avatar: profile.photos[0].value
-                // Fake password để pass validation
             });
     
             return done(null, newUser);
         }
     
-        // Xử lý đăng nhập
         if (user) {
                 if (!user.googleId) {
                 user.googleId = profile.id;

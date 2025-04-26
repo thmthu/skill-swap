@@ -1,5 +1,13 @@
-import "./App.css";
-import MyNetworkPage from "./pages/private/MyNetwork/page";
+import './App.css'
+import LoginPage from './pages/public/LogIn/page'
+import MyNetworkPage from './pages/private/MyNetwork/page'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import { PrivateRoute, PublicRoute } from './routes/AuthRoutes';
+import Home from '@/pages/public/Home/page';
+import Login from '@/pages/public/LogIn/page';
+import Signup from '@/pages/public/SignUp/page';
+import AuthPage from '@/pages/public/AuthPage';
 
 function ColorTest() {
 	return (
@@ -26,13 +34,19 @@ function ColorTest() {
 	);
 }
 
+
+
 function App() {
-	return (
-		<div>
-			{/* <ColorTest /> */}
-			<MyNetworkPage />
-		</div>
-	);
+  return (
+    <Router>
+      <AuthProvider>
+        <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/auth" element={<AuthPage />} />
+        </Routes>
+      </AuthProvider>
+    </Router>
+  );
 }
 
 export default App;
