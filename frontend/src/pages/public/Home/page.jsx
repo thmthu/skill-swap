@@ -2,7 +2,10 @@ import { Button } from "@/components/ui/button";
 import { RetroGrid } from "@/components/magicui/retro-grid";
 import { LineShadowText } from "@/components/magicui/line-shadow-text";
 import { AnimatedGradientText } from "@/components/magicui/animated-gradient-text";
-import { SectionParagraphEffect } from "@/components/text-effects/SectionParagraphEffect";
+import { TextEffect } from '@/components/ui/text-effect';
+import { AnimatedGroup } from '@/components/ui/animated-group';
+
+
 
 export default function HomePage() {
     return (
@@ -36,47 +39,83 @@ export default function HomePage() {
     </div>
 
 
-  <div className="max-w-6xl mx-auto px-4 text-center space-y-12">
-    <div>
-    <AnimatedGradientText   colorFrom="#893C3E"  // gradient-start
-  colorTo="#1B0705"    // gradient-end
-  className="text-4xl font-bold tracking-tight">
+    <section className="max-w-6xl mx-auto px-6 py-24 text-center space-y-16">
+  
+  {/* Section Heading */}
+  <AnimatedGradientText
+    colorFrom="#893C3E"
+    colorTo="#1B0705"
+    className="text-4xl font-bold tracking-tight"
+  >
     Why Choose SkillSwap?
   </AnimatedGradientText>
-  <SectionParagraphEffect />
 
-    </div>
+  {/* TextEffect Short Phrases */}
+  <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 pt-4 ubtitle2">
+    <TextEffect
+      as="span"
+      per="char"
+      delay={0.5}
+      preset="fade"
+    >
+      Grow faster.
+    </TextEffect>
 
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-      {/* Feature Card 1 */}
-      <div className="space-y-4">
-        <div className="text-5xl">👨‍🏫</div>
-        <h3 className="text-xl font-semibold">Expert Mentors</h3>
-        <p className="text-gray-500">Learn from real professionals across industries.</p>
-      </div>
+    <TextEffect
+      as="span"
+      per="char"
+      delay={1}
+      preset="fade"
+    >
+      Learn smarter.
+    </TextEffect>
 
-      {/* Feature Card 2 */}
-      <div className="space-y-4">
-        <div className="text-5xl">🚀</div>
-        <h3 className="text-xl font-semibold">Flexible Scheduling</h3>
-        <p className="text-gray-500">Book lessons when you want, where you want.</p>
-      </div>
-
-      {/* Feature Card 3 */}
-      <div className="space-y-4">
-        <div className="text-5xl">🔒</div>
-        <h3 className="text-xl font-semibold">Safe and Secure</h3>
-        <p className="text-gray-500">Verified mentors, secure payment protection.</p>
-      </div>
-
-      {/* Feature Card 4 */}
-      <div className="space-y-4">
-        <div className="text-5xl">🏆</div>
-        <h3 className="text-xl font-semibold">Track Your Progress</h3>
-        <p className="text-gray-500">Earn certificates, track skills growth.</p>
-      </div>
-    </div>
+    <TextEffect
+      as="span"
+      per="char"
+      delay={1.5}
+      preset="fade"
+    >
+      Switch confidently.
+    </TextEffect>
   </div>
+
+  {/* Feature Cards appear after TextEffect */}
+  <AnimatedGroup
+    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pt-4"
+    preset="scale"
+  >
+    {/* Feature Card 1 */}
+    <div className="space-y-4">
+      <div className="text-5xl">🤝</div>
+      <h3 className="text-xl font-semibold">Connect with Experts</h3>
+      <p className="text-gray-500">Find mentors already working inside your company.</p>
+    </div>
+
+    {/* Feature Card 2 */}
+    <div className="space-y-4">
+      <div className="text-5xl">🎯</div>
+      <h3 className="text-xl font-semibold">Upskill for Your Next Role</h3>
+      <p className="text-gray-500">Learn new skills from trusted colleagues and industry leaders.</p>
+    </div>
+
+    {/* Feature Card 3 */}
+    <div className="space-y-4">
+      <div className="text-5xl">🛤️</div>
+      <h3 className="text-xl font-semibold">Personalized Paths</h3>
+      <p className="text-gray-500">Get mentorship and training customized to your career goals.</p>
+    </div>
+
+    {/* Feature Card 4 */}
+    <div className="space-y-4">
+      <div className="text-5xl">🚪</div>
+      <h3 className="text-xl font-semibold">Internal Career Mobility</h3>
+      <p className="text-gray-500">Move across departments and grow without leaving your company.</p>
+    </div>
+  </AnimatedGroup>
+  
+</section>
+
 </section>
 
 
