@@ -1,8 +1,10 @@
 import { useAuth } from "../../context/AuthContext";
+import { Link, useNavigate } from "react-router-dom";
 import ThemeToggle from "../Toggle/ThemeToggle";
 
 export default function Navbar() {
-  const { isAuthenticated, user } = useAuth(); // Lấy cả user info nếu cần
+  const { isAuthenticated, user } = useAuth();
+  const navigate = useNavigate();
 
   return (
     <header className="w-full bg-black text-white px-6 py-2 md:px-8 md:py-3 flex items-center justify-between">
@@ -13,47 +15,41 @@ export default function Navbar() {
           <span className="block">NAB Skillswap</span>
         </div>
       </div>
+
       {/* Nav & Actions */}
       <div className="flex items-center gap-4 md:gap-6">
         <nav className="flex gap-5 font-semibold text-xs md:text-sm">
-          <a href="#" className="text-white hover:text-primary">
+          <Link to="/home" className="text-white hover:text-primary">
             Home
-          </a>
-          <a href="#" className="text-white hover:text-primary">
+          </Link>
+          <Link to="/resources" className="text-white hover:text-primary">
             Resources
-          </a>
-
-          {/* Chỉ hiện My Network nếu user đã đăng nhập */}
+          </Link>
           {isAuthenticated && (
-            <a href="#" className="text-white hover:text-primary">
+            <Link to="/mynetwork" className="text-white hover:text-primary">
               My Network
-            </a>
+            </Link>
           )}
         </nav>
 
-        {/* Toggle */}
+        {/* Toggle theme */}
         <ThemeToggle />
 
-        {/* Icons */}
+        {/* Chat Icon */}
         <img
           src="/iconChat.png"
-          className="icon-hover w-6 h-6 hover:opacity-80"
+          className="icon-hover w-6 h-6 hover:opacity-80 cursor-pointer"
           alt="Chat"
+          onClick={() => navigate("/chat")}
         />
-        {/* Avatar user */}
-        {isAuthenticated ? (
-          <img
-            src={user?.avatar || "/iconUser.png"} // Nếu có avatar user thì show, không thì dùng default icon
-            className="icon-hover w-6 h-6 rounded-full object-cover hover:opacity-80"
-            alt="User Avatar"
-          />
-        ) : (
-          <img
-            src="/iconUser.png"
-            className="icon-hover w-6 h-6 rounded-full hover:opacity-80"
-            alt="Default User Icon"
-          />
-        )}
+
+        {/* Avatar */}
+        <img
+          src={user?.avatar || "/iconUser.png"}
+          className="icon-hover w-6 h-6 rounded-full object-cover hover:opacity-80 cursor-pointer"
+          alt="User Avatar"
+          onClick={() => navigate("/profile")}
+        />
       </div>
     </header>
   );

@@ -36,6 +36,7 @@ export function AuthProvider({ children }) {
       setLoading(false);
     }
   };
+
   const register = async (userData) => {
     try {
       // const userData = await authService.register(fullName, email, password)
