@@ -1,5 +1,3 @@
-"use client";
-
 import { useTheme } from "@/context/ThemeContext";
 import { AnimatedGradientText } from "@/components/magicui/animated-gradient-text";
 
@@ -13,7 +11,7 @@ export default function GradientHeading({ children }) {
     <AnimatedGradientText
       colorFrom={colorFrom}
       colorTo={colorTo}
-      className="text-4xl px-4 font-bold tracking-tight"
+      className="text-4xl md:text-display font-bold font-heading tracking-tight"
     >
       {children}
     </AnimatedGradientText>
