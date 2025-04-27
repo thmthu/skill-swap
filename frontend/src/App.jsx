@@ -2,7 +2,7 @@ import Navbar from "./components/Navbar/navbar";
 
 function App() {
   return (
-    <div className="w-full min-h-screen bg-bg-light">
+    <div className="min-h-screen w-screen overflow-x-hidden bg-bg-light">
       <Navbar />
 
       {/* Nội dung chính */}
