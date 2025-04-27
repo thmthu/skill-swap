@@ -70,7 +70,7 @@ export default function CoursesPage() {
       />
 
       {loading ? (
-        <div className="flex justify-center items-center min-h-[200px]">
+        <div className="flex justify-center items-center min-h-[300px]">
           <Loader2 className="h-10 w-10 animate-spin text-primary" />
         </div>
       ) : (
