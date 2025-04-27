@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Accordion,
   AccordionItem,
@@ -7,20 +5,14 @@ import {
   AccordionContent,
 } from "@/components/ui/accordion";
 import { ChevronRight } from "lucide-react";
-import { AnimatedGradientText } from "@/components/magicui/animated-gradient-text";
+import GradientHeading from "@/components/Text/GradientHeading";
 
-export function FAQ() {
+export default function FAQ() {
   return (
     <section className="max-w-4xl mx-auto px-6 py-24 flex flex-col items-center text-center space-y-12">
       {/* Heading */}
       <div className="space-y-4">
-        <AnimatedGradientText
-          colorFrom="#893C3E"
-          colorTo="#1B0705"
-          className="text-4xl px-4 font-bold tracking-tight"
-        >
-          Frequently Asked Questions
-        </AnimatedGradientText>
+        <GradientHeading>Frequently Asked Question</GradientHeading>
 
         <p className="text-body1 p-4 text-text-light dark:text-text-dark max-w-2xl mx-auto">
           Find quick answers about how SkillSwap supports your development
