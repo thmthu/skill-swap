@@ -19,7 +19,7 @@ export const getAllUsers = async (req, res) => {
 }
 export const getUserProfile = async (req, res) => {
     try {
-        const user = await getUserById(req.params.userId);
+        const user = await User.findById(req.userId).select('-password');
         if (!user) {
             return res.status(401).json({ message: 'User not found' });
         }
@@ -31,7 +31,7 @@ export const getUserProfile = async (req, res) => {
 
 export const addSkill = async (req, res) => {
     try {
-        const user = await getUserById(req.params.userId);
+        const user = await User.findById(req.userId).select('-password');
         if (!user) {
             return res.status(401).json({ message: 'User not found' });
         }
@@ -46,7 +46,7 @@ export const addSkill = async (req, res) => {
 
 export const addLearn = async (req, res) => {
     try {
-        const user = await getUserById(req.params.userId);
+        const user = await User.findById(req.userId).select('-password');
         if (!user) {
             return res.status(401).json({ message: 'User not found' });
         }
@@ -61,7 +61,7 @@ export const addLearn = async (req, res) => {
 
 export const deleteSkill = async (req, res) => {
     try {   
-        const user = await getUserById(req.params.userId);
+        const user = await User.findById(req.userId).select('-password');
         if (!user) {
             return res.status(401).json({ message: 'User not found' });
         }
@@ -76,7 +76,7 @@ export const deleteSkill = async (req, res) => {
 
 export const deleteLearn = async (req, res) => {
     try {
-        const user = await getUserById(req.params.userId);
+        const user = await User.findById(req.userId).select('-password');
         if (!user) {
             return res.status(401).json({ message: 'User not found' });
         }
