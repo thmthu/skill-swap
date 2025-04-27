@@ -13,7 +13,7 @@ export default function GradientHeading({ children }) {
     <AnimatedGradientText
       colorFrom={colorFrom}
       colorTo={colorTo}
-      className="text-4xl px-4 font-bold tracking-tight text-text-light dark:text-text-dark"
+      className="text-4xl px-4 font-bold tracking-tight"
     >
       {children}
     </AnimatedGradientText>
