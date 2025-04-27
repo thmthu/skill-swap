@@ -3,7 +3,7 @@
 
 @custom-variant dark (&:is(.dark *));
 @config "../tailwind.config.js";
-
+/* Thêm vào file CSS toàn cục của bạn (ví dụ: src/index.css) */
 .bg-gradient-tech {
   background: linear-gradient(90deg, #893c3e 0%, #430d0d 69%, #1b0705 100%);
 }
