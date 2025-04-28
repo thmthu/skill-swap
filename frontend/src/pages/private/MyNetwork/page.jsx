@@ -35,7 +35,7 @@ const MyNetworkPage = () => {
 		},
 	];
 	return (
-		<div className="w-[100vw]">
+		<div className="w-[100vw] flex flex-col justify-start items-center gap-12">
 			<Header />
 			<div className="flex w-[84vw]">
 				{["Sent", "Received", "New Connections"].map((item, index) => (

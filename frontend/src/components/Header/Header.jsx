@@ -10,7 +10,7 @@ const Header = () => {
 		},
 	};
 	return (
-		<div className="w-full h-[50vh] relative bg-[url(../../../public/header-background.jpg)] bg-gradient-to-l from-black/5 via-black/25 to-black/25 overflow-hidden">
+		<div className="w-full h-[60vh] relative bg-[url(/header-background.jpg)] bg-gradient-to-l from-black/5 via-black/25 to-black/25 overflow-hidden">
 			<div className="w-[495px] px-10 py-8 left-[120px] top-[113px] absolute bg-gray-50 rounded-2xl inline-flex flex-col justify-start items-start gap-4">
 				<div className="self-stretch flex flex-col justify-start items-start">
 					<div className="self-stretch justify-start text-black text-5xl font-bold font-['Poppins']">
