@@ -342,7 +342,7 @@ const MultipleSelector = forwardRef((props, ref) => {
     >
       <div
         className={cn(
-          "min-h-10 rounded-md border border-input text-base ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 md:text-sm",
+          "min-h-10 rounded-md  text-base ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 md:text-sm",
           {
             "px-3 py-2": selected.length !== 0,
             "cursor-text": !disabled && selected.length !== 0,
@@ -354,33 +354,32 @@ const MultipleSelector = forwardRef((props, ref) => {
           inputRef?.current?.focus();
         }}
       >
-        <div className="relative flex flex-wrap gap-1">
+        <div className="flex flex-wrap items-center gap-2 px-3 py-2 min-h-[48px] rounded-md border border-input bg-background">
           {selected.map((option) => (
             <Badge
               key={option.value}
               className={cn(
-                "data-[disabled]:bg-muted-foreground data-[disabled]:text-muted",
-                "data-[fixed]:bg-muted-foreground data-[fixed]:text-muted",
+                "bg-red-600 text-white rounded-full px-3 py-1 text-xs font-medium flex items-center gap-1",
                 badgeClassName
               )}
               data-fixed={option.fixed}
               data-disabled={disabled || undefined}
             >
-              {option.label}
+              <span>{option.label}</span>{" "}
+              {/* <<< wrap label in span for better control */}
               <button
                 type="button"
-                className={cn(
-                  "ml-1 rounded-full outline-none ring-offset-background focus:ring-2 focus:ring-ring focus:ring-offset-2",
-                  (disabled || option.fixed) && "hidden"
-                )}
-                onKeyDown={(e) => e.key === "Enter" && handleUnselect(option)}
+                className="ml-1 rounded-full p-0 focus:outline-none"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleUnselect(option);
+                }}
                 onMouseDown={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
                 }}
                 onClick={() => handleUnselect(option)}
               >
-                <X className="h-3 w-3 text-muted-foreground hover:text-foreground" />
+                <X />
               </button>
             </Badge>
           ))}
@@ -420,7 +419,7 @@ const MultipleSelector = forwardRef((props, ref) => {
               onChange?.(newFixed);
             }}
             className={cn(
-              "absolute right-0 h-6 w-6 p-0",
+              "absolute right-2 top-1/2 -translate-y-1/2 h-5 w-5 p-0 rounded-full bg-muted hover:bg-foreground hover:text-background",
               (hideClearAllButton ||
                 disabled ||
                 selected.length < 1 ||
@@ -428,7 +427,7 @@ const MultipleSelector = forwardRef((props, ref) => {
                 "hidden"
             )}
           >
-            <X />
+            <X className="h-3 w-3" />
           </button>
         </div>
       </div>

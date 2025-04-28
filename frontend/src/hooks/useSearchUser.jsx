@@ -24,7 +24,7 @@ export function useSearchUser(initialSearch = "", initialSkills = "") {
         }
 
         if (selectedSkills.length > 0) {
-          params.append("skills", selectedSkills.join(",")); // e.g., react,mongodb
+          params.append("teach", selectedSkills.join(",")); // e.g., react,mongodb
         }
 
         const url = params.toString()

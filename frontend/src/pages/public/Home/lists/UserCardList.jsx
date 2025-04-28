@@ -76,15 +76,13 @@ export default function UserCardList() {
       {/* Heading + Search/Filter Bar */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <GradientHeading>Explore Our Mentors</GradientHeading>
-        <SearchBar value={searchTerm} onChange={setSearchTerm} />{" "}
+        <SearchBar
+          value={searchTerm}
+          onChange={setSearchTerm}
+          selectedSkills={selectedSkills}
+          onSkillsChange={setSelectedSkills}
+        />{" "}
         {/* <- put it properly beside the title */}
-      </div>
-      <div className="flex min-h-screen flex-col items-center justify-center bg-white p-10">
-        <h1 className="mb-10 text-4xl font-bold">Test Multiple Selector</h1>
-        <div className="w-full max-w-md space-y-6">
-          {/* 👇 This container limits width nicely */}
-          <MultipleSelectorControlled />
-        </div>
       </div>
 
       {/* Loading or Error */}

@@ -19,8 +19,11 @@ export default function SearchBar({
   selectedSkills,
   onSkillsChange,
 }) {
+  const safeSkills = Array.isArray(selectedSkills) ? selectedSkills : [];
+
   return (
     <div className="flex flex-col md:flex-row gap-4 items-center w-full">
+      {/* Search by name */}
       <div className="w-full max-w-xs">
         <Input
           type="text"
@@ -30,10 +33,11 @@ export default function SearchBar({
         />
       </div>
 
-      {/* <div className="w-full max-w-md">
+      {/* Filter by skills */}
+      <div className="w-full max-w-md">
         <MultipleSelector
           defaultOptions={OPTIONS}
-          value={selectedSkills.map((skill) => ({
+          value={safeSkills.map((skill) => ({
             label: skill,
             value: skill,
           }))}
@@ -47,7 +51,7 @@ export default function SearchBar({
             </p>
           }
         />
-      </div> */}
+      </div>
     </div>
   );
 }

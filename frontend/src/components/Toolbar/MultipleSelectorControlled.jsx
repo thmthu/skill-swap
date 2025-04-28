@@ -1,41 +1,55 @@
 "use client";
 
-import React, { useState } from "react";
-import MultipleSelector from "@/components/ui/multiple-selector"; // No `{ Option }` anymore, just import default
+import { Input } from "@/components/ui/input";
+import MultipleSelector from "@/components/ui/multiple-selector";
 
 const OPTIONS = [
-  { label: "Next.js", value: "nextjs" },
   { label: "React", value: "react" },
-  { label: "Remix", value: "remix" },
-  { label: "Vite", value: "vite" },
-  { label: "Nuxt", value: "nuxt" },
-  { label: "Vue", value: "vue" },
-  { label: "Svelte", value: "svelte" },
-  { label: "Angular", value: "angular" },
-  { label: "Ember", value: "ember" },
-  { label: "Gatsby", value: "gatsby" },
-  { label: "Astro", value: "astro" },
+  { label: "Node.js", value: "nodejs" },
+  { label: "MongoDB", value: "mongodb" },
+  { label: "AWS", value: "aws" },
+  { label: "Next.js", value: "nextjs" },
+  { label: "Docker", value: "docker" },
+  { label: "Python", value: "python" },
 ];
 
-export default function MultipleSelectorControlled() {
-  const [value, setValue] = useState([]);
-
+export default function SearchBar({
+  value,
+  onChange,
+  selectedSkills,
+  onSkillsChange,
+}) {
   return (
-    <div className="flex w-full flex-col gap-5 px-10">
-      <p className="text-primary font-medium">
-        Your selection: {value.map((v) => v.label).join(", ") || "None"}
-      </p>
-      <MultipleSelector
-        value={value}
-        onChange={setValue}
-        defaultOptions={OPTIONS}
-        placeholder="Select frameworks you like..."
-        emptyIndicator={
-          <p className="text-center text-lg leading-10 text-muted-foreground">
-            No results found.
-          </p>
-        }
-      />
+    <div className="flex flex-col md:flex-row gap-4 items-center w-full">
+      {/* Search by name */}
+      <div className="w-full max-w-xs">
+        <Input
+          type="text"
+          placeholder="Search mentors by name..."
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+        />
+      </div>
+
+      {/* Filter by skills */}
+      <div className="w-full max-w-md">
+        <MultipleSelector
+          defaultOptions={OPTIONS}
+          value={selectedSkills.map((skill) => ({
+            label: skill,
+            value: skill,
+          }))}
+          onChange={(options) =>
+            onSkillsChange(options.map((opt) => opt.value))
+          }
+          placeholder="Filter by skills..."
+          emptyIndicator={
+            <p className="text-center text-muted-foreground">
+              No skills found.
+            </p>
+          }
+        />
+      </div>
     </div>
   );
 }
