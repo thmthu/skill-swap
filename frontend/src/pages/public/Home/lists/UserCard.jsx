@@ -11,8 +11,13 @@ import {
   MorphingDialogContainer,
 } from "@/components/ui/morphing-dialog";
 
-export default function UserCard({ image, name, tags = [], description = "" }) {
-  console.log("UserCard props:", { image, name, tags, description });
+export default function UserCard({
+  image,
+  name,
+  tags = [],
+  description = "",
+  department,
+}) {
   return (
     <Tilt rotationFactor={8} isReverse>
       <MorphingDialog
@@ -33,12 +38,18 @@ export default function UserCard({ image, name, tags = [], description = "" }) {
             className="h-48 w-full object-cover"
           />
 
-          {/* Name and Tags */}
+          {/* Name + Department + Tags */}
           <div className="flex grow flex-col items-center justify-center px-3 py-4 space-y-2">
-            <MorphingDialogTitle className="text-h2 font-semibold font-heading text-text-light dark:text-text-dark text-center">
-              {name}
-            </MorphingDialogTitle>
+            <div className="text-center space-y-1">
+              <MorphingDialogTitle className="text-h2 font-semibold font-heading text-text-light dark:text-text-dark">
+                {name}
+              </MorphingDialogTitle>
 
+              {/* Department displayed immediately */}
+              <p className="text-sm text-muted-foreground">{department}</p>
+            </div>
+
+            {/* Tags */}
             <div className="flex flex-wrap justify-center gap-2">
               {tags.map((tag, index) => (
                 <span
@@ -65,11 +76,16 @@ export default function UserCard({ image, name, tags = [], description = "" }) {
             />
 
             <div className="p-6">
-              <MorphingDialogTitle className="text-2xl font-bold font-heading text-text-light dark:text-text-dark">
-                {name}
-              </MorphingDialogTitle>
+              <div className="space-y-1">
+                <MorphingDialogTitle className="text-2xl font-bold font-heading text-text-light dark:text-text-dark">
+                  {name}
+                </MorphingDialogTitle>
+                <p className="text-md font-medium text-zinc-500 dark:text-zinc-400">
+                  {department}
+                </p>
+              </div>
 
-              <MorphingDialogSubtitle className="flex flex-wrap gap-2 mt-2">
+              <MorphingDialogSubtitle className="flex flex-wrap gap-2 mt-4">
                 {tags.map((tag, index) => (
                   <span
                     key={index}
@@ -88,7 +104,7 @@ export default function UserCard({ image, name, tags = [], description = "" }) {
                   exit: { opacity: 0, scale: 0.8, y: 100 },
                 }}
               >
-                <p className="pt-2 text-body2 md:text-body1 text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                <p className="pt-2 text-body1 md:text-body1 text-zinc-500 dark:text-zinc-400 leading-relaxed">
                   {description}
                 </p>
               </MorphingDialogDescription>

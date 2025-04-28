@@ -40,6 +40,7 @@ export function useSearchUser(initialSearch = "", initialSkills = "") {
             name: user.username,
             tags: user.teach || [],
             description: generateDynamicDescription(user),
+            department: user.department || "Unknown Department",
           }));
 
           setUsers(mappedUsers);
