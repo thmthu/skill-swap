@@ -1,6 +1,7 @@
 import "./App.css";
 import MyNetworkPage from "./pages/private/MyNetwork/page";
 import HomePage from "./pages/public/Home/page";
+import Chat from "./pages/private/Chat/page";
 import { useTheme } from "@/context/ThemeContext";
 
 function ColorTest() {
@@ -36,6 +37,7 @@ function App() {
     <div>
       {/* <ColorTest /> */}
       <HomePage />
+      {/* <Chat /> */}
     </div>
   );
 }

@@ -14,7 +14,11 @@ var User = new Schema({
     updated_at: { type: Date, default: Date.now },
     skills: { type: [String], default: [] },
     learn: { type: [String], default: [] },
-    connections: { type: [String], default: [] }
+    connections: { type: [String], default: [] },
+    chat_room_id: {
+      type: [String],
+      default: [],
+    },
 });
 
 var User = model('User', User);
