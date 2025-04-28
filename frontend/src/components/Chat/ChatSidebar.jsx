@@ -8,14 +8,24 @@ const ChatSidebar = ({ chats, selectedChat, onSelectChat }) => {
           MESSAGE
         </h2>
       </div>
-
+      {/* Search */}
+      <div className="p-4">
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="Search conversations..."
+            className="w-full pl-10 pr-4 py-2 rounded-lg border border-primary-extra-light bg-bg-light text-body1 focus:outline-none focus:border-primary-medium"
+          />
+          <Search className="absolute left-3 top-2.5 h-5 w-5 text-primary-medium" />
+        </div>
+      </div>
       <div className="overflow-y-auto h-[calc(100vh-140px)]">
         {chats.map((chat) => (
           <div
-            key={chat.id}
-            onClick={() => onSelectChat(chat.id)}
+            key={chat.chatRoomId}
+            onClick={() => onSelectChat(chat.chatRoomId)}
             className={`p-4 cursor-pointer hover:bg-secondary-light-pink transition-colors ${
-              selectedChat === chat.id ? "bg-secondary-light-pink" : ""
+              selectedChat === chat.chatRoomId ? "bg-secondary-light-pink" : ""
             }`}
           >
             <div className="flex items-start gap-3">
@@ -25,7 +35,7 @@ const ChatSidebar = ({ chats, selectedChat, onSelectChat }) => {
               <div className="flex-1 min-w-0">
                 <div className="flex justify-between items-start">
                   <h3 className="text-subtitle1 font-semibold text-text-light truncate">
-                    {chat.name}
+                    {chat.user.username}
                   </h3>
                   <span className="text-body2 text-primary-medium">
                     {chat.time}
@@ -35,9 +45,11 @@ const ChatSidebar = ({ chats, selectedChat, onSelectChat }) => {
                   {chat.lastMessage}
                 </p>
               </div>
-              {chat.unread > 0 && (
+              {chat.unreadCount > 0 && (
                 <div className="min-w-[20px] h-5 rounded-full bg-primary flex items-center justify-center">
-                  <span className="text-btn2 text-white">{chat.unread}</span>
+                  <span className="text-btn2 text-white">
+                    {chat.unreadCount}
+                  </span>
                 </div>
               )}
             </div>
