@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config({ path: '../.env' });
+
 export const ACCESS_TOKEN_EXPIRE_TIME = '900';
 export const REFRESH_TOKEN_EXPIRE_TIME = '604800';
 export const PORT = process.env.PORT;
