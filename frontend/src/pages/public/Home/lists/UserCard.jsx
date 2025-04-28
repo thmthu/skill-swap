@@ -10,7 +10,7 @@ import {
   MorphingDialogDescription,
   MorphingDialogContainer,
 } from "@/components/ui/morphing-dialog";
-
+import { ChatBubbleLeftEllipsisIcon } from "@heroicons/react/24/solid";
 export default function UserCard({
   image,
   name,
@@ -38,19 +38,31 @@ export default function UserCard({
             className="h-48 w-full object-cover"
           />
 
-          {/* Name + Department + Tags */}
-          <div className="flex grow flex-col items-center justify-center px-3 py-4 space-y-2">
-            <div className="text-center space-y-1">
-              <MorphingDialogTitle className="text-h2 font-semibold font-heading text-text-light dark:text-text-dark">
-                {name}
-              </MorphingDialogTitle>
+          <div className="flex flex-col grow px-4 py-5 space-y-2">
+            {/* Name + Department + Chat Icon in one row */}
+            <div className="flex items-center justify-between w-full">
+              <div className="text-left space-y-1">
+                <MorphingDialogTitle className="text-h2 font-semibold font-heading text-text-light dark:text-text-dark">
+                  {name}
+                </MorphingDialogTitle>
+                <p className="text-sm text-muted-foreground">{department}</p>
+              </div>
 
-              {/* Department displayed immediately */}
-              <p className="text-sm text-muted-foreground">{department}</p>
+              {/* Chat Icon */}
+              <div
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  console.log("Chat icon clicked");
+                }}
+                className="ml-4 bg-primary text-white rounded-full p-2 hover:bg-primary-dark transition cursor-pointer"
+              >
+                <ChatBubbleLeftEllipsisIcon className="w-5 h-5" />
+              </div>
             </div>
 
             {/* Tags */}
-            <div className="flex flex-wrap justify-center gap-2">
+            <div className="flex flex-wrap justify-center gap-2 pt-3">
               {tags.map((tag, index) => (
                 <span
                   key={index}
