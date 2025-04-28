@@ -7,10 +7,12 @@ import { API_CONFIG } from "@/lib/config";
 import GradientHeading from "@/components/Text/GradientHeading";
 import mockUsers from "@/pages/public/Home/lists/mockUsers";
 import { UserCardSkeleton } from "@/components/Skeleton/LoadingSkeleton";
+import SearchBar from "@/components/ToolBar/SearchBar";
 
 import { generateDynamicDescription } from "@/utils/formatSkills";
 
 export default function UserCardList() {
+  const [searchQuery, setSearchQuery] = useState("");
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -45,32 +47,82 @@ export default function UserCardList() {
     fetchUsers();
   }, []);
 
-  //   useEffect(() => {
-  //     // Simulate async API fetching
-  //     const fetchMockUsers = async () => {
-  //       try {
-  //         console.log("Loading mock users...");
-  //         await new Promise((resolve) => setTimeout(resolve, 500)); // simulate 0.5s delay
-  //         setUsers(mockUsers);
-  //         console.log("Mock users loaded:", mockUsers);
-  //       } catch (error) {
-  //         console.error("Failed to load mock users:", error);
-  //       } finally {
-  //         setLoading(false);
-  //       }
-  //     };
+  //Uncomment this block to use mock data instead of API
+  // useEffect(() => {
+  //   // Simulate async API fetching
+  //   const fetchMockUsers = async () => {
+  //     try {
+  //       console.log("Loading mock users...");
+  //       await new Promise((resolve) => setTimeout(resolve, 500)); // simulate 0.5s delay
+  //       setUsers(mockUsers);
+  //       console.log("Mock users loaded:", mockUsers);
+  //     } catch (error) {
+  //       console.error("Failed to load mock users:", error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-  //     fetchMockUsers();
-  //   }, []);
+  //   fetchMockUsers();
+  // }, []);
 
   return (
-    <section className="py-24 max-w-6xl mx-auto px-6">
-      <GradientHeading>Explore Our Mentors</GradientHeading>
+    <section className="py-24 max-w-6xl mx-auto px-6 space-y-8">
+      {/* Heading + Search/Filter Bar */}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <GradientHeading>Explore Our Mentors</GradientHeading>
+        <SearchBar onResultsUpdate={setUsers} />{" "}
+        {/* <- put it properly beside the title */}
+      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-4">
+      {/* Cards Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-8">
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* 6 placeholder skeletons */}
+            {Array.from({ length: 6 }).map((_, index) => (
+              <UserCardSkeleton key={index} />
+            ))}
+          </div>
+        ) : users.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {users.map((user) => (
+              <UserCard
+                key={user.userId}
+                image="/NAB.png"
+                name={user.name}
+                tags={user.tags || []}
+                description={user.description}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="col-span-full text-center mt-8 text-body1 font-medium text-text-light dark:text-text-dark">
+            No mentors found at the moment.
+            <br />
+            Please check back later!
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+// <section className="py-24 max-w-6xl mx-auto px-6">
+//   <GradientHeading>Explore Our Mentors</GradientHeading>
+//   <div className="flex flex-wrap gap-4 justify-between items-center mb-8">
+//     <ToolbarDynamic
+//       searchQuery={searchQuery}
+//       setSearchQuery={setSearchQuery}
+//     />
+{
+  /* SkillsFilter coming soon... */
+}
+// </div>
+/* SkillsFilter coming soon... */
+
+/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-4">
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+           
             {Array.from({ length: 6 }).map((_, index) => (
               <UserCardSkeleton key={index} />
             ))}
@@ -94,7 +146,5 @@ export default function UserCardList() {
             Please check back later!
           </div>
         )}
-      </div>
-    </section>
-  );
-}
+      </div> */
+// </section>
