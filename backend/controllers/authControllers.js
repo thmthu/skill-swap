@@ -1,8 +1,12 @@
 import User from '../models/User.js';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { 
     COOKIE_OPTIONS,
     ACCESS_TOKEN_EXPIRE_TIME,
+    CLIENT_REDIRECT_URL,
+    GOOGLE_OAUTH_CLIENT,
+    GOOGLE_OAUTH_SECRET,
+    GOOGLE_CALLBACK_URL
 } from '../config/env.js';
 import {
     generateTokens,
@@ -10,6 +14,7 @@ import {
     verifyRefreshToken,
     addToBlacklist
 } from "../utils/jwt.js"
+import passport from 'passport';
 
 export const register = async (req, res) => {
     try {
@@ -107,4 +112,38 @@ export const refreshToken = async (req, res) => {
     }
 };
 
-export default { register, login, logout, refreshToken };
+export const googleAuth = (req, res, next) => {
+    passport.authenticate('google', {
+      scope: ['profile', 'email'],
+      session: false
+    })(req, res, next);
+  };
+  
+export const googleAuthCallback = async (req, res, next) => {
+    passport.authenticate('google', { session: false }, async (err, user) => {
+      try {
+        if (err) return res.redirect(`/auth?error=${encodeURIComponent(err.message)}`);
+        if (!user) return res.redirect(`/auth?error=${encodeURIComponent(info?.message || 'Authentication failed')}`);
+  
+        const { accessToken, refreshToken } = generateTokens({ userId: user._id });
+  
+        res.cookie('accessToken', accessToken, {
+          ...COOKIE_OPTIONS,
+          httpOnly: false,
+          maxAge: parseInt(ACCESS_TOKEN_EXPIRE_TIME) * 1000
+        });
+        
+        res.cookie('refreshToken', refreshToken, COOKIE_OPTIONS);
+
+        const redirectUrl = req.query.state === 'signup' 
+        ? CLIENT_REDIRECT_URL + '/welcome' 
+        : CLIENT_REDIRECT_URL + '/';
+        res.redirect(redirectUrl);
+
+    } catch (error) {
+      res.redirect('/error?message=Server Error');
+    }
+  })(req, res, next);
+};
+
+export default { register, login, logout, refreshToken, googleAuth, googleAuthCallback };

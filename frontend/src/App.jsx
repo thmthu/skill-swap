@@ -1,6 +1,9 @@
 import "./App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import MyNetworkPage from "./pages/private/MyNetwork/page";
+import HomePage from "./pages/public/Home/page";
 import Chat from "./pages/private/Chat/page";
+import { useTheme } from "@/context/ThemeContext";
+
 function ColorTest() {
   return (
     <div className="space-y-4 p-6">
@@ -27,13 +30,15 @@ function ColorTest() {
 }
 
 function App() {
+  const { theme } = useTheme();
+  console.log("Theme is:", theme);
+
   return (
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Chat />} />
-          <Route path="/chat" element={<Chat />} />
-        </Routes>
-      </BrowserRouter>
+    <div>
+      {/* <ColorTest /> */}
+      <HomePage />
+      {/* <Chat /> */}
+    </div>
   );
 }
 

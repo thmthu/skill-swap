@@ -12,8 +12,8 @@ import { authMiddleware } from '../middlewares/authMiddlewares.js';
 export const router = Router();
 
 router.get('/', getAllUsers);
-router.get('/:userId', authMiddleware, getUserProfile);
-router.post('/:userId/skills', authMiddleware, addSkill);
-router.post('/:userId/learn', authMiddleware, addLearn);
-router.delete('/:userId/skills', authMiddleware, deleteSkill);
-router.delete('/:userId/learn', authMiddleware, deleteLearn);
+router.get('/me', authMiddleware, getUserProfile);
+router.post('/skills', authMiddleware, addSkill);
+router.post('/learn', authMiddleware, addLearn);
+router.delete('/skills', authMiddleware, deleteSkill);
+router.delete('/learn', authMiddleware, deleteLearn);
