@@ -1,6 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton";
 
-export function UserCardSkeleton() {
+export function LoadingSkeleton() {
   return (
     <div className="flex flex-col w-full max-w-[300px] overflow-hidden rounded-xl border border-zinc-950/10 bg-bg-light dark:bg-bg-dark p-4">
       {/* Image Skeleton */}
