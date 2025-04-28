@@ -6,10 +6,11 @@ export function CategoryFilter({ categories, selected, onSelect }) {
       {categories.map((cat) => (
         <Button
           key={cat}
-          className={`transition-colors ${
+          variant="secondary"
+          className={`!transition-colors font-heading focus:!outline-none focus:!ring-0 ${
             selected === cat
-              ? "bg-primary text-white hover:bg-primary-dark"
-              : "border border-gray-300 text-gray-600 hover:bg-primary-light hover:text-white"
+              ? "!bg-primary !text-white hover:!bg-primary-light"
+              : "!border-gray-300 !text-gray-600 hover:!bg-gray-100"
           }`}
           onClick={() => onSelect(cat)}
         >

@@ -47,7 +47,7 @@ export function CourseCarousel({ courses }) {
   return (
     <div className="relative flex flex-col items-center">
       {/* Carousel Row */}
-      <div className="w-full relative flex items-center">
+      <div className="w-full h-full relative flex items-center">
         {/* Left Button */}
         <button
           onClick={() => scroll("left")}
@@ -56,13 +56,13 @@ export function CourseCarousel({ courses }) {
                      ${canScrollLeft ? "bg-white hover:bg-primary hover:text-white" : "bg-gray-100 text-gray-400 cursor-not-allowed"}
                      hidden md:block`}
         >
-          <ChevronLeft className="h-6 w-6" />
+          <ChevronLeft className="h-4 w-4" />
         </button>
 
         {/* Carousel */}
         <div
           ref={scrollContainerRef}
-          className="flex gap-6 overflow-x-auto no-scrollbar px-8"
+          className="flex gap-6 overflow-x-auto no-scrollbar px-8 py-4"
           style={{ scrollbarWidth: "none" }}
         >
           {courses.map((course, idx) => (
@@ -80,7 +80,7 @@ export function CourseCarousel({ courses }) {
                      ${canScrollRight ? "bg-white hover:bg-primary hover:text-white" : "bg-gray-100 text-gray-400 cursor-not-allowed"}
                      hidden md:block`}
         >
-          <ChevronRight className="h-6 w-6" />
+          <ChevronRight className="h-4 w-4" />
         </button>
       </div>
       {/* Carousel Dots */}
