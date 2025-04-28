@@ -20,7 +20,7 @@ export function useSearchUser(initialSearch = "", initialSkills = "") {
         const params = new URLSearchParams();
 
         if (searchTerm.trim() !== "") {
-          params.append("name", searchTerm.trim());
+          params.append("username", searchTerm.trim());
         }
 
         if (selectedSkills.length > 0) {
@@ -36,7 +36,7 @@ export function useSearchUser(initialSearch = "", initialSkills = "") {
         if (Array.isArray(response.data)) {
           const mappedUsers = response.data.map((user) => ({
             id: user.userId,
-            image: "/NAB.png", // static image placeholder
+            image: user.ava, // chỗ này nè
             name: user.username,
             tags: user.teach || [],
             description: generateDynamicDescription(user),
