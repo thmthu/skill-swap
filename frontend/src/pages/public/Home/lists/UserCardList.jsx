@@ -4,7 +4,7 @@ import GradientHeading from "@/components/Text/GradientHeading";
 import { LoadingSkeleton } from "@/components/Skeleton/LoadingSkeleton";
 import SearchBar from "@/components/ToolBar/SearchBar";
 import { useSearchUser } from "@/hooks/useSearchUser";
-
+import Spinner from "@/components/Skeleton/Spinner";
 export default function UserCardList() {
   const {
     users,
@@ -34,38 +34,32 @@ export default function UserCardList() {
         </div>
       </div>
 
-      {/* Loading or Error */}
-      {loading && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-8">
-          {Array.from({ length: 6 }).map((_, idx) => (
-            <LoadingSkeleton key={idx} />
-          ))}
-        </div>
-      )}
-
       {error && <div className="text-center text-red-500 mt-8">{error}</div>}
-
-      {/* Cards Grid */}
-      {!loading && !error && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-8">
-          {users.length > 0 ? (
-            users.map((user) => (
-              <UserCard
-                key={user.userId}
-                image="/NAB.png"
-                name={user.name}
-                tags={user.tags || []}
-                description={user.description}
-                department={user.department || "Unknown Department"}
-              />
-            ))
-          ) : (
-            <div className="col-span-full text-center mt-8 text-body1 font-medium text-text-light dark:text-text-dark">
-              No mentors found. Try another keyword!
-            </div>
-          )}
-        </div>
-      )}
+      {/* This part changes: Card grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-8 min-h-[400px]">
+        {loading ? (
+          <div className="col-span-full flex justify-center items-center">
+            <Spinner size="large" />
+          </div>
+        ) : error ? (
+          <div className="col-span-full text-center text-red-500">{error}</div>
+        ) : users.length > 0 ? (
+          users.map((user) => (
+            <UserCard
+              key={user.userId}
+              image="/NAB.png"
+              name={user.name}
+              tags={user.tags || []}
+              description={user.description}
+              department={user.department || "Unknown Department"}
+            />
+          ))
+        ) : (
+          <div className="col-span-full text-center text-body1 font-medium text-text-light dark:text-text-dark">
+            No mentors found. Try another keyword!
+          </div>
+        )}
+      </div>
     </section>
   );
 }

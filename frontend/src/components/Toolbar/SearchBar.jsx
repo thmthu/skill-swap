@@ -2,16 +2,7 @@
 
 import { Input } from "@/components/ui/input";
 import MultipleSelector from "@/components/ui/multiple-selector";
-
-const OPTIONS = [
-  { label: "React", value: "react" },
-  { label: "Node.js", value: "nodejs" },
-  { label: "MongoDB", value: "mongodb" },
-  { label: "AWS", value: "aws" },
-  { label: "Next.js", value: "nextjs" },
-  { label: "Docker", value: "docker" },
-  { label: "Python", value: "python" },
-];
+import { OPTIONS } from "@/components/ToolBar/skill-options";
 
 export default function SearchBar({
   value,
