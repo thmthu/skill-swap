@@ -8,10 +8,18 @@ import GradientHeading from "@/components/Text/GradientHeading";
 import { LoadingSkeleton } from "@/components/Skeleton/LoadingSkeleton";
 import SearchBar from "@/components/ToolBar/SearchBar";
 import { useSearchUser } from "@/hooks/useSearchUser";
+import MultipleSelectorControlled from "@/components/ToolBar/MultipleSelectorControlled"; // Adjust the path if needed
 
 export default function UserCardList() {
-  const { users, loading, error, searchTerm, setSearchTerm } =
-    useSearchUser("");
+  const {
+    users,
+    loading,
+    error,
+    searchTerm,
+    setSearchTerm,
+    selectedSkills,
+    setSelectedSkills,
+  } = useSearchUser("");
 
   //Fetch users from the API
   // useEffect(() => {
@@ -71,6 +79,14 @@ export default function UserCardList() {
         <SearchBar value={searchTerm} onChange={setSearchTerm} />{" "}
         {/* <- put it properly beside the title */}
       </div>
+      <div className="flex min-h-screen flex-col items-center justify-center bg-white p-10">
+        <h1 className="mb-10 text-4xl font-bold">Test Multiple Selector</h1>
+        <div className="w-full max-w-md space-y-6">
+          {/* 👇 This container limits width nicely */}
+          <MultipleSelectorControlled />
+        </div>
+      </div>
+
       {/* Loading or Error */}
       {loading && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-8">
@@ -92,7 +108,7 @@ export default function UserCardList() {
                 image="/NAB.png"
                 name={user.name}
                 tags={user.tags || []}
-                description={user.message}
+                description={user.description}
               />
             ))
           ) : (
