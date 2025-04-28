@@ -26,19 +26,6 @@ import ResourcePage from "./pages/public/Resources/page";
 // 	);
 // }
 
-const courses = [
-  {
-    title: "Frontend Developer Basics",
-    description: "Learn HTML, CSS, and JavaScript to start your frontend journey.",
-    image: "", // optional
-  },
-  {
-    title: "React for Beginners",
-    description: "Master components, hooks, and the basics of modern React.",
-    image: "", 
-  },
-  // Add more course objects here...
-];
 function App() {
 	return (
 		<div>
