@@ -19,32 +19,40 @@ export default function SearchBar({
   selectedSkills,
   onSkillsChange,
 }) {
-  const safeSkills = Array.isArray(selectedSkills) ? selectedSkills : [];
-
   return (
-    <div className="flex flex-col md:flex-row gap-4 items-center w-full">
+    <div className="flex flex-col md:flex-row gap-8 w-full">
       {/* Search by name */}
-      <div className="w-full max-w-xs">
+      <div className="flex flex-col w-full">
+        <p className="text-sm font-medium text-muted-foreground mb-2">
+          Search by Name
+        </p>
         <Input
           type="text"
-          placeholder="Search mentors by name..."
+          placeholder="Enter mentor name..."
           value={value}
           onChange={(e) => onChange(e.target.value)}
+          className="w-full min-h-[48px]"
         />
       </div>
 
       {/* Filter by skills */}
-      <div className="w-full max-w-md">
+      <div className="flex flex-col w-full">
+        <p className="text-sm font-medium text-muted-foreground mb-2">
+          Filter by Skills
+        </p>
         <MultipleSelector
           defaultOptions={OPTIONS}
-          value={safeSkills.map((skill) => ({
-            label: skill,
-            value: skill,
-          }))}
+          className="w-full min-h-[48px]"
+          value={(Array.isArray(selectedSkills) ? selectedSkills : []).map(
+            (skill) => ({
+              label: skill,
+              value: skill,
+            })
+          )}
           onChange={(options) =>
             onSkillsChange(options.map((opt) => opt.value))
           }
-          placeholder="Filter by skills..."
+          placeholder="Select skills..."
           emptyIndicator={
             <p className="text-center text-muted-foreground">
               No skills found.

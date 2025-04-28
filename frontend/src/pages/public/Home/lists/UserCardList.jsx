@@ -74,7 +74,7 @@ export default function UserCardList() {
   return (
     <section className="py-24 max-w-6xl mx-auto px-6 space-y-8">
       {/* Heading + Search/Filter Bar */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-8">
         <GradientHeading>Explore Our Mentors</GradientHeading>
         <SearchBar
           value={searchTerm}

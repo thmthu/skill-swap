@@ -21,8 +21,6 @@ import {
 } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
 
-// ========== Remove TS Interface, use simple JSDoc if needed ==========
-
 function useDebounce(value, delay) {
   const [debouncedValue, setDebouncedValue] = useState(value);
 
@@ -359,17 +357,22 @@ const MultipleSelector = forwardRef((props, ref) => {
             <Badge
               key={option.value}
               className={cn(
-                "bg-red-600 text-white rounded-full px-3 py-1 text-xs font-medium flex items-center gap-1",
+                "bg-bg-dark text-text-dark rounded-full px-3 py-1 text-xs font-medium flex items-center gap-1 border-none shadow-none",
                 badgeClassName
               )}
               data-fixed={option.fixed}
               data-disabled={disabled || undefined}
             >
               <span>{option.label}</span>{" "}
-              {/* <<< wrap label in span for better control */}
               <button
                 type="button"
-                className="ml-1 rounded-full p-0 focus:outline-none"
+                className="!ml-1 !p-0 !bg-transparent border-none shadow-none rounded-full !focus:outline-none text-text-dark hover!text-primary-medium flex items-center"
+                style={{
+                  fontSize: "12px",
+                  lineHeight: "1",
+                  width: "18px",
+                  height: "18px",
+                }}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") handleUnselect(option);
                 }}
@@ -379,7 +382,7 @@ const MultipleSelector = forwardRef((props, ref) => {
                 }}
                 onClick={() => handleUnselect(option)}
               >
-                <X />
+                <X size={12} />
               </button>
             </Badge>
           ))}
@@ -402,7 +405,7 @@ const MultipleSelector = forwardRef((props, ref) => {
                 : placeholder
             }
             className={cn(
-              "flex-1 bg-transparent outline-none placeholder:text-muted-foreground",
+              "flex-1 min-w-0 bg-transparent outline-none placeholder:text-muted-foreground",
               {
                 "w-full": hidePlaceholderWhenSelected,
                 "px-3 py-2": selected.length === 0,
