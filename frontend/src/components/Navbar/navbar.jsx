@@ -1,7 +1,7 @@
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "@/context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import ThemeToggle from "../Toggle/ThemeToggle";
-
+import ActiveButton from "../Button/ActiveButton";
 export default function Navbar() {
   const { isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
@@ -34,22 +34,41 @@ export default function Navbar() {
 
         {/* Toggle theme */}
         <ThemeToggle />
-
-        {/* Chat Icon */}
-        <img
-          src="/iconChat.png"
+        {isAuthenticated && (
+          <>
+            {/* Chat Icon */}
+            <img
+              src="/iconChat.png"
           className="icon-hover w-6 h-6 hover:opacity-80 cursor-pointer"
           alt="Chat"
           onClick={() => navigate("/chat")}
         />
 
-        {/* Avatar */}
-        <img
-          src={user?.avatar || "/iconUser.png"}
-          className="icon-hover w-6 h-6 rounded-full object-cover hover:opacity-80 cursor-pointer"
-          alt="User Avatar"
-          onClick={() => navigate("/profile")}
-        />
+            {/* Avatar */}
+            <img
+              src={user?.avatar || "/iconUser.png"}
+              className="icon-hover w-6 h-6 rounded-full object-cover hover:opacity-80 cursor-pointer"
+              alt="User Avatar"
+              onClick={() => navigate("/profile")}
+            />
+          </>
+        )}
+        {!isAuthenticated && (
+          <>
+            <ActiveButton
+              // className="bg-primary text-white px-4 py-2 rounded-md hover:opacity-80"
+              onClick={() => navigate("/auth?state=login")}
+            >
+              Login
+            </ActiveButton>
+            <ActiveButton
+              // className="bg-primary text-white px-4 py-2 rounded-md hover:opacity-80"
+              onClick={() => navigate("/auth?state=signup")}
+            >
+              Register
+            </ActiveButton>
+          </>
+        )}
       </div>
     </header>
   );

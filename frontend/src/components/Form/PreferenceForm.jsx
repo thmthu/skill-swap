@@ -1,0 +1,251 @@
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { toast } from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
+import { useState, useEffect } from 'react';
+
+// Import your Form components
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import ActiveButton from '@/components/Button/ActiveButton';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Check, ChevronsUpDown } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useNavigate } from 'react-router-dom';
+import { authService } from '@/services/AuthService';
+import PreferenceService from '@/services/PreferenceService';
+
+const formSchema = z.object({
+  department: z.string().min(1, { message: 'Department is required' }),
+  masteredSkills: z.string().min(1, { message: 'Please list at least one skill' }),
+  skillsToLearn: z.string().min(1, { message: 'Please list at least one skill' }),
+});
+
+export default function UserPreferencesForm() {
+  const navigate = useNavigate()
+    const [allSkills, setSkills] = useState([])
+    const [departments, setDepartments] = useState([])
+    const [openMastered, setOpenMastered] = useState(false);
+    const [openToLearn, setOpenToLearn] = useState(false);
+    useEffect(() => {
+        const fetchSkillsDepartment = async () => {
+            const { data } = await PreferenceService.getSkillsDepartment()
+            // console.log(data)
+            setSkills(data["SKILLS"])
+            setDepartments(data["DEPARTMENTS"])
+        }
+        fetchSkillsDepartment()
+    }, [])
+
+    const form = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      department: '',
+      masteredSkills: '',
+      skillsToLearn: '',
+    },
+  });
+
+  async function onSubmit(values) {
+    try {
+      // Here you would typically send the data to your backend
+      console.log('User preferences submitted:', values);
+      toast.success('Preferences saved successfully!');
+      await PreferenceService.postUserPreference(values);
+    navigate('/home')
+    } catch (error) {
+      console.error('Submission error', error);
+      toast.error(error.message || 'Failed to save preferences. Please try again.');
+    }
+  }
+
+  return (
+    <div>
+      <Toaster />
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <div className="space-y-4">
+            {/* Department Dropdown */}
+            <FormField
+                control={form.control}
+                name="department"
+                render={({ field }) => (
+                    <FormItem className="space-y-2">
+                    <FormLabel className="text-text-dark font-body">Your Department *</FormLabel>
+                    <Popover>
+                        <PopoverTrigger asChild>
+                        <FormControl>
+                            <button
+                            role="combobox"
+                            aria-expanded={open}
+                            className="flex h-10 w-full items-center justify-between rounded-md border border-gray-600 bg-bg-dark px-3 py-2 text-sm text-text-dark placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                            >
+                            {field.value || "Select department..."}
+                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                            </button>
+                        </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-[400px] p-0 bg-bg-dark border-gray-600">
+                        <Command>
+                            <CommandInput placeholder="Search departments..." />
+                            <CommandEmpty>No department found.</CommandEmpty>
+                            <CommandGroup className="max-h-60 overflow-y-auto">
+                            {departments.map((dept) => (
+                                <CommandItem
+                                key={dept}
+                                value={dept}
+                                onSelect={() => {
+                                    field.onChange(dept);
+                                }}
+                                >
+                                <Check
+                                    className={cn(
+                                    "mr-2 h-4 w-4",
+                                    field.value === dept ? "opacity-100" : "opacity-0"
+                                    )}
+                                />
+                                {dept}
+                                </CommandItem>
+                            ))}
+                            </CommandGroup>
+                        </Command>
+                        </PopoverContent>
+                    </Popover>
+                    <FormMessage className="text-primary-medium" />
+                    </FormItem>
+                )}
+                />
+
+            {/* Mastered Skills Multi-Select */}
+            <FormField
+              control={form.control}
+              name="masteredSkills"
+              render={({ field }) => (
+                <FormItem className="space-y-2">
+                  <FormLabel className="text-text-dark font-body">Your Mastered Skills *</FormLabel>
+                  <Popover open={openMastered} onOpenChange={setOpenMastered}>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <button
+                          role="combobox"
+                          aria-expanded={openMastered}
+                          className="flex h-10 w-full items-center justify-between rounded-md border border-gray-600 bg-bg-dark px-3 py-2 text-sm text-text-dark placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                        >
+                          {field.value.length > 0
+                            ? field.value.map(skill => allSkills.find(s => s === skill)).join(", ")
+                            : "Select skills..."}
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[400px] p-0 bg-bg-dark border-gray-600">
+                      <Command>
+                        <CommandInput placeholder="Search skills..." />
+                        <CommandEmpty>No skill found.</CommandEmpty>
+                        <CommandGroup className="max-h-60 overflow-y-auto">
+                          {allSkills.map((skill) => (
+                            <CommandItem
+                              key={skill}
+                              value={skill}
+                              onSelect={() => {
+                                const currentValues = field.value;
+                                const newValues = currentValues.includes(skill)
+                                  ? currentValues.filter(s => s !== skill)
+                                  : [...currentValues, skill];
+                                field.onChange(newValues);
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  field.value.includes(skill) ? "opacity-100" : "opacity-0"
+                                )}
+                              />
+                              {skill}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage className="text-primary-medium" />
+                </FormItem>
+              )}
+            />
+
+            {/* Skills to Learn Multi-Select */}
+            <FormField
+              control={form.control}
+              name="skillsToLearn"
+              render={({ field }) => (
+                <FormItem className="space-y-2">
+                  <FormLabel className="text-text-dark font-body">Skills You Want To Learn *</FormLabel>
+                  <Popover open={openToLearn} onOpenChange={setOpenToLearn}>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <button
+                          role="combobox"
+                          aria-expanded={openToLearn}
+                          className="flex h-10 w-full items-center justify-between rounded-md border border-gray-600 bg-bg-dark px-3 py-2 text-sm text-text-dark placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                        >
+                          {field.value.length > 0
+                            ? field.value.map(skill => allSkills.find(s => s === skill)).join(", ")
+                            : "Select skills..."}
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[400px] p-0 bg-bg-dark border-gray-600">
+                      <Command>
+                        <CommandInput placeholder="Search skills..." />
+                        <CommandEmpty>No skill found.</CommandEmpty>
+                        <CommandGroup className="max-h-60 overflow-y-auto">
+                          {allSkills.map((skill) => (
+                            <CommandItem
+                              key={skill}
+                              value={skill}
+                              onSelect={() => {
+                                const currentValues = field.value;
+                                const newValues = currentValues.includes(skill)
+                                  ? currentValues.filter(s => s !== skill)
+                                  : [...currentValues, skill];
+                                field.onChange(newValues);
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  field.value.includes(skill) ? "opacity-100" : "opacity-0"
+                                )}
+                              />
+                              {skill}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage className="text-primary-medium" />
+                </FormItem>
+              )}
+            />
+              
+
+            <div className="flex justify-center flex-col gap-2">
+              <ActiveButton className="text-light">Submit</ActiveButton>
+            </div>
+          </div>
+        </form>
+      </Form>
+    </div>
+  );
+}

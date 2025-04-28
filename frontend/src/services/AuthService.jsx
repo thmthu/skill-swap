@@ -11,14 +11,17 @@ export const authService = {
         email,
         password
       })
-      
+      console.log("response", response.data.user) 
       if (response.data.token) {
         localStorage.setItem('user', JSON.stringify(response.data))
+      }
+      if (response.data.user.skills.length === 0 || response.data.user.learn.length === 0) {
+        window.location.href = '/user-preference'
       }
       
       return response.data
     } catch (error) {
-      throw new Error(error.response?.data?.message || 'Failed to login')
+      throw new Error(error.response?.data?.message || 'Failed to login ' + error)
     }
   },
   async register(fullName, email, password) {

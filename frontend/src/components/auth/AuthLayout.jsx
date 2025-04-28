@@ -17,7 +17,7 @@ export default function AuthLayout({ children }) {
       </div>
 
       {/* Content container */}
-      <div className="flex items-center justify-center relative z-10 w-full ml-100">
+      <div className="flex items-center justify-center relative z-10 ml-200">
         <div className="w-9/12 max-w-md">{children}</div>
       </div>
     </>
