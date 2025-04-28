@@ -352,7 +352,7 @@ const MultipleSelector = forwardRef((props, ref) => {
           inputRef?.current?.focus();
         }}
       >
-        <div className="flex flex-wrap items-center gap-2 px-3 py-2 min-h-[48px] rounded-md border border-input bg-background">
+        <div className="flex items-center flex-nowrap gap-2 px-3 py-2 min-h-[48px] rounded-md border border-input bg-background overflow-hidden">
           {selected.map((option) => (
             <Badge
               key={option.value}
@@ -405,12 +405,8 @@ const MultipleSelector = forwardRef((props, ref) => {
                 : placeholder
             }
             className={cn(
-              "flex-1 min-w-0 bg-transparent outline-none placeholder:text-muted-foreground",
-              {
-                "w-full": hidePlaceholderWhenSelected,
-                "px-3 py-2": selected.length === 0,
-                "ml-1": selected.length !== 0,
-              },
+              "flex-2 !min-w-0 !p-0 bg-transparent outline-none placeholder:text-muted-foreground",
+
               inputProps?.className
             )}
           />

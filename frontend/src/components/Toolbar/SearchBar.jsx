@@ -53,6 +53,7 @@ export default function SearchBar({
             onSkillsChange(options.map((opt) => opt.value))
           }
           placeholder="Select skills..."
+          hidePlaceholderWhenSelected={true}
           emptyIndicator={
             <p className="text-center text-muted-foreground">
               No skills found.
