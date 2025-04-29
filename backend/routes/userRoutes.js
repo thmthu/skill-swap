@@ -5,7 +5,8 @@ import {
     addSkill,
     addLearn,
     deleteSkill,
-    deleteLearn
+    deleteLearn,
+    updateUserPreference
 } from '../controllers/userControllers.js';
 import { authMiddleware } from '../middlewares/authMiddlewares.js';
 
@@ -17,3 +18,4 @@ router.post('/skills', authMiddleware, addSkill);
 router.post('/learn', authMiddleware, addLearn);
 router.delete('/skills', authMiddleware, deleteSkill);
 router.delete('/learn', authMiddleware, deleteLearn);
+router.patch('/preference', authMiddleware, updateUserPreference);

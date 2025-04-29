@@ -74,16 +74,15 @@ export const authService = {
     }
   },
 
-  // Get current user
   async getCurrentUser() {
-    const userStr = localStorage.getItem("user");
-    if (!userStr) return null;
-
     try {
-      const user = JSON.parse(userStr);
-      await axios.get(`${API_CONFIG.BASE_URL}/users/me`);
-      return user;
+      const response = await axios.get(`${API_CONFIG.BASE_URL}/users/me`, {
+        withCredentials: true, // 🔥 Quan trọng nếu dùng cookie-based auth
+      });
+
+      return response.data;
     } catch (error) {
+      console.error("getCurrentUser error:", error);
       localStorage.removeItem("user");
       return null;
     }

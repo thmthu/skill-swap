@@ -9,6 +9,7 @@ const AuthContext = createContext(null);
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [needsUserPreference, setNeedsUserPreference] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,7 +26,28 @@ export function AuthProvider({ children }) {
 
     checkUserLoggedIn();
   }, []);
+  useEffect(() => {
+    if (!user) return;
+  
+    const checkUserPreference = async () => {
+      try {
+        const currentUser = await authService.getCurrentUser();
+        const needsPreference = !currentUser.skills?.length || !currentUser.learn?.length;
+        setNeedsUserPreference(needsPreference);
+        if (needsPreference) {
+          navigate('/user-preference')
+        } else {
+          navigate('/home')
+        }
 
+      } catch (error) {
+        console.error("Error checking user preferences", error);
+      }
+    };
+  
+    checkUserPreference();
+  }, [user]);
+  
   const login = async (userData) => {
     setLoading(true);
     try {
@@ -79,6 +101,7 @@ export function AuthProvider({ children }) {
     logout,
     register,
     isAuthenticated: !!user,
+    needsUserPreference,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
