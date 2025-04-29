@@ -89,4 +89,27 @@ export const deleteLearn = async (req, res) => {
     }
 }
 
-export default { getAllUsers, getUserProfile, addSkill, addLearn, deleteSkill, deleteLearn };
+export const updateUserPreference = async (req, res) => {
+    try {
+        const user = await User.findById(req.userId).select('-password');
+        if (!user) {
+            return res.status(401).json({ message: 'User not found' });
+        }
+        const { bio, skills, learn } = req.body;
+        user.bio = bio;
+        user.skills = skills;
+        user.learn = learn;
+        await user.save();
+        return res.status(200).json(user);
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+}
+
+export default { getAllUsers, 
+                getUserProfile, 
+                addSkill, 
+                addLearn, 
+                deleteSkill, 
+                deleteLearn, 
+                updateUserPreference };

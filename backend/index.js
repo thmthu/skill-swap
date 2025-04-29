@@ -31,9 +31,9 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use(cors({
-  origin: FRONTEND_URL, // Allow requests from your frontend
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'], // Specify allowed HTTP methods
-  credentials: true, // If you need to send cookies or authentication headers
+  origin: FRONTEND_URL, 
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  credentials: true,
 }));
 
 // redisClient.connect();
