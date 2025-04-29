@@ -10,9 +10,14 @@ import {
   MorphingDialogDescription,
   MorphingDialogContainer,
 } from "@/components/ui/morphing-dialog";
-
-export default function UserCard({ image, name, tags = [], description = "" }) {
-  console.log("UserCard props:", { image, name, tags, description });
+import { ChatBubbleLeftEllipsisIcon } from "@heroicons/react/24/solid";
+export default function UserCard({
+  image,
+  name,
+  tags = [],
+  description = "",
+  department,
+}) {
   return (
     <Tilt rotationFactor={8} isReverse>
       <MorphingDialog
@@ -33,13 +38,31 @@ export default function UserCard({ image, name, tags = [], description = "" }) {
             className="h-48 w-full object-cover"
           />
 
-          {/* Name and Tags */}
-          <div className="flex grow flex-col items-center justify-center px-3 py-4 space-y-2">
-            <MorphingDialogTitle className="text-h2 font-semibold font-heading text-text-light dark:text-text-dark text-center">
-              {name}
-            </MorphingDialogTitle>
+          <div className="flex flex-col grow px-4 py-5 space-y-2">
+            {/* Name + Department + Chat Icon in one row */}
+            <div className="flex items-center justify-between w-full">
+              <div className="text-left space-y-1">
+                <MorphingDialogTitle className="text-h2 font-semibold font-heading text-text-light dark:text-text-dark">
+                  {name}
+                </MorphingDialogTitle>
+                <p className="text-sm text-muted-foreground">{department}</p>
+              </div>
 
-            <div className="flex flex-wrap justify-center gap-2">
+              {/* Chat Icon */}
+              <div
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  console.log("Chat icon clicked");
+                }}
+                className="ml-4 bg-primary text-white rounded-full p-2 hover:bg-primary-dark transition cursor-pointer"
+              >
+                <ChatBubbleLeftEllipsisIcon className="w-5 h-5" />
+              </div>
+            </div>
+
+            {/* Tags */}
+            <div className="flex flex-wrap justify-center gap-2 pt-3">
               {tags.map((tag, index) => (
                 <span
                   key={index}
@@ -65,11 +88,16 @@ export default function UserCard({ image, name, tags = [], description = "" }) {
             />
 
             <div className="p-6">
-              <MorphingDialogTitle className="text-2xl font-bold font-heading text-text-light dark:text-text-dark">
-                {name}
-              </MorphingDialogTitle>
+              <div className="space-y-1">
+                <MorphingDialogTitle className="text-2xl font-bold font-heading text-text-light dark:text-text-dark">
+                  {name}
+                </MorphingDialogTitle>
+                <p className="text-md font-medium text-zinc-500 dark:text-zinc-400">
+                  {department}
+                </p>
+              </div>
 
-              <MorphingDialogSubtitle className="flex flex-wrap gap-2 mt-2">
+              <MorphingDialogSubtitle className="flex flex-wrap gap-2 mt-4">
                 {tags.map((tag, index) => (
                   <span
                     key={index}
@@ -88,7 +116,7 @@ export default function UserCard({ image, name, tags = [], description = "" }) {
                   exit: { opacity: 0, scale: 0.8, y: 100 },
                 }}
               >
-                <p className="pt-2 text-body2 md:text-body1 text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                <p className="pt-2 text-body1 md:text-body1 text-zinc-500 dark:text-zinc-400 leading-relaxed">
                   {description}
                 </p>
               </MorphingDialogDescription>
