@@ -1,27 +1,35 @@
+import { lazy } from "react";
 import { Navigate } from "react-router-dom";
-import { PublicRoute, PrivateRoute } from "@/components/ProtectedRoutes";
-import Home from "@/pages/public/Home/page";
-import Resources from "@/pages/public/Resources/page";
+import { AuthRoute } from "./AuthRoutes";
+import { PrivateRoute } from "./ProtectedRoute";
 
-import Chat from "@/pages/private/Chat/page";
-import MyNetwork from "@/pages/private/MyNetwork/page";
-import Profile from "@/pages/private/Profile/page";
+const HomePage = lazy(() => import("@/pages/public/Home/page"));
+const ResourcesPage = lazy(() => import("@/pages/public/Resources/page"));
+const LoginPage = lazy(() => import("@/pages/public/LogIn/page"));
+const SignupPage = lazy(() => import("@/pages/public/SignUp/page"));
+const ChatPage = lazy(() => import("@/pages/private/Chat/page"));
+const ProfilePage = lazy(() => import("@/pages/private/Profile/page"));
+const MyNetworkPage = lazy(() => import("@/pages/private/MyNetwork/page"));
+const NotFoundPage = lazy(() => import("@/pages/public/NotFound/page"));
 
 export const navRoutes = [
+  { path: "/", element: <Navigate to="/home" replace /> },
+  { path: "/home", element: <HomePage /> },
+  { path: "/resources", element: <ResourcesPage /> },
   {
-    path: "/",
-    element: <PublicRoute />,
-    children: [{ path: "login", element: <div>Login Page</div> }],
-  },
-  {
-    path: "/",
-    element: <PrivateRoute />,
+    element: <AuthRoute />,
     children: [
-      { path: "home", element: <Home /> },
-      { path: "resources", element: <Resources /> },
-      { path: "mynetwork", element: <MyNetwork /> },
-      { path: "chat", element: <Chat /> },
-      { path: "profile", element: <Profile /> },
+      { path: "/login", element: <LoginPage /> },
+      { path: "/signup", element: <SignupPage /> },
     ],
   },
+  {
+    element: <PrivateRoute />,
+    children: [
+      { path: "/chat", element: <ChatPage /> },
+      { path: "/profile", element: <ProfilePage /> },
+      { path: "/mynetwork", element: <MyNetworkPage /> },
+    ],
+  },
+  { path: "*", element: <NotFoundPage /> },
 ];
