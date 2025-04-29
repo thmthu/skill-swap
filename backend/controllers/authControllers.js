@@ -151,7 +151,7 @@ export const googleAuth = (req, res, next) => {
   
         res.cookie('refreshToken', refreshToken, COOKIE_OPTIONS);
         const userData = await User.findById(user._id);
-        console.log(userData.skills, userData.learn)
+        // console.log(userData.skills, userData.learn)
         if (userData.skills.length === 0 || userData.learn.length === 0) {
             return res.redirect(CLIENT_REDIRECT_URL + '/user-preference?message=Signup successful');
         }
@@ -168,4 +168,9 @@ export const googleAuth = (req, res, next) => {
     })(req, res, next);
   };
 
-export default { register, login, logout, refreshToken, googleAuth, googleAuthCallback };
+export default { register, 
+                login, 
+                logout, 
+                refreshToken, 
+                googleAuth, 
+                googleAuthCallback };
