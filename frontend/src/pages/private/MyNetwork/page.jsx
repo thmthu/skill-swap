@@ -35,16 +35,16 @@ const MyNetworkPage = () => {
 		},
 	];
 	return (
-		<div className="w-[100vw] flex flex-col justify-start items-center gap-12">
+		<div className="w-auto flex flex-col justify-start items-center gap-12">
 			<Header />
 			<div className="flex w-[84vw]">
 				{["Sent", "Received", "New Connections"].map((item, index) => (
 					<div
-						className="w-[33%] inline-flex flex-col justify-start items-center gap-1"
+						className="w-full md:w-[33%] flex flex-col justify-start items-center gap-1"
 						onClick={() => setActiveTab(item)}
 						key={index}
 					>
-						<div className="text-center justify-start text-black text-3xl font-semibold font-['Poppins']">
+						<div className="text-center text-black text-lg md:text-3xl font-semibold font-['Poppins']">
 							{item}
 						</div>
 						<div
