@@ -1,7 +1,8 @@
 import { useAuth } from "@/context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import ThemeToggle from "../Toggle/ThemeToggle";
-import ActiveButton from "../Button/ActiveButton";
+import UserDropdown from "../Dropdown/UserDropdown";
+
 export default function Navbar() {
   const { isAuthenticated, user, loading } = useAuth();
   const navigate = useNavigate();
@@ -51,23 +52,18 @@ export default function Navbar() {
 
         {/* Chat and User Actions */}
         {isAuthenticated ? (
-          <>
-            {/* Chat Icon */}
+          <div className="flex items-center gap-3">
             <img
               src="/iconChat.png"
-              className="icon-hover w-6 h-6 hover:opacity-80 cursor-pointer transition duration-300"
+              className="w-6 h-6 hover:opacity-80 cursor-pointer"
               alt="Chat"
               onClick={() => navigate("/chat")}
             />
-
-            {/* Avatar */}
-            <img
-              src={user?.avatar || "/iconUser.png"}
-              className="icon-hover w-6 h-6 rounded-full object-cover hover:opacity-80 cursor-pointer transition duration-300"
-              alt="User Avatar"
-              onClick={() => navigate("/profile")}
+            <UserDropdown
+              avatarUrl={user?.avatar || "/iconUser.png"}
+              username={user?.username || "User"}
             />
-          </>
+          </div>
         ) : (
           <div className="flex gap-2 font-semibold text-btn2 md:text-btn1 font-heading">
             <button
