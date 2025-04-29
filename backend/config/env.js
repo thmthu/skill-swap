@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config({ path: '../.env' });
+
 export const ACCESS_TOKEN_EXPIRE_TIME = '900';
 export const REFRESH_TOKEN_EXPIRE_TIME = '604800';
 export const PORT = process.env.PORT;
@@ -13,4 +16,10 @@ export const COOKIE_OPTIONS = {
 };
 export const REDIS_HOST = process.env.REDIS_HOST;
 export const REDIS_PORT = process.env.REDIS_PORT;
-
+export const CLIENT_REDIRECT_URL = process.env.FRONTEND_URL;
+export const GOOGLE_OAUTH_CLIENT = process.env.GOOGLE_OAUTH_CLIENT;
+export const GOOGLE_OAUTH_SECRET = process.env.GOOGLE_OAUTH_SECRET;
+export const GOOGLE_CALLBACK_URL = process.env.GOOGLE_CALLBACK_URL;
+export const SESSION_SECRET = process.env.SESSION_SECRET;
+export const NODE_ENV = process.env.NODE_ENV;
+export const FRONTEND_URL = process.env.FRONTEND_URL;

@@ -11,9 +11,9 @@ export const authMiddleware = async (req, res, next) => {
             return res.status(401).json({ message: 'Auth Middlewares: Access denied. Token revoked.' });
         }
         const decoded = verifyAccessToken(token);
-        req.user = decoded;
+        req.userId = decoded.userId;
         next();
-    } catch (error) {
+    } catch (error) {   
         return res.status(401).json({ 
             message: 'Auth Middlewares: Access denied. Invalid token.', 
             error: error.message });
