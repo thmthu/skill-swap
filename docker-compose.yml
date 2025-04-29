@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 services:
   redis:
     image: redis:7
@@ -24,6 +24,6 @@ services:
     env_file:
       - .env
     environment:
-      - MONGODB_URI=mongodb+srv://root:${MONGO_PASSWORD}@projects.0xua05v.mongodb.net/nab_camp?retryWrites=true&w=majority&authSource=admin
+      - MONGODB_URI=mongodb+srv://root:${MONGO_PASSWORD}@cluster0.ynwctaq.mongodb.net/nab_camp?retryWrites=true&w=majority&authSource=admin
     ports:
       - "3000:3000"

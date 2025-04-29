@@ -3,10 +3,11 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
 import { createClient } from 'redis';
-import { 
-    authRouters,
-    userRouters,
-    connectionRouters
+import {
+  authRouters,
+  userRouters,
+  connectionRouters,
+  chatRouters
 } from './routes/routes.js';
 import connectMongo from './config/mongo.js';
 import redisClient from './config/redis.js';
@@ -19,6 +20,9 @@ import { SESSION_SECRET,
           FRONTEND_URL
 } from './config/env.js';
 import cors from 'cors';
+import { createServer } from "http"; 
+import { Server } from "socket.io"; 
+import initSocket from "./socket/index.js";
 connectMongo();
 
 const app = express();
@@ -48,11 +52,22 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // app.use('/api', authRouters, userRouters, connectionRouters);
-app.use('/api/auth', authRouters);
-app.use('/api/users', userRouters);
-app.use('/api/connections', connectionRouters);
+app.use("/api/chat", chatRouters);
+app.use("/api/auth", authRouters);
+app.use("/api/users", userRouters);
+app.use("/api/connections", connectionRouters);
 
+const httpServer = createServer(app);
 
-app.listen(port, () => {
+const io = new Server(httpServer, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST", "PUT"],
+  },
+});
+
+initSocket(io);
+
+httpServer.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
