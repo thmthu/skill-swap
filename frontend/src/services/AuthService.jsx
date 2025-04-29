@@ -5,21 +5,52 @@ import { useNavigate } from "react-router-dom";
 
 export const authService = {
   async login(email, password, rememberMe = false) {
-    const response = await axios.post(`${API_CONFIG.BASE_URL}/auth/login`, { email, password, rememberMe }, { withCredentials: true });
-    return response.data.user;
+    try {
+      console.log(email, password, rememberMe);
+      const response = await axios.post(`${API_CONFIG.BASE_URL}/auth/login`, {
+        email,
+        password,
+      });
+
+      if (response.data.token) {
+        localStorage.setItem("user", JSON.stringify(response.data));
+      }
+
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || "Failed to login");
+    }
+  },
+  async register(fullName, email, password) {
+    try {
+      const response = await axios.post(
+        `${API_CONFIG.BASE_URL}/auth/register`,
+        {
+          username: fullName,
+          email: email,
+          password: password,
+        }
+      );
+      if (response.data.token) {
+        localStorage.setItem("user", JSON.stringify(response.data));
+      }
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || "Failed to signup");
+    }
   },
 
   async loginWithGoogle() {
     try {
       window.location.href = `${API_CONFIG.BASE_URL}/auth/google/login`;
     } catch (error) {
-      console.log(error);
       throw new Error(
         error.response?.data?.message ||
           "Failed to login with Google" + error + API_CONFIG.BASE_URL
       );
     }
   },
+
   async signupWithGoogle() {
     try {
       window.location.href = `${API_CONFIG.BASE_URL}/auth/google/signup`;
@@ -32,22 +63,28 @@ export const authService = {
     }
   },
 
-  async register(fullName, email, password) {
-    const response = await axios.post(`${API_CONFIG.BASE_URL}/auth/register`, 
-                                    { "username":fullName, 
-                                      "email":email, 
-                                      "password":password }, 
-                                    { withCredentials: true });
-    return response.data.user;
-  },
-
+  // Logout user
   async logout() {
-    await axios.post('/auth/logout', {}, { withCredentials: true });
+    try {
+      await axios.post(`${API_CONFIG.BASE_URL}/auth/logout`);
+      localStorage.removeItem("user");
+    } catch (error) {
+      console.error("Logout error:", error);
+      localStorage.removeItem("user");
+    }
   },
 
   async getCurrentUser() {
-    const response = await axios.get(`${API_CONFIG.BASE_URL}/users/me`, { withCredentials: true });
-    // console.log("response in auth service", response.data)
-    return response.data;
-  }
+    try {
+      const response = await axios.get(`${API_CONFIG.BASE_URL}/users/me`, {
+        withCredentials: true, // 🔥 Quan trọng nếu dùng cookie-based auth
+      });
+
+      return response.data;
+    } catch (error) {
+      console.error("getCurrentUser error:", error);
+      localStorage.removeItem("user");
+      return null;
+    }
+  },
 };
