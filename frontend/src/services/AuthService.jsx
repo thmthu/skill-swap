@@ -5,55 +5,21 @@ import { useNavigate } from "react-router-dom";
 
 export const authService = {
   async login(email, password, rememberMe = false) {
-    try {
-      console.log(email, password, rememberMe);
-      const response = await axios.post(`${API_CONFIG.BASE_URL}/auth/login`, {
-        email,
-        password
-      })
-      console.log("response", response.data.user) 
-      if (response.data.token) {
-        localStorage.setItem("user", JSON.stringify(response.data));
-      }
-      if (response.data.user.skills.length === 0 || response.data.user.learn.length === 0) {
-        window.location.href = '/user-preference'
-      }
-      
-      return response.data
-    } catch (error) {
-      throw new Error(error.response?.data?.message || 'Failed to login ' + error)
-    }
-  },
-  async register(fullName, email, password) {
-    try {
-      const response = await axios.post(
-        `${API_CONFIG.BASE_URL}/auth/register`,
-        {
-          username: fullName,
-          email: email,
-          password: password,
-        }
-      );
-      if (response.data.token) {
-        localStorage.setItem("user", JSON.stringify(response.data));
-      }
-      return response.data;
-    } catch (error) {
-      throw new Error(error.response?.data?.message || "Failed to signup");
-    }
+    const response = await axios.post(`${API_CONFIG.BASE_URL}/auth/login`, { email, password, rememberMe }, { withCredentials: true });
+    return response.data.user;
   },
 
   async loginWithGoogle() {
     try {
       window.location.href = `${API_CONFIG.BASE_URL}/auth/google/login`;
     } catch (error) {
+      console.log(error);
       throw new Error(
         error.response?.data?.message ||
           "Failed to login with Google" + error + API_CONFIG.BASE_URL
       );
     }
   },
-
   async signupWithGoogle() {
     try {
       window.location.href = `${API_CONFIG.BASE_URL}/auth/google/signup`;
@@ -66,28 +32,22 @@ export const authService = {
     }
   },
 
-  // Logout user
+  async register(fullName, email, password) {
+    const response = await axios.post(`${API_CONFIG.BASE_URL}/auth/register`, 
+                                    { "username":fullName, 
+                                      "email":email, 
+                                      "password":password }, 
+                                    { withCredentials: true });
+    return response.data.user;
+  },
+
   async logout() {
-    try {
-      await axios.post(`${API_CONFIG.BASE_URL}/auth/logout`);
-      localStorage.removeItem("user");
-    } catch (error) {
-      console.error("Logout error:", error);
-      localStorage.removeItem("user");
-    }
+    await axios.post('/auth/logout', {}, { withCredentials: true });
   },
 
   async getCurrentUser() {
-    const userStr = localStorage.getItem("user");
-    if (!userStr) return null;
-
-    try {
-      const user = JSON.parse(userStr);
-      await axios.get(`${API_CONFIG.BASE_URL}/users/me`);
-      return user;
-    } catch (error) {
-      localStorage.removeItem("user");
-      return null;
-    }
-  },
+    const response = await axios.get(`${API_CONFIG.BASE_URL}/users/me`, { withCredentials: true });
+    // console.log("response in auth service", response.data)
+    return response.data;
+  }
 };

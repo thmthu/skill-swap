@@ -4,7 +4,7 @@ import AuthLayout from '@/components/auth/AuthLayout'
 import AuthCard from '@/components/auth/AuthCard'
 import UserPreferencesForm from '@/components/Form/PreferenceForm'
 import { motion } from 'framer-motion'
-import { Toaster, toast } from 'react-hot-toast'
+import { toast } from 'react-hot-toast'
 import { useEffect } from 'react'
 
 export default function UserPreference() {
@@ -13,13 +13,14 @@ export default function UserPreference() {
             position: 'top-center',
             duration: 5000,
             style: {
-                background: '#333',
+                background: '#fff',
+                color: '#000',
+                icon: '👋'
             }
         });
     }, [])
   return (
     <AuthLayout>
-      <Toaster />
       <motion.div
       initial={{ x: 100, opacity: 0 }}  
       animate={{ x: 0, opacity: 1 }}   

@@ -5,7 +5,9 @@ import { API_CONFIG } from '@/lib/config'
 
 const PreferenceService = {
     async postUserPreference(data) {
-        const response = await axios.post(`${API_CONFIG.BASE_URL}/user-preference`, data)
+        const response = await axios.patch(`${API_CONFIG.BASE_URL}/users/preference`, 
+                                            data,
+                                            { withCredentials: true })
         return response.data
     },
     async getSkillsDepartment() {

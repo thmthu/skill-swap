@@ -3,7 +3,6 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
-import { Toaster } from 'react-hot-toast';
 import { useState } from 'react';
 
 // Import your Form components (assuming you have them)
@@ -22,7 +21,7 @@ const formSchema = z.object({
 
 export default function LoginForm() {
   const [rememberMe, setRememberMe] = useState(false);
-  const { login } = useAuth();
+  const { login, needsUserPreference } = useAuth();
   const navigate = useNavigate();
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -35,14 +34,11 @@ export default function LoginForm() {
   async function onSubmit(values) {
     try {
       const { email, password } = values;
-      const data = await authService.login(email, password, rememberMe); 
+      const data = await authService.login(email, password); 
       await login(data) 
-      // toast.success('Login successful!');
-      console.log('Login data:', data);
-      navigate('/home')
     } catch (error) {
       console.error('Login error', error);
-      toast.error(error.message || 'Login failed. Please check your credentials and try again.');
+      toast.error(error.response?.data?.message || 'Login failed. Please check your credentials and try again.');
     }
   }
 
@@ -57,7 +53,6 @@ export default function LoginForm() {
 
   return (
     <div>
-      <Toaster/>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <div className="space-y-4">

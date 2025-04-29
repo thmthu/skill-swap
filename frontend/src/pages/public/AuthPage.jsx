@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Toaster, toast } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import Login from "./LogIn/page";
 import Signup from "./SignUp/page";
 
@@ -70,7 +70,6 @@ export default function AuthPage() {
 
   return (
     <div>
-      <Toaster />
       {isSignup ? <Signup /> : <Login />}
     </div>
   );

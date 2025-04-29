@@ -3,7 +3,6 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
-import { Toaster } from 'react-hot-toast';
 import { useState } from 'react';
 
 // Import your Form components (assuming you have them)
@@ -50,12 +49,12 @@ export default function SignUpForm() {
       const { fullName, email, password } = values;
       const data = await authService.register(fullName, email, password);
       await register(data);
-      navigate('/auth?state=login&message=Signup successful')
+      navigate('/auth?state=login&message=Signup successful, please login!')
     //   toast.success('Sign up successful!');
       console.log('Registration data:', data);
     } catch (error) {
       console.error('Registration error', error);
-      toast.error(error.message || 'Sign up failed. Please try again.');
+      toast.error(error.response?.data?.message || 'Sign up failed. Please try again.');
     }
   }
 
@@ -70,7 +69,6 @@ export default function SignUpForm() {
 
   return (
     <div>
-      <Toaster />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <div className="space-y-4">

@@ -71,13 +71,13 @@ export default function Navbar() {
         ) : (
           <div className="flex gap-2 font-semibold text-btn2 md:text-btn1 font-heading">
             <button
-              onClick={() => navigate("/login")}
+              onClick={() => navigate("/auth?state=login")}
               className="text-text-dark hover:text-primary-light transition duration-300"
             >
               Login
             </button>
             <button
-              onClick={() => navigate("/signup")}
+              onClick={() => navigate("/auth?state=signup")}
               className="text-text-dark hover:text-primary-light transition duration-300"
             >
               Sign Up

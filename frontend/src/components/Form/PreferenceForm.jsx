@@ -2,33 +2,24 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
-import { Toaster } from 'react-hot-toast';
 import { useState, useEffect } from 'react';
 
 // Import your Form components
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import ActiveButton from '@/components/Button/ActiveButton';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useNavigate } from 'react-router-dom';
-import { authService } from '@/services/AuthService';
 import PreferenceService from '@/services/PreferenceService';
 
 const formSchema = z.object({
   department: z.string().min(1, { message: 'Department is required' }),
-  masteredSkills: z.string().min(1, { message: 'Please list at least one skill' }),
-  skillsToLearn: z.string().min(1, { message: 'Please list at least one skill' }),
+  masteredSkills: z.array(z.string()).min(1, { message: 'Please list at least one skill' }),
+  skillsToLearn: z.array(z.string()).min(1, { message: 'Please list at least one skill' }),
 });
+
 
 export default function UserPreferencesForm() {
   const navigate = useNavigate()
@@ -57,11 +48,20 @@ export default function UserPreferencesForm() {
 
   async function onSubmit(values) {
     try {
-      // Here you would typically send the data to your backend
-      console.log('User preferences submitted:', values);
-      toast.success('Preferences saved successfully!');
-      await PreferenceService.postUserPreference(values);
-    navigate('/home')
+      await PreferenceService.postUserPreference({
+        bio: values.department,
+        skills: values.masteredSkills,
+        learn: values.skillsToLearn,
+      });
+      toast.success('Preferences saved successfully!\nWelcome to the community!',
+        {
+          position: 'top-center',
+          duration: 3000
+        }
+      );
+      setTimeout(() => {
+        navigate('/home');
+      }, 3000);
     } catch (error) {
       console.error('Submission error', error);
       toast.error(error.message || 'Failed to save preferences. Please try again.');
@@ -70,7 +70,6 @@ export default function UserPreferencesForm() {
 
   return (
     <div>
-      <Toaster />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <div className="space-y-4">

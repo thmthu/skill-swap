@@ -7,7 +7,7 @@ export function PublicRoute() {
 }
 
 const PrivateRoute = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, needsUserPreference } = useAuth();
   return isAuthenticated ? <Outlet /> : <Navigate to="/auth?state=login" replace />; 
 };
 
