@@ -52,7 +52,7 @@ export default function UserCardList() {
             users.map((user) => (
               <UserCard
                 key={user.userId}
-                image="/NAB.png"
+                image={user.avatar||"/NAB.png"}
                 name={user.name}
                 tags={user.tags || []}
                 description={user.description}
