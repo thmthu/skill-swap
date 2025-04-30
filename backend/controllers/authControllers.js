@@ -37,10 +37,13 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
     try {
-        const { username, password } = req.body;
-        const user = await User.findOne({ username });
+        const { email, password } = req.body;
+        const user = await User.findOne({ email });
         if (!user) {
             return res.status(400).json({ message: 'User not found' });
+        }
+        if (!user.password) {
+            return res.status(400).json({ message: 'User registered with Google, please login with Google' });
         }
         const passChecked = await bcrypt.compare(password, user.password)
         if (!passChecked) {
@@ -57,7 +60,8 @@ export const login = async (req, res) => {
         });
         res.cookie('refreshToken', refreshToken, COOKIE_OPTIONS);
 
-        return res.status(200).json({ message: 'Logged in successfully' });
+        return res.status(200).json({ message: 'Logged in successfully', 
+                                    user: user });
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
@@ -119,12 +123,24 @@ export const googleAuth = (req, res, next) => {
     })(req, res, next);
   };
   
-export const googleAuthCallback = async (req, res, next) => {
-    passport.authenticate('google', { session: false }, async (err, user) => {
-      try {
-        if (err) return res.redirect(`/auth?error=${encodeURIComponent(err.message)}`);
-        if (!user) return res.redirect(`/auth?error=${encodeURIComponent(info?.message || 'Authentication failed')}`);
+  export const googleAuthCallback = async (req, res, next) => {
+    const createErrorUrl = (message, state) => {
+      const params = new URLSearchParams({
+        error: message,
+        ...(state && { state }) // Add state if it exists
+      });
+      return `${CLIENT_REDIRECT_URL}/auth?${params.toString()}`;
+    };
   
+    passport.authenticate('google', { session: false }, async (err, user, info) => {
+      try {
+        // If there's an error from the strategy (e.g., database error), redirect with the error message
+        if (err) return res.redirect(createErrorUrl(err.message || 'Authentication error', req.query.state));
+  
+        // If authentication fails (user is false), redirect with the specific message from the strategy
+        if (!user) return res.redirect(createErrorUrl(info?.message || 'Authentication failed', req.query.state));
+  
+        // If authentication succeeds, generate tokens and set cookies
         const { accessToken, refreshToken } = generateTokens({ userId: user._id });
   
         res.cookie('accessToken', accessToken, {
@@ -132,18 +148,29 @@ export const googleAuthCallback = async (req, res, next) => {
           httpOnly: false,
           maxAge: parseInt(ACCESS_TOKEN_EXPIRE_TIME) * 1000
         });
-        
+  
         res.cookie('refreshToken', refreshToken, COOKIE_OPTIONS);
-
-        const redirectUrl = req.query.state === 'signup' 
-        ? CLIENT_REDIRECT_URL + '/welcome' 
-        : CLIENT_REDIRECT_URL + '/';
+        const userData = await User.findById(user._id);
+        // console.log(userData.skills, userData.learn)
+        if (userData.skills.length === 0 || userData.learn.length === 0) {
+            return res.redirect(CLIENT_REDIRECT_URL + '/user-preference?message=Signup successful');
+        }
+  
+        // Redirect based on the flow (signup or login)
+        const redirectUrl = req.query.state === 'signup'
+          ? CLIENT_REDIRECT_URL + '/auth?state=login&message=Signup successful'
+          : CLIENT_REDIRECT_URL + '/home?message=Login successful';
         res.redirect(redirectUrl);
+      } catch (error) {
+        // Catch unexpected server errors (not authentication failures)
+        res.redirect(createErrorUrl('Server Error', req.query.state));
+      }
+    })(req, res, next);
+  };
 
-    } catch (error) {
-      res.redirect('/error?message=Server Error');
-    }
-  })(req, res, next);
-};
-
-export default { register, login, logout, refreshToken, googleAuth, googleAuthCallback };
+export default { register, 
+                login, 
+                logout, 
+                refreshToken, 
+                googleAuth, 
+                googleAuthCallback };

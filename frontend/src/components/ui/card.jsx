@@ -1,3 +1,4 @@
+
 import * as React from "react";
 import { cva } from "class-variance-authority";
 import { cn } from "@/lib/utils";
@@ -78,6 +79,7 @@ function CardContent({ className, ...props }) {
 function CardFooter({ className, ...props }) {
   return (
     <div className={cn("flex items-center justify-end pt-4", className)} {...props} />
+
   );
 }
 
