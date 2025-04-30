@@ -14,10 +14,8 @@ export const router = Router();
 router.post("/", authMiddleware, createConnection);
 router.patch("/respond", authMiddleware, respondConnection);
 router.get("/", authMiddleware, getAllConnections);
-// router.get("/received", authMiddleware, getAllReceivedConnections);
-router.get("/received", getAllReceivedConnections);
+router.get("/received", authMiddleware, getAllReceivedConnections);
 router.get("/sent", authMiddleware, getAllSentConnections);
-// router.get("/recent", authMiddleware, getRecentConnections);
-router.get("/recent", getRecentConnections);
+router.get("/recent", authMiddleware, getRecentConnections);
 
 export default router;
