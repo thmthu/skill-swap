@@ -11,9 +11,9 @@ const initSocket = (io) => {
 
     socket.on(
       "sendMessage",
-      async ({ selectedChatId, senderId, receiverId, text }) => {
+      async ({ chatRoomId, senderId, receiverId, text }) => {
         try {
-          const chatRoomId = selectedChatId;
+          console.log("recie: ", receiverId);
           let room = await ChatRoom.findOne({ chat_room_id: chatRoomId });
           const message = await Message.create({
             chat_room_id: chatRoomId,

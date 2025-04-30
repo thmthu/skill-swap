@@ -2,27 +2,22 @@ import { Send, MessageSquare } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import axios from "axios";
-
-// const senderId = "6805e59935e3fe0a7c60c000";
-// const receiverId = "6805e59935e3fe0a7c60c002";
-
-// const senderId = "6805e59935e3fe0a7c60c002";
-const senderId = "6805e59935e3fe0a7c60c001";
+import { useAuth } from "../../context/AuthContext";
 const socket = io("http://localhost:3000");
-//xem recieverId là selectedChatId
-const ChatContent = ({ selectedChatId }) => {
+const ChatContent = ({ userFromHome, setRecentChats, chatRoomId }) => {
+  const senderId = useAuth().user._id;
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const messageContainerRef = useRef(null);
-  let receiverId;
+  const [receiverId, setReceiverId] = useState("");
   useEffect(() => {
-    socket.emit("joinRoom", selectedChatId);
-    const ids = selectedChatId.split("_");
-    receiverId = ids.find((id) => id !== senderId);
+    socket.emit("joinRoom", chatRoomId);
+    const ids = chatRoomId.split("_");
+    setReceiverId(ids.find((id) => id !== senderId));
     const fetchMessages = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:3000/api/chat/chat-get-message/${selectedChatId}` // trả về thêm reciever name và avatar
+          `http://localhost:3000/api/chat/chat-get-message/${chatRoomId}` 
         );
         console.log("data:", res.data);
         if (res.data.data.messages) {
@@ -41,13 +36,19 @@ const ChatContent = ({ selectedChatId }) => {
         messageContainerRef.current.scrollHeight;
     }
     socket.on("newMessage", (newMsg) => {
-      appendMessage(newMsg);
+      setMessages((prevMessages) => [...prevMessages, newMsg]);
+      setTimeout(() => {
+        if (messageContainerRef.current) {
+          messageContainerRef.current.scrollTop =
+            messageContainerRef.current.scrollHeight;
+        }
+      }, 50);
     });
 
     return () => {
       socket.off("newMessage");
     };
-  }, [selectedChatId]);
+  }, [chatRoomId]);
 
   const appendMessage = (newMsg) => {
     if (messageContainerRef.current) {
@@ -81,17 +82,64 @@ const ChatContent = ({ selectedChatId }) => {
   const handleSend = () => {
     if (message.trim()) {
       socket.emit("sendMessage", {
-        selectedChatId,
+        chatRoomId,
         senderId,
         receiverId,
         text: message.trim(),
       });
 
+      const today = new Date();
+      const day = String(today.getDate()).padStart(2, "0");
+      const month = String(today.getMonth() + 1).padStart(2, "0");
+      const year = today.getFullYear();
+      const formattedDate = `${day}/${month}/${year}`;
       setMessage("");
+      if (messages.length == 0) {
+        const newChatRoom = {
+          chatRoomId,
+          latestMessage: message.trim(),
+          time: formattedDate,
+          unreadCount: 0,
+          user: { ...userFromHome },
+        };
+
+        setRecentChats((prevChats) => {
+          const exists = prevChats.some(
+            (chat) => chat.chatRoomId === chatRoomId
+          );
+          if (exists) {
+            return prevChats.map((chat) =>
+              chat.chatRoomId === chatRoomId
+                ? {
+                    ...chat,
+                    latestMessage: message.trim(),
+                    time: formattedDate,
+                  }
+                : chat
+            );
+          } else {
+            return [newChatRoom, ...prevChats];
+          }
+        });
+      } else {
+        setRecentChats((prevChats) => {
+          const existingChatIndex = prevChats.findIndex(
+            (chat) => chat.chatRoomId === chatRoomId
+          );
+          const updatedChats = [...prevChats];
+          const [existingChat] = updatedChats.splice(existingChatIndex, 1);
+          const updatedChat = {
+            ...existingChat,
+            latestMessage: message.trim(),
+            time: formattedDate,
+          };
+          return [updatedChat, ...updatedChats];
+        });
+      }
     }
   };
 
-  if (!selectedChatId || selectedChatId === "null") {
+  if (!chatRoomId || chatRoomId === "null") {
     return (
       <div className=" h-full overflow-y-auto flex-1 flex items-center justify-center bg-bg-light">
         <div className="text-center">
@@ -144,6 +192,13 @@ const ChatContent = ({ selectedChatId }) => {
             </div>
           </div>
         ))}
+        {messages.length === 0 && (
+          <div className="flex items-center justify-center h-full">
+            <p className="text-body1 text-gray-400">
+              No messages yet. Start a conversation!
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Message Input */}
