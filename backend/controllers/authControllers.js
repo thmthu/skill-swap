@@ -12,7 +12,8 @@ import {
     generateTokens,
     verifyAccessToken,
     verifyRefreshToken,
-    addToBlacklist
+    addToBlacklist,
+    isBlacklisted
 } from "../utils/jwt.js"
 import passport from 'passport';
 
@@ -57,6 +58,7 @@ export const login = async (req, res) => {
             ...COOKIE_OPTIONS,
             httpOnly: true,
             maxAge: parseInt(ACCESS_TOKEN_EXPIRE_TIME) * 1000
+            // maxAge: parseInt(60) * 1000
         });
         res.cookie('refreshToken', refreshToken, COOKIE_OPTIONS);
 
@@ -89,21 +91,24 @@ export const logout = async (req, res) => {
 // when access token expires when user still logged in -> use refresh token to generate new access token
 export const refreshToken = async (req, res) => {
     const cookieRefreshToken = req.cookies['refreshToken'];
+
     if (!cookieRefreshToken) {
         return res.status(401).json({ message: 'No refresh token provided' });
     }
 
     try {
         const decoded = verifyRefreshToken(cookieRefreshToken);
-        const user = await User.findById(decoded.userId);
-        if (!user || user.refreshToken !== cookieRefreshToken) {
-            return res.status(401).json({ message: 'Invalid refresh token' });
+        const userObj = await User.findById(decoded.userId);
+        if (!userObj) {
+            return res.status(401).json({ message: "User not found with this refresh token." });
         }
 
+        const user = userObj.toObject(); 
+        const tokenBlacklisted = await isBlacklisted(cookieRefreshToken);
+        if (tokenBlacklisted) {
+            return res.status(401).json({ message: 'Refresh token is blacklisted' });
+        }
         const { accessToken, refreshToken } = generateTokens({ userId: user._id });
-        user.refreshToken = refreshToken;
-        await user.save();
-
         res.cookie('accessToken', accessToken, {
             ...COOKIE_OPTIONS,
             httpOnly: false,
@@ -113,7 +118,7 @@ export const refreshToken = async (req, res) => {
 
         return res.status(200).json({ message: 'Tokens refreshed successfully' });
     } catch (error) {
-        return res.status(401).json({ message: 'Invalid refresh token' });
+        return res.status(401).json({ message: `Invalid refresh token ${error}` });
     }
 };
 
