@@ -6,6 +6,7 @@ import UserDropdown from "../Dropdown/UserDropdown";
 export default function Navbar() {
   const { isAuthenticated, user, loading } = useAuth();
   const navigate = useNavigate();
+
   if (loading) {
     return null; // hoặc <div>Loading...</div>
   }
@@ -16,10 +17,12 @@ export default function Navbar() {
     <header className="w-full bg-gradient-to-l from-gradient-start via-gradient-mid to-gradient-end text-text-dark px-6 py-2 md:px-8 md:py-3 flex items-center justify-between">
       {/* Logo */}
       <div className="flex items-center gap-3">
-        <img src="/logoNAB.png" alt="logo" className="w-12 h-12" />
-        <div className="font-heading text-h1 md:text-display font-bold leading-tight">
-          <span className="block">NAB Skillswap</span>
-        </div>
+        <Link to="/home" className="logo-link flex items-center gap-3">
+          <img src="/logoNAB.png" alt="logo" className="w-12 h-12" />
+          <div className="font-heading text-h1 md:text-display font-bold leading-tight">
+            <span className="block">NAB Skillswap</span>
+          </div>
+        </Link>
       </div>
 
       {/* Nav & Actions */}

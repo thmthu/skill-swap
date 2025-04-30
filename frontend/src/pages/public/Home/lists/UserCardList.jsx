@@ -50,9 +50,9 @@ export default function UserCardList() {
           {users.length > 0 ? (
             users.map((user) => (
               <UserCard
-                key={user.id}
+                key={user.userId}
+                image={user.avatar||"/NAB.png"}
                 userId={user.id}
-                image="/NAB.png"
                 name={user.name}
                 tags={user.tags || []}
                 description={user.description}
