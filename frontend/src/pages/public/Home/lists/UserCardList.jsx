@@ -15,7 +15,6 @@ export default function UserCardList() {
     selectedSkills,
     setSelectedSkills,
   } = useSearchUser("");
-
   return (
     <section className="py-24 max-w-6xl mx-auto px-6 space-y-8">
       {/* Heading + Search/Filter Bar */}
@@ -51,7 +50,8 @@ export default function UserCardList() {
           {users.length > 0 ? (
             users.map((user) => (
               <UserCard
-                key={user.userId}
+                key={user.id}
+                userId={user.id}
                 image="/NAB.png"
                 name={user.name}
                 tags={user.tags || []}

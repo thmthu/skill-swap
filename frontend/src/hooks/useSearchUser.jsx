@@ -32,10 +32,9 @@ export function useSearchUser(initialSearch = "", initialSkills = "") {
           : `${API_CONFIG.BASE_URL}/users`;
 
         const response = await axios.get(url);
-
         if (Array.isArray(response.data)) {
           const mappedUsers = response.data.map((user) => ({
-            id: user.userId,
+            id: user._id,
             image: user.ava, // chỗ này nè
             name: user.username,
             tags: user.teach || [],
