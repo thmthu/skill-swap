@@ -15,7 +15,7 @@ export const router = Router();
 router.post('/register', register);
 router.post('/login', login);
 router.post('/logout', authMiddleware, logout);
-router.post('/refresh', authMiddleware, refreshToken);
+router.post('/refresh', refreshToken);
 
 router.get('/google/signup', (req, res, next) => {
     return passport.authenticate('google', {

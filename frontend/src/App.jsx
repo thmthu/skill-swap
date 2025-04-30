@@ -9,9 +9,8 @@ function App() {
   const { theme } = useTheme();
 
   return (
-    
     <div className="min-h-screen w-screen overflow-x-hidden bg-bg-light flex flex-col">
-      <Toaster/>
+      <Toaster />
       <Navbar />
       <main className="flex-1 p-6">{element}</main>
     </div>
