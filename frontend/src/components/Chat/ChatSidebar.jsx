@@ -2,7 +2,7 @@ import { MessageSquare, Search } from "lucide-react";
 
 const ChatSidebar = ({ chats, selectedChat, onSelectChat }) => {
   return (
-    <div className="w-80 border-r border-primary-extra-light bg-white">
+    <div className=" h-full border-r border-primary-extra-light bg-white">
       <div className="p-4 bg-white border-b border-primary-extra-light">
         <h2 className="text-h3 font-heading font-bold text-primary-dark">
           MESSAGE

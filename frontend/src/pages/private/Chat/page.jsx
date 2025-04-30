@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ChatSidebar from "../../../components/Chat/ChatSidebar";
 import ChatContent from "../../../components/Chat/ChatContent";
 import axios from "axios";
-const userId = "6805e59935e3fe0a7c60c001";
+import { useAuth } from "../../../context/AuthContext";
+//const userId = "6805e59935e3fe0a7c60c001";
 const Chat = () => {
+  const userId = useAuth().user._id;
   const [selectedChat, setSelectedChat] = useState("null");
   const [recentChats, setRecentChats] = useState([]);
   useEffect(() => {
@@ -12,7 +14,6 @@ const Chat = () => {
         const res = await axios.get(
           `http://localhost:3000/api/chat/chat-get-room/${userId}`
         );
-        console.log("==========", res.data.data.chatRoom);
         if (res.data.data.chatRoom.length > 0) {
           setRecentChats(res.data.data.chatRoom);
         }
@@ -23,7 +24,7 @@ const Chat = () => {
     fetchChatRoom();
   }, []);
   return (
-    <div className="mr-10 pr-10 flex h-screen w-screen bg-bg-light">
+    <div className="flex w-4/5 h-[calc(100vh-136px)] mx-auto my-2 bg-bg-light shadow-lg rounded-lg overflow-hidden">
       <ChatSidebar
         chats={recentChats}
         selectedChat={selectedChat}

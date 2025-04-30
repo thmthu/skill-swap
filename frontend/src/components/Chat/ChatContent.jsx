@@ -16,28 +16,13 @@ const ChatContent = ({ selectedChatId }) => {
   const messageContainerRef = useRef(null);
   let receiverId;
   useEffect(() => {
-    if (!selectedChatId) {
-      return (
-        <div className="flex-1 flex items-center justify-center bg-bg-light">
-          <div className="text-center">
-            <MessageSquare className="w-16 h-16 text-primary-medium mx-auto mb-4" />
-            <h2 className="text-h2 font-heading font-bold text-primary-dark">
-              Select a conversation
-            </h2>
-            <p className="text-body1 text-primary-medium mt-2">
-              Choose a chat from the sidebar to start messaging
-            </p>
-          </div>
-        </div>
-      );
-    }
     socket.emit("joinRoom", selectedChatId);
     const ids = selectedChatId.split("_");
     receiverId = ids.find((id) => id !== senderId);
     const fetchMessages = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:3000/api/chat/chat-get-message/${selectedChatId}`
+          `http://localhost:3000/api/chat/chat-get-message/${selectedChatId}` // trả về thêm reciever name và avatar
         );
         console.log("data:", res.data);
         if (res.data.data.messages) {
@@ -65,8 +50,6 @@ const ChatContent = ({ selectedChatId }) => {
   }, [selectedChatId]);
 
   const appendMessage = (newMsg) => {
-    //setMessages((prev) => [...prev, newMsg]);
-
     if (messageContainerRef.current) {
       const msgDiv = document.createElement("div");
       msgDiv.className = `flex ${
@@ -108,8 +91,23 @@ const ChatContent = ({ selectedChatId }) => {
     }
   };
 
+  if (!selectedChatId || selectedChatId === "null") {
+    return (
+      <div className=" h-full overflow-y-auto flex-1 flex items-center justify-center bg-bg-light">
+        <div className="text-center">
+          <MessageSquare className="w-16 h-16 text-primary-medium mx-auto mb-4" />
+          <h2 className="text-h2 font-heading font-bold text-primary-dark">
+            Select a conversation
+          </h2>
+          <p className="text-body1 secondary-light-pink mt-2">
+            Choose a chat from the sidebar to start messaging
+          </p>
+        </div>
+      </div>
+    );
+  }
   return (
-    <div className="flex-1 flex flex-col h-screen bg-bg-light">
+    <div className="flex-1 flex flex-col h-full bg-bg-light">
       {/* Chat Header */}
       <div className="p-4 bg-white border-b border-primary-extra-light">
         <h2 className="text-h3 font-heading font-bold text-primary-dark">
@@ -163,7 +161,7 @@ const ChatContent = ({ selectedChatId }) => {
             onClick={handleSend}
             className="p-2 rounded-lg bg-primary hover:bg-primary-dark"
           >
-            <Send color="#3e9392" className="w-5 h-5" />
+            <Send color="white" className="w-5 h-5" />
           </button>
         </div>
       </div>
