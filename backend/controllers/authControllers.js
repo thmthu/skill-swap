@@ -49,9 +49,9 @@ export const login = async (req, res) => {
         if (!passChecked) {
             return res.status(400).json({ message: 'Invalid password' });
         }
-        const { accessToken, refreshToken } = generateTokens({ userId: user._id })
-        user.refreshToken = refreshToken;
-        await user.save();
+        const { accessToken, refreshToken } = generateTokens({ userId: user._id });
+        // user.refreshToken = refreshToken;
+        // await user.save();
 
         res.cookie('accessToken', accessToken, {
             ...COOKIE_OPTIONS,
@@ -70,6 +70,7 @@ export const login = async (req, res) => {
 export const logout = async (req, res) => {
     try {
         const accessToken = req.headers.authorization?.split(' ')[1] || req.cookies['accessToken'];
+        // console.log("Logout accessToken: ", accessToken)
         if (accessToken) {
             const decoded = verifyAccessToken(accessToken);
             const expiry = decoded.exp - Math.floor(Date.now() / 1000);

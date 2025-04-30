@@ -6,10 +6,12 @@ import { useNavigate } from "react-router-dom";
 export const authService = {
   async login(email, password, rememberMe = false) {
     try {
-      console.log(email, password, rememberMe);
+      // console.log(email, password, rememberMe);
       const response = await axios.post(`${API_CONFIG.BASE_URL}/auth/login`, {
         email,
         password,
+      },{
+        withCredentials: true
       });
 
       if (response.data.token) {
@@ -29,6 +31,9 @@ export const authService = {
           username: fullName,
           email: email,
           password: password,
+        },
+        {
+          withCredentials: true,
         }
       );
       if (response.data.token) {
@@ -66,7 +71,10 @@ export const authService = {
   // Logout user
   async logout() {
     try {
-      await axios.post(`${API_CONFIG.BASE_URL}/auth/logout`);
+      const response = await axios.post(`${API_CONFIG.BASE_URL}/auth/logout`, {}, {
+        withCredentials: true,
+      });
+      console.log("Logout response:", response.data);
       localStorage.removeItem("user");
     } catch (error) {
       console.error("Logout error:", error);
