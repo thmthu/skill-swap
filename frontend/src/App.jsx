@@ -1,7 +1,3 @@
-
-import "./App.css";
-import MyNetworkPage from "./pages/private/MyNetwork/page";
-import ResourcePage from "./pages/public/Resources/page";
 import { useRoutes } from "react-router-dom";
 import { navRoutes } from "@/routes/NavRoutes";
 import Navbar from "@/components/Navbar/Navbar";
@@ -11,14 +7,14 @@ import { useTheme } from "@/context/ThemeContext";
 function App() {
   const element = useRoutes(navRoutes);
   const { theme } = useTheme();
-	return (
-		<div>
-			{/* <ColorTest /> */}
-			{/* <MyNetworkPage /> */}
-      <ResourcePage />
-   
-		</div>
-	);
+
+  return (
+    <div className="min-h-screen w-screen overflow-x-hidden bg-bg-light flex flex-col">
+      <Toaster />
+      <Navbar />
+      <main className="flex-1 p-6">{element}</main>
+    </div>
+  );
 }
 
 export default App;
