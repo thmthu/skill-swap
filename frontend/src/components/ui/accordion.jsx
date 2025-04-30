@@ -1,14 +1,15 @@
-'use client';;
-import { motion, AnimatePresence, MotionConfig } from 'motion/react';
-import { cn } from '@/lib/utils';
-import React, { createContext, useContext, useState } from 'react';
+"use client";
+import { motion, AnimatePresence, MotionConfig } from "framer-motion";
+
+import { cn } from "@/lib/utils";
+import React, { createContext, useContext, useState } from "react";
 
 const AccordionContext = createContext(undefined);
 
 function useAccordion() {
   const context = useContext(AccordionContext);
   if (!context) {
-    throw new Error('useAccordion must be used within an AccordionProvider');
+    throw new Error("useAccordion must be used within an AccordionProvider");
   }
   return context;
 }
@@ -17,10 +18,9 @@ function AccordionProvider({
   children,
   variants,
   expandedValue: externalExpandedValue,
-  onValueChange
+  onValueChange,
 }) {
-  const [internalExpandedValue, setInternalExpandedValue] =
-    useState(null);
+  const [internalExpandedValue, setInternalExpandedValue] = useState(null);
 
   const expandedValue =
     externalExpandedValue !== undefined
@@ -49,15 +49,16 @@ function Accordion({
   transition,
   variants,
   expandedValue,
-  onValueChange
+  onValueChange,
 }) {
   return (
     <MotionConfig transition={transition}>
-      <div className={cn('relative', className)} aria-orientation='vertical'>
+      <div className={cn("relative", className)} aria-orientation="vertical">
         <AccordionProvider
           variants={variants}
           expandedValue={expandedValue}
-          onValueChange={onValueChange}>
+          onValueChange={onValueChange}
+        >
           {children}
         </AccordionProvider>
       </div>
@@ -65,18 +66,15 @@ function Accordion({
   );
 }
 
-function AccordionItem({
-  value,
-  children,
-  className
-}) {
+function AccordionItem({ value, children, className }) {
   const { expandedValue } = useAccordion();
   const isExpanded = value === expandedValue;
 
   return (
     <div
-      className={cn('overflow-hidden', className)}
-      {...(isExpanded ? { 'data-expanded': '' } : {'data-closed': ''})}>
+      className={cn("overflow-hidden", className)}
+      {...(isExpanded ? { "data-expanded": "" } : { "data-closed": "" })}
+    >
       {React.Children.map(children, (child) => {
         if (React.isValidElement(child)) {
           return React.cloneElement(child, {
@@ -91,38 +89,31 @@ function AccordionItem({
   );
 }
 
-function AccordionTrigger({
-  children,
-  className,
-  ...props
-}) {
+function AccordionTrigger({ children, className, ...props }) {
   const { toggleItem, expandedValue } = useAccordion();
-  const value = (props).value;
+  const value = props.value;
   const isExpanded = value === expandedValue;
 
   return (
     <button
       onClick={() => value !== undefined && toggleItem(value)}
       aria-expanded={isExpanded}
-      type='button'
-      className={cn('group', className)}
-      {...(isExpanded ? { 'data-expanded': '' } : {'data-closed': ''})}>
+      type="button"
+      className={cn("group", className)}
+      {...(isExpanded ? { "data-expanded": "" } : { "data-closed": "" })}
+    >
       {children}
     </button>
   );
 }
 
-function AccordionContent({
-  children,
-  className,
-  ...props
-}) {
+function AccordionContent({ children, className, ...props }) {
   const { expandedValue, variants } = useAccordion();
-  const value = (props).value;
+  const value = props.value;
   const isExpanded = value === expandedValue;
 
   const BASE_VARIANTS = {
-    expanded: { height: 'auto', opacity: 1 },
+    expanded: { height: "auto", opacity: 1 },
     collapsed: { height: 0, opacity: 0 },
   };
 
@@ -135,11 +126,12 @@ function AccordionContent({
     <AnimatePresence initial={false}>
       {isExpanded && (
         <motion.div
-          initial='collapsed'
-          animate='expanded'
-          exit='collapsed'
+          initial="collapsed"
+          animate="expanded"
+          exit="collapsed"
           variants={combinedVariants}
-          className={className}>
+          className={className}
+        >
           {children}
         </motion.div>
       )}
