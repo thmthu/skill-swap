@@ -6,9 +6,10 @@ var Connection = new Schema(
 		receiver: { type: String, required: true },
 		status: {
 			type: String,
-			enum: ["pending", "accepted", "rejected"],
+			enum: ["pending", "accepted"],
 			default: "pending",
 		},
+		isDeleted: { type: Boolean, default: false },
 	},
 	{ timestamps: true }
 );
