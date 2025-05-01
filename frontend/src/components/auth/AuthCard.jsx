@@ -16,7 +16,7 @@ export default function AuthCard({ title, subtitle, children, footerText, footer
           {title}
           <span className="text-h2-0 block text-white mt-2">NAB Skillswap!</span>
         </CardTitle>
-        <CardDescription className="text-body1 text-text-dark/80 text-center mt-2">
+        <CardDescription className="text-body1 text-text-dark/80 text-center mb-2">
           {subtitle}
         </CardDescription>
       </CardHeader>

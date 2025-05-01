@@ -1,13 +1,19 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
+import LoadingScreen from "@/components/Loading/LoadingScreen";
 
 export function PrivateRoute() {
   const { isAuthenticated, loading, needsUserPreference } = useAuth();
+  const location = useLocation();
+  const isHomePage = location.pathname === "/home";
 
-  if (loading) return <div>Loading...</div>;
-  if (!isAuthenticated) return <Navigate to="/auth?state=login" replace />;
+  if (loading) return <LoadingScreen />;
+  
+  if (!isAuthenticated && !isHomePage) {
+    return <Navigate to="/auth?state=login" replace />;
+  }
 
-  if (needsUserPreference && !window.location.pathname.includes("user-preference")) {
+  if (isAuthenticated && needsUserPreference && !window.location.pathname.includes("user-preference")) {
     return <Navigate to="/user-preference" replace />;
   }
 
