@@ -4,6 +4,7 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 export default function DocCard({ doc }) {
   return (
@@ -19,6 +20,15 @@ export default function DocCard({ doc }) {
           <CardTitle className="text-base md:text-lg">{doc.title}</CardTitle>
         </div>
         <p className="text-sm text-muted-foreground">{doc.description}</p>
+        {doc.tags?.length > 0 && (
+          <div className="flex gap-2 flex-wrap mt-2">
+            {doc.tags.map((tag, idx) => (
+              <Badge key={idx} variant="custom">
+                {tag}
+              </Badge>
+            ))}
+          </div>
+        )}
       </CardContent>
       <CardFooter>
         <a
