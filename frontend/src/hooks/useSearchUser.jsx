@@ -1,9 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import axios from "axios";
-import { API_CONFIG } from "@/lib/config";
-import { generateDynamicDescription } from "@/utils/formatSkills";
+import { useState, useEffect, useCallback } from "react";
+import debounce from 'lodash/debounce';
+import axios from "@/lib/axiosClient";
 
 export function useSearchUser(initialSearch = "", initialSkills = "") {
   const [users, setUsers] = useState([]);
@@ -11,53 +10,61 @@ export function useSearchUser(initialSearch = "", initialSkills = "") {
   const [selectedSkills, setSelectedSkills] = useState(initialSkills);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  
+  const fetchUsers = useCallback(async (search, skills) => {
+    try {
+      setLoading(true);
+      setError("");
+      const params = new URLSearchParams();
+
+      if (search.trim() !== "") {
+        params.append("name", search.trim());
+      }
+
+      if (skills.length > 0) {
+        params.append("skills", skills.join(","));
+      }
+
+      const url = params.toString() ? `/users?${params.toString()}` : `/users`;
+      const response = await axios.get(url);
+      
+      if (Array.isArray(response.data)) {
+        const mappedUsers = response.data.map((user) => ({
+          id: user._id,
+          image: user.ava || "/NAB.png",
+          name: user.username,
+          tags: user.skills || [],
+          department: user.bio || "Unknown Department",
+        }));
+
+        setUsers(mappedUsers);
+      } else {
+        setUsers([]);
+        console.error("Unexpected response format:", response.data);
+      }
+    } catch (err) {
+      console.error("Fetch error:", err);
+      setError("Failed to load mentors. Please try again.");
+      setUsers([]);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const debouncedFetch = useCallback(
+    debounce((search, skills) => {
+      fetchUsers(search, skills);
+    }, 500),
+    [fetchUsers]
+  );
 
   useEffect(() => {
-    const delayDebounce = setTimeout(async () => {
-      try {
-        setLoading(true);
-        setError("");
-        const params = new URLSearchParams();
-
-        if (searchTerm.trim() !== "") {
-          params.append("username", searchTerm.trim());
-        }
-
-        if (selectedSkills.length > 0) {
-          params.append("teach", selectedSkills.join(",")); // e.g., react,mongodb
-        }
-
-        const url = params.toString()
-          ? `${API_CONFIG.BASE_URL}/users?${params.toString()}`
-          : `${API_CONFIG.BASE_URL}/users`;
-
-        const response = await axios.get(url);
-        if (Array.isArray(response.data)) {
-          const mappedUsers = response.data.map((user) => ({
-            id: user._id,
-            image: user.ava, // chỗ này nè
-            name: user.username,
-            tags: user.teach || [],
-            description: generateDynamicDescription(user),
-            department: user.department || "Unknown Department",
-          }));
-
-          setUsers(mappedUsers);
-        } else {
-          setUsers([]);
-          console.error("Unexpected response format:", response.data);
-        }
-      } catch (err) {
-        console.error("Fetch error:", err);
-        setError("Failed to load mentors. Please try again.");
-        setUsers([]);
-      } finally {
-        setLoading(false);
-      }
-    }, 500); // 500ms debounce
-
-    return () => clearTimeout(delayDebounce);
-  }, [searchTerm, selectedSkills]);
+    debouncedFetch(searchTerm, selectedSkills);
+    
+    return () => {
+      debouncedFetch.cancel();
+    };
+  }, [searchTerm, selectedSkills, debouncedFetch]);
 
   return {
     users,

@@ -1,8 +1,31 @@
-import { Router } from 'express';
-import { createConnection, respondConnection } from '../controllers/connectionControllers.js';
-import { authMiddleware } from '../middlewares/authMiddlewares.js';
+import { Router } from "express";
+import {
+	createConnection,
+	getAllConnections,
+	getAllReceivedConnections,
+	getAllSentConnections,
+	getRecentConnections,
+	withdrawRequest,
+	acceptRequest,
+	rejectRequest,
+	deleteConnection,
+} from "../controllers/connectionControllers.js";
+import { authMiddleware } from "../middlewares/authMiddlewares.js";
 
 export const router = Router();
 
-router.post('/', authMiddleware, createConnection);
-router.patch('/respond', authMiddleware, respondConnection);
+router.get("/", authMiddleware, getAllConnections);
+router.get("/received", authMiddleware, getAllReceivedConnections);
+router.get("/sent", authMiddleware, getAllSentConnections);
+router.get("/recent", authMiddleware, getRecentConnections);
+router.post("/create/:senderId/:receiverId", authMiddleware, createConnection);
+router.delete(
+	"/withdraw/:connectionId/:userId",
+	authMiddleware,
+	withdrawRequest
+);
+router.post("/accept/:connectionId/:userId", authMiddleware, acceptRequest);
+router.post("/reject/:connectionId/:userId", authMiddleware, rejectRequest);
+router.delete("/delete/:connectionId", authMiddleware, deleteConnection);
+
+export default router;

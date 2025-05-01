@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-@custom-variant dark (&:is(.dark *));
+/* @custom-variant dark (&:is(.dark *)); */
 @config "../tailwind.config.js";
 /* Thêm vào file CSS toàn cục của bạn (ví dụ: src/index.css) */
 .bg-gradient-tech {
