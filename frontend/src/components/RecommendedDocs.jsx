@@ -1,3 +1,5 @@
+import DocCard from "@/components/docsCard";
+import GradientHeading from "@/components/Text/GradientHeading";
 const docs = [
   {
     title: "React",
@@ -58,28 +60,12 @@ const docs = [
 export function RecommendedDocs() {
   return (
     <section className="max-w-[1280px] mx-auto px-4 py-12">
-      {/* <h2 className="text-2xl md:text-4xl font-heading text-center mb-8 text-primary">
-        Recommended Docs
-      </h2> */}
-
+      <h2 className="text-2xl md:text-4xl font-heading text-center mb-8 text-primary">
+        <GradientHeading>Recommended Docs</GradientHeading>
+        </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {docs.map((doc) => (
-          <a
-            key={doc.title}
-            href={doc.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block border border-gray-200 rounded-lg p-6 hover:border-primary hover:shadow-lg transition"
-          >
-            <div className="flex items-center gap-3 mb-4">
-              <img src={doc.icon} alt={doc.title} className="w-6 h-6" />
-              <h3 className="text-lg font-semibold text-gray-900">{doc.title}</h3>
-            </div>
-            <p className="text-sm text-gray-600 mb-4">{doc.description}</p>
-            <span className="inline-block text-sm text-primary font-medium">
-              📘 View Docs →
-            </span>
-          </a>
+          <DocCard key={doc.title} doc={doc} />
         ))}
       </div>
     </section>

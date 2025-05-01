@@ -4,7 +4,7 @@ import { CategoryFilter } from "../../../components/filter";
 import { Loader2 } from "lucide-react";
 import GradientHeading from "@/components/Text/GradientHeading";
 import { RecommendedDocs } from "@/components/RecommendedDocs";
-
+import { CertificateSection } from "@/pages/public/Resources/CertificateSection";
 const allCourses = [
   // UI/UX Design
   { title: "UI/UX Basics", description: "Design fundamentals for beginners.", category: "UI/UX Design", url: "https://www.coursera.org/specializations/ui-ux-design" },
@@ -88,8 +88,12 @@ export default function CoursesPage() {
         )}
       </div>
       <div className="flex justify-center items-center mb-6 md:text-2xl lg:text-3xl">
-        <GradientHeading>Recommended Docs</GradientHeading>
+        {/* <GradientHeading>Recommended Docs</GradientHeading> */}
         <RecommendedDocs />
+      </div>
+      <div className="flex justify-center items-center mb-6 md:text-2xl lg:text-3xl">
+        {/* <GradientHeading>Recommended Certificates</GradientHeading> */}
+        <CertificateSection />
       </div>
     </div>
 
