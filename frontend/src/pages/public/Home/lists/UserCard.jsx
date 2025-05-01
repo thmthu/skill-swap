@@ -84,7 +84,7 @@ export default function UserCard({
             <MorphingDialogImage
               src={image}
               alt={name}
-              className="h-full w-full object-cover"
+              className="h-64 w-full object-cover"
             />
 
             <div className="p-6">
