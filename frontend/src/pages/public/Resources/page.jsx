@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { CourseCarousel } from "../../../components/Carousel";
 import { CategoryFilter } from "../../../components/filter";
-import { Loader2 } from "lucide-react"; // if you have Shadcn's icons installed
+import { Loader2 } from "lucide-react";
+import GradientHeading from "@/components/Text/GradientHeading";
+
 
 const allCourses = [
   // UI/UX Design
@@ -56,13 +58,16 @@ export default function CoursesPage() {
         setFilteredCourses(allCourses.filter((course) => course.category === category));
       }
       setLoading(false);
-    }, 400); // fake loading time
+    }, 200); // fake loading time
   };
 
   return (
-    <div className="container mx-auto px-4 py-6">
-      <div className="sticky top-0 z-10 bg-white pb-4">
-        <h1 className="italic font-heading text-primary text-center mb-4 font-bold text-2xl md:text-3xl lg:text-4xl">Popular Courses</h1>
+    <div>
+      <div className="sticky top-0 z-1 pb-2 mb-4">
+        {/* <h1 className="italic font-heading text-primary text-center mb-4 font-bold text-2xl md:text-3xl lg:text-4xl">Popular Courses</h1> */}
+        <div className="flex justify-center items-center mb-6 md:text-2xl lg:text-3xl">
+          <GradientHeading>Popular Courses</GradientHeading>
+        </div>
 
         <CategoryFilter
           categories={categories}

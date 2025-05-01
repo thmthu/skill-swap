@@ -11,7 +11,7 @@ function App() {
   return (
     <div className="min-h-screen w-screen overflow-x-hidden bg-bg-light flex flex-col">
       <Toaster />
-      <Navbar />
+      <Navbar />  
       <main className="flex-1 p-6">{element}</main>
     </div>
   );

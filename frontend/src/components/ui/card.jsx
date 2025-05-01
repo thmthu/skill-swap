@@ -1,4 +1,3 @@
-
 import * as React from "react";
 import { cva } from "class-variance-authority";
 import { cn } from "@/lib/utils";
@@ -51,38 +50,63 @@ function Card({ className, elevation, padding, hoverable, image, children, ...pr
   );
 }
 
-// Other slots
+// Card Sections
 function CardHeader({ className, ...props }) {
   return (
-    <div className={cn("grid grid-rows-[auto_auto] items-start gap-1.5", className)} {...props} />
+    <div
+      data-slot="card-header"
+      className={cn("grid grid-rows-[auto_auto] items-start gap-1.5", className)}
+      {...props}
+    />
   );
 }
 
 function CardTitle({ className, ...props }) {
   return (
-    <h3 className={cn("text-xl font-bold leading-tight", className)} {...props} />
+    <h3
+      data-slot="card-title"
+      className={cn("text-xl font-bold leading-tight", className)}
+      {...props}
+    />
   );
 }
 
 function CardDescription({ className, ...props }) {
   return (
-    <p className={cn("text-muted-foreground text-sm", className)} {...props} />
+    <p
+      data-slot="card-description"
+      className={cn("text-muted-foreground text-sm", className)}
+      {...props}
+    />
   );
 }
 
 function CardContent({ className, ...props }) {
   return (
-    <div className={cn("flex-1", className)} {...props} />
+    <div data-slot="card-content" className={cn("flex-1", className)} {...props} />
   );
 }
 
 function CardFooter({ className, ...props }) {
   return (
-    <div className={cn("flex items-center justify-end pt-4", className)} {...props} />
-
+    <div data-slot="card-footer" className={cn("flex items-center justify-end pt-4", className)} {...props} />
   );
 }
 
+function CardAction({ className, ...props }) {
+  return (
+    <div
+      data-slot="card-action"
+      className={cn(
+        "col-start-2 row-span-2 row-start-1 self-start justify-self-end",
+        className
+      )}
+      {...props}
+    />
+  );
+}
+
+// Export all parts
 export {
   Card,
   CardHeader,
@@ -90,4 +114,5 @@ export {
   CardDescription,
   CardContent,
   CardFooter,
+  CardAction,
 };
