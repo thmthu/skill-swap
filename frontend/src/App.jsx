@@ -3,6 +3,7 @@ import { navRoutes } from "@/routes/NavRoutes";
 import Navbar from "@/components/Navbar/Navbar";
 import { Toaster } from "react-hot-toast";
 import { useTheme } from "@/context/ThemeContext";
+import Header from "./components/Header/Header";
 
 function App() {
   const element = useRoutes(navRoutes);
@@ -12,6 +13,7 @@ function App() {
     <div className="min-h-screen w-screen overflow-x-hidden bg-bg-light flex flex-col">
       <Toaster />
       <Navbar />  
+      {/* <Header /> */}
       <main className="flex-1 p-6">{element}</main>
     </div>
   );

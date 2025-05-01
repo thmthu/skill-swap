@@ -3,7 +3,7 @@ import { CourseCarousel } from "../../../components/Carousel";
 import { CategoryFilter } from "../../../components/filter";
 import { Loader2 } from "lucide-react";
 import GradientHeading from "@/components/Text/GradientHeading";
-
+import { RecommendedDocs } from "@/components/RecommendedDocs";
 
 const allCourses = [
   // UI/UX Design
@@ -62,7 +62,7 @@ export default function CoursesPage() {
   };
 
   return (
-    <div>
+    <div className="container mx-auto px-4 md:px-8 lg:px-16">
       <div className="sticky top-0 z-1 pb-2 mb-4">
         {/* <h1 className="italic font-heading text-primary text-center mb-4 font-bold text-2xl md:text-3xl lg:text-4xl">Popular Courses</h1> */}
         <div className="flex justify-center items-center mb-6 md:text-2xl lg:text-3xl">
@@ -82,9 +82,16 @@ export default function CoursesPage() {
             <Loader2 className="h-10 w-10 animate-spin text-primary" />
           </div>
         ) : (
-          <CourseCarousel courses={filteredCourses} />
+          <div className="max-w-[90%] mx-auto">
+            <CourseCarousel courses={filteredCourses} />
+          </div>
         )}
       </div>
+      <div className="flex justify-center items-center mb-6 md:text-2xl lg:text-3xl">
+        <GradientHeading>Recommended Docs</GradientHeading>
+        <RecommendedDocs />
+      </div>
     </div>
+
   );
 }
