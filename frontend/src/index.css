@@ -67,6 +67,9 @@ a:hover {
   color: #dc2626;
 }
 
+.logo-link:hover {
+  color: inherit !important;
+}
 body {
   margin: 0;
   display: flex;
