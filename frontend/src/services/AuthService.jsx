@@ -64,7 +64,11 @@ export const authService = {
 
   async getCurrentUser() {
     try {
-      const response = await axios.get("/users/me");
+      const response = await axios.get("/users/me", {
+        headers: {
+          'Cache-Control': 'no-cache', // Prevent caching issues
+        }
+      });
 
       return response.data;
     } catch (error) {
