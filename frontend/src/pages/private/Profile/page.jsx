@@ -1,7 +1,7 @@
 import React from "react";
 import ProfileCard from "@/components/Profile/ProfileCard";
 import NetworkList from "@/components/Profile/NetworkList";
-import LayoutContainer from "@/components/Layout/LayoutContainer";
+import LayoutContainer from "../../../components/LayoutContainer/LayoutContainer";
 
 export default function ProfilePage() {
   return (

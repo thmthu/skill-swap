@@ -1,4 +1,3 @@
-
 import * as React from "react";
 import { cva } from "class-variance-authority";
 import { cn } from "@/lib/utils";
@@ -34,7 +33,15 @@ const cardVariants = cva(
 );
 
 // Main Card Component
-function Card({ className, elevation, padding, hoverable, image, children, ...props }) {
+function Card({
+  className,
+  elevation,
+  padding,
+  hoverable,
+  image,
+  children,
+  ...props
+}) {
   return (
     <div
       data-slot="card"
@@ -42,7 +49,11 @@ function Card({ className, elevation, padding, hoverable, image, children, ...pr
       {...props}
     >
       {image && (
-        <img src={image} alt="Card Image" className="w-full h-40 object-cover" />
+        <img
+          src={image}
+          alt="Card Image"
+          className="w-full h-40 object-cover"
+        />
       )}
       <div className="flex flex-col flex-1 justify-between h-full">
         {children}
@@ -54,13 +65,22 @@ function Card({ className, elevation, padding, hoverable, image, children, ...pr
 // Other slots
 function CardHeader({ className, ...props }) {
   return (
-    <div className={cn("grid grid-rows-[auto_auto] items-start gap-1.5", className)} {...props} />
+    <div
+      className={cn(
+        "grid grid-rows-[auto_auto] items-start gap-1.5",
+        className
+      )}
+      {...props}
+    />
   );
 }
 
 function CardTitle({ className, ...props }) {
   return (
-    <h3 className={cn("text-xl font-bold leading-tight", className)} {...props} />
+    <h3
+      className={cn("text-xl font-bold leading-tight", className)}
+      {...props}
+    />
   );
 }
 
@@ -71,15 +91,23 @@ function CardDescription({ className, ...props }) {
 }
 
 function CardContent({ className, ...props }) {
-  return (
-    <div className={cn("flex-1", className)} {...props} />
-  );
+  return <div className={cn("flex-1", className)} {...props} />;
 }
 
 function CardFooter({ className, ...props }) {
   return (
-    <div className={cn("flex items-center justify-end pt-4", className)} {...props} />
-
+    <div
+      className={cn("flex items-center justify-end pt-4", className)}
+      {...props}
+    />
+  );
+}
+function CardAction({ className, ...props }) {
+  return (
+    <div
+      className={cn("flex items-center justify-end gap-2", className)}
+      {...props}
+    />
   );
 }
 
@@ -90,4 +118,5 @@ export {
   CardDescription,
   CardContent,
   CardFooter,
+  CardAction,
 };

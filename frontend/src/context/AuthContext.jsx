@@ -26,28 +26,32 @@ export function AuthProvider({ children }) {
 
     checkUserLoggedIn();
   }, []);
+
   useEffect(() => {
     if (!user) return;
-  
+
     const checkUserPreference = async () => {
       try {
         const currentUser = await authService.getCurrentUser();
-        const needsPreference = !currentUser.skills?.length || !currentUser.learn?.length;
+        const needsPreference =
+          !currentUser.skills?.length || !currentUser.learn?.length;
         setNeedsUserPreference(needsPreference);
-        if (needsPreference) {
-          navigate('/user-preference')
-        } else {
-          navigate('/home')
-        }
 
+        // ✅ Chỉ redirect nếu chưa đúng trang
+        const currentPath = window.location.pathname;
+        if (needsPreference && currentPath !== "/user-preference") {
+          navigate("/user-preference");
+        } else if (!needsPreference && currentPath === "/auth") {
+          navigate("/home");
+        }
       } catch (error) {
         console.error("Error checking user preferences", error);
       }
     };
-  
+
     checkUserPreference();
   }, [user]);
-  
+
   const login = async (userData) => {
     setLoading(true);
     try {
