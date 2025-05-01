@@ -5,7 +5,7 @@ import {
 	ChatBubbleOvalLeftIcon,
 } from "@heroicons/react/24/solid";
 
-const ReceivedCard = ({ data, formatTime }) => {
+const ReceivedCard = ({ data, formatTime, handleAccept, handleReject }) => {
 	return (
 		<div
 			data-property-1="Received"
@@ -44,12 +44,12 @@ const ReceivedCard = ({ data, formatTime }) => {
 				</div>
 
 				{/* Decline Icon */}
-				<div className="w-10 h-10 md:w-14 md:h-14 flex justify-center items-center border-primary border-2 rounded-full">
+				<div onClick={() => handleReject(data)} className="w-10 h-10 md:w-14 md:h-14 flex justify-center items-center border-primary border-2 rounded-full">
 					<XMarkIcon className="w-6 md:w-8 text-primary" />
 				</div>
 
 				{/* Accept Icon */}
-				<div className="w-10 h-10 md:w-14 md:h-14 flex justify-center items-center border-semantic-green border-2 rounded-full">
+				<div onClick={() => handleAccept(data)} className="w-10 h-10 md:w-14 md:h-14 flex justify-center items-center border-semantic-green border-2 rounded-full">
 					<CheckIcon className="w-6 md:w-8 text-semantic-green" />
 				</div>
 			</div>

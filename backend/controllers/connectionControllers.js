@@ -1,3 +1,4 @@
+import { get } from "mongoose";
 import Connection from "../models/Connection.js";
 import User from "../models/User.js";
 import { getUserById } from "../utils/user.js";
@@ -197,12 +198,15 @@ export const createConnection = async (req, res) => {
 
 export const withdrawRequest = async (req, res) => {
 	try {
-		const { connectionId, userId } = req.body;
+		const { connectionId } = req.params;
+
+		const user = await getUserById(req.userId);
+		// console.log(user);
 		const connection = await Connection.findById(connectionId);
 		if (!connection) {
 			return res.status(404).json({ message: "Connection not found" });
 		}
-		if (connection.sender.toString() !== userId) {
+		if (connection.sender !== user._id.toString()) {
 			return res.status(403).json({
 				message: "You can only withdraw your own connections",
 			});
@@ -219,12 +223,13 @@ export const withdrawRequest = async (req, res) => {
 
 export const acceptRequest = async (req, res) => {
 	try {
-		const { connectionId, userId } = req.body;
+		const { connectionId } = req.params;
+		const user = await getUserById(req.userId);
 		const connection = await Connection.findById(connectionId);
 		if (!connection) {
 			return res.status(404).json({ message: "Connection not found" });
 		}
-		if (connection.receiver.toString() !== userId) {
+		if (connection.receiver.toString() !== user._id.toString()) {
 			return res.status(403).json({
 				message: "You can only accept your own connections",
 			});
@@ -240,12 +245,13 @@ export const acceptRequest = async (req, res) => {
 
 export const rejectRequest = async (req, res) => {
 	try {
-		const { connectionId, userId } = req.body;
+		const { connectionId } = req.params;
+		const user = await getUserById(req.userId);
 		const connection = await Connection.findById(connectionId);
 		if (!connection) {
 			return res.status(404).json({ message: "Connection not found" });
 		}
-		if (connection.receiver.toString() !== userId) {
+		if (connection.receiver.toString() !== user._id.toString()) {
 			return res.status(403).json({
 				message: "You can only reject your own connections",
 			});
@@ -261,14 +267,15 @@ export const rejectRequest = async (req, res) => {
 
 export const deleteConnection = async (req, res) => {
 	try {
-		const { connectionId } = req.body;
+		const { connectionId } = req.params;
+		const user = await getUserById(req.userId);
 		const connection = await Connection.findById(connectionId);
 		if (!connection) {
 			return res.status(404).json({ message: "Connection not found" });
 		}
 		if (
-			connection.sender.toString() !== req.userId &&
-			connection.receiver.toString() !== req.userId
+			connection.sender !== user._id.toString() &&
+			connection.receiver !== user._id.toString()
 		) {
 			return res.status(403).json({
 				message: "You can only delete your own connections",

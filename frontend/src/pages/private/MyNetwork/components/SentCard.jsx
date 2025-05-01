@@ -1,8 +1,7 @@
 import React from "react";
 import ActiveButton from "../../../../components/Button/ActiveButton";
 
-const SentCard = ({ data, formatTime }) => {
-
+const SentCard = ({ data, formatTime, handleWithdraw }) => {
 	return (
 		<div
 			data-property-1="Sent"
@@ -35,7 +34,11 @@ const SentCard = ({ data, formatTime }) => {
 
 			{/* Action Button */}
 			<div className="flex justify-end items-center">
-				<ActiveButton children="Withdraw" className="text-text-dark" />
+				<ActiveButton
+					onClick={() => handleWithdraw(data)}
+					children="Withdraw"
+					className="text-text-dark"
+				/>
 			</div>
 		</div>
 	);

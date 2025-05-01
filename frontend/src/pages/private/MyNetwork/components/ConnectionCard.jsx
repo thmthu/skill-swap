@@ -5,7 +5,7 @@ import {
 	ChatBubbleOvalLeftIcon,
 } from "@heroicons/react/24/solid";
 
-const ConnectionCard = ({ data, formatTime }) => {
+const ConnectionCard = ({ data, formatTime, handleDelete }) => {
 	return (
 		<div
 			data-property-1="Received"
@@ -44,7 +44,10 @@ const ConnectionCard = ({ data, formatTime }) => {
 				</div>
 
 				{/* Decline Icon */}
-				<div className="w-10 h-10 md:w-14 md:h-14 relative flex justify-center items-center border-primary border-2 rounded-full">
+				<div
+					onClick={() => handleDelete(data)}
+					className="w-10 h-10 md:w-14 md:h-14 relative flex justify-center items-center border-primary border-2 rounded-full"
+				>
 					<UserGroupIcon className="w-6 md:w-8 text-primary" />
 					<SlashIcon className="absolute w-8 md:w-12 text-primary rotate-12" />
 				</div>

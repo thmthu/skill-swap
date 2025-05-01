@@ -18,6 +18,103 @@ const MyNetworkPage = () => {
 		return tokenCookie ? tokenCookie.split("=")[1] : null;
 	};
 
+	const handleWithdraw = async (data) => {
+		try {
+			const token = getCookie("accessToken");
+			if (!token) throw new Error("Missing auth token");
+
+			await axios.delete(`/api/connections/withdraw/${data.connectionId}`, {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			});
+			// Update the data state by removing the withdrawn connection
+			setData((prevData) =>
+				prevData.filter((item) => item.connectionId !== data.connectionId)
+			);
+		} catch (error) {
+			console.error(
+				"Error withdrawing request:",
+				error.response?.data || error.message
+			);
+		}
+	};
+
+	const handleAccept = async (data) => {
+		try {
+			const token = getCookie("accessToken");
+			if (!token) throw new Error("Missing auth token");
+			await axios.post(
+				`/api/connections/accept/${data.connectionId}`,
+				{
+					userId: data.receiver,
+				},
+				{
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			);
+			// Update the data state by removing the accepted connection
+			setData((prevData) =>
+				prevData.filter((item) => item.connectionId !== data.connectionId)
+			);
+		} catch (error) {
+			console.error(
+				"Error accepting request:",
+				error.response?.data || error.message
+			);
+		}
+	};
+
+	const handleReject = async (data) => {
+		try {
+			const token = getCookie("accessToken");
+			if (!token) throw new Error("Missing auth token");
+			await axios.post(
+				`/api/connections/reject/${data.connectionId}`,
+				{
+					userId: data.receiver,
+				},
+				{
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			);
+			// Update the data state by removing the rejected connection
+			setData((prevData) =>
+				prevData.filter((item) => item.connectionId !== data.connectionId)
+			);
+		} catch (error) {
+			console.error(
+				"Error rejecting request:",
+				error.response?.data || error.message
+			);
+		}
+	};
+
+	const handleDelete = async (data) => {
+		try {
+			const token = getCookie("accessToken");
+			if (!token) throw new Error("Missing auth token");
+			await axios.delete(`/api/connections/delete/${data.connectionId}`, {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			});
+			// Update the data state by removing the deleted connection
+			setData((prevData) =>
+				prevData.filter((item) => item.connectionId !== data.connectionId)
+			);
+		} catch (error) {
+			console.error(
+				"Error deleting connection:",
+				error.response?.data || error.message
+			);
+		}
+	};
+
 	// Fetch data based on the active tab
 	useEffect(() => {
 		const fetchData = async () => {
@@ -46,23 +143,23 @@ const MyNetworkPage = () => {
 				setLoading(false); // Set loading to false after fetching
 			}
 		};
-
-		(async () => {
-			await fetchData();
-		})();
+		fetchData();
 	}, [activeTab]);
 
 	const calculateTimeDifference = (updatedAt) => {
 		const now = new Date();
 		const updatedDate = new Date(updatedAt);
-		const diffInMs = now - updatedDate;
+		const nowUTC = new Date(now.toISOString());
+		const updatedDateUTC = new Date(updatedDate.toISOString());
+
+		const diffInMs = nowUTC - updatedDateUTC;
 
 		const days = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
 		const hours = Math.floor(
 			(diffInMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
 		);
 		const minutes = Math.floor((diffInMs % (1000 * 60 * 60)) / (1000 * 60));
-
+		// console.log(nowUTC, updatedDateUTC);
 		if (days > 0) {
 			return `${days} day${days > 1 ? "s" : ""} ago`;
 		} else if (hours > 0) {
@@ -103,18 +200,22 @@ const MyNetworkPage = () => {
 								data={item}
 								key={index}
 								formatTime={calculateTimeDifference}
+								handleWithdraw={handleWithdraw}
 							/>
 						) : activeTab === "Received" ? (
 							<ReceivedCard
 								data={item}
 								key={index}
 								formatTime={calculateTimeDifference}
+								handleAccept={handleAccept}
+								handleReject={handleReject}
 							/>
 						) : (
 							<ConnectionCard
 								data={item}
 								key={index}
 								formatTime={calculateTimeDifference}
+								handleDelete={handleDelete}
 							/>
 						)
 					)
