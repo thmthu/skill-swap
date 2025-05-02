@@ -7,7 +7,6 @@ import { authService } from "@/services/AuthService";
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-  // User state
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [needsUserPreference, setNeedsUserPreference] = useState(null);
@@ -17,8 +16,6 @@ export function AuthProvider({ children }) {
   const fetchUserData = async () => {
     try {
       const currentUser = await authService.getCurrentUser();
-      console.log("Current user data fetched:", currentUser);
-
       if (currentUser) {
         setUser(currentUser);
         const needsPreference =
@@ -42,7 +39,6 @@ export function AuthProvider({ children }) {
           (url.searchParams.get("reason") === "session_expired" ||
             url.searchParams.get("state") === "login")
         ) {
-          console.log("Skipping auth check for login page");
           setLoading(false);
           setIsInitialAuthCheckDone(true);
           return;
@@ -53,9 +49,7 @@ export function AuthProvider({ children }) {
           try {
             const parsedUser = JSON.parse(savedUser);
             setUser(parsedUser);
-            console.log("User loaded from localStorage:", parsedUser);
           } catch (e) {
-            console.error("Error parsing user from localStorage:", e);
             localStorage.removeItem("user");
           }
         }
@@ -92,11 +86,15 @@ export function AuthProvider({ children }) {
           !currentUser.skills?.length || !currentUser.learn?.length;
         setNeedsUserPreference(needsPreference);
 
-        // ✅ Chỉ redirect nếu chưa đúng trang
         const currentPath = window.location.pathname;
+
+        // ✅ Chỉ redirect nếu thiếu và không đang ở /user-preference
         if (needsPreference && currentPath !== "/user-preference") {
           navigate("/user-preference");
-        } else if (!needsPreference && currentPath === "/auth") {
+        }
+
+        // ✅ Nếu login xong mà ở /auth, thì đi thẳng về /home
+        if (!needsPreference && currentPath === "/auth") {
           navigate("/home");
         }
       } catch (error) {
@@ -111,9 +109,7 @@ export function AuthProvider({ children }) {
     setLoading(true);
     try {
       setUser(userData.user);
-
       localStorage.setItem("user", JSON.stringify(userData.user));
-
       return userData;
     } finally {
       setLoading(false);
