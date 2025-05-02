@@ -1,24 +1,21 @@
 import { Send, MessageSquare } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { io } from "socket.io-client";
 import { useAuth } from "../../context/AuthContext";
 import axiosClient from "../../lib/axiosClient";
-const socket = io("http://localhost:3000");
+import { useSocket } from "../../context/SocketContext";
 const ChatContent = ({ userFromHome, setRecentChats, chatRoomId }) => {
   const senderId = useAuth().user._id;
+  const sender = useAuth();
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const messageContainerRef = useRef(null);
   const [receiverId, setReceiverId] = useState("");
-
+  const { socket, joinRoom, markAsRead, sendMessage } = useSocket();
   useEffect(() => {
-    if (!chatRoomId || chatRoomId === "null") return;
+    if (!chatRoomId || chatRoomId === "null" || !socket) return;
 
-    socket.emit("joinRoom", chatRoomId);
-    socket.emit("markAsRead", {
-      chatRoomId,
-      userId: senderId,
-    });
+    joinRoom(chatRoomId);
+    markAsRead(chatRoomId, senderId);
 
     setRecentChats((prevChats) =>
       prevChats.map((chat) =>
@@ -45,10 +42,16 @@ const ChatContent = ({ userFromHome, setRecentChats, chatRoomId }) => {
     };
 
     fetchMessages();
-    return () => {
-      socket.off("newMessage");
+    const handleNewMessage = (newMsg) => {
+      setMessages((prevMessages) => [...prevMessages, newMsg]);
     };
-  }, [chatRoomId, senderId]);
+
+    socket.on("newMessage", handleNewMessage);
+
+    return () => {
+      socket.off("newMessage", handleNewMessage);
+    };
+  }, [chatRoomId, senderId, socket]);
 
   useEffect(() => {
     const scrollToBottom = () => {
@@ -65,23 +68,27 @@ const ChatContent = ({ userFromHome, setRecentChats, chatRoomId }) => {
     return () => clearTimeout(timeoutId);
   }, [messages]);
 
-  useEffect(() => {
-    if (!chatRoomId) return;
+  // useEffect(() => {
+  //   if (!chatRoomId || !socket) return;
 
-    const handleNewMessage = (newMsg) => {
-      setMessages((prevMessages) => [...prevMessages, newMsg]);
-    };
+  //   const handleNewMessage = (newMsg) => {
+  //     setMessages((prevMessages) => [...prevMessages, newMsg]);
+  //   };
 
-    socket.on("newMessage", handleNewMessage);
+  //   socket.on("newMessage", handleNewMessage);
 
-    return () => {
-      socket.off("newMessage", handleNewMessage);
-    };
-  }, [chatRoomId]);
+  //   return () => {
+  //     socket.off("newMessage", handleNewMessage);
+  //   };
+  // }, [chatRoomId]);
 
   const handleSend = () => {
     if (message.trim()) {
-      socket.emit("sendMessage", {
+      sendMessage({
+        sender: {
+          name: sender.user.username,
+          profilePic: sender.user.avatar || "./NAB.png",
+        },
         chatRoomId,
         senderId,
         receiverId,

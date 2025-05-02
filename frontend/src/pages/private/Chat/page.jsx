@@ -17,7 +17,6 @@ const Chat = () => {
     username: "",
     profilePic: "",
   });
-  const flag = useRef(false);
   useEffect(() => {
     const fetchChatRoom = async () => {
       try {
@@ -30,8 +29,7 @@ const Chat = () => {
       }
     };
     fetchChatRoom();
-    if (location.state?.username && !flag.current) {
-      console.log("hello");
+    if (location.state?.username ) {
       setReceiver({
         receiverId,
         username: location.state?.username,
@@ -40,27 +38,7 @@ const Chat = () => {
       return;
     }
   }, []);
-  // useEffect(() => {
-  //   if (location.state?.username && !flag.current) {
-  //     console.log("hello");
-  //     setReceiver({
-  //       receiverId,
-  //       username: location.state?.username,
-  //       profilePic: location.state?.profilePic,
-  //     });
-  //     return;
-  //   } else if (selectedChat != "null") {
-  //     const userFetch = recentChats.find((chat) => {
-  //       return chat.chatRoomId == selectedChat;
-  //     });
-  //     setReceiver({
-  //       receiverId,
-  //       username: userFetch.user.username,
-  //       profilePic: userFetch.user.profilePic || "./NAB.png",
-  //     });
-  //   }
-  //   flag.current = true;
-  // }, [recentChats, selectedChat]);
+
   useEffect(() => {
     if (receiverId && userId) {
       const temp =
