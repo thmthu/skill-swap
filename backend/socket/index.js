@@ -3,7 +3,15 @@ import ChatRoom from "../models/ChatRoom.js";
 import { convertToObjectId } from "../utils/mongo.js";
 import User from "../models/User.js";
 const initSocket = (io) => {
+  const userSocketMap = new Map();
+
   io.on("connection", (socket) => {
+    socket.on("login", (userId) => {
+      console.log("User logged in:", userId);
+      userSocketMap.set(userId, socket.id);
+      socket.join(`user_${userId}`);
+    });
+
     socket.on("joinRoom", (chatRoomId) => {
       console.log("User joinRoom:", socket.id);
       socket.join(chatRoomId);
@@ -11,9 +19,8 @@ const initSocket = (io) => {
 
     socket.on(
       "sendMessage",
-      async ({ chatRoomId, senderId, receiverId, text }) => {
+      async ({ sender, chatRoomId, senderId, receiverId, text }) => {
         try {
-          console.log("recie: ", receiverId);
           let room = await ChatRoom.findOne({ chat_room_id: chatRoomId });
           const message = await Message.create({
             chat_room_id: chatRoomId,
@@ -52,6 +59,16 @@ const initSocket = (io) => {
             await room.save();
           }
           io.to(chatRoomId).emit("newMessage", message);
+
+          io.to(`user_${receiverId}`).emit("messageNotification", {
+            message: text,
+            chatRoomId: chatRoomId,
+            sender: {
+              id: senderId,
+              name: sender.name || sender.username,
+              avatar: sender.profilePic || "./NAB.png",
+            },
+          });
         } catch (e) {
           console.log("error at send message socket: ", e);
         }
@@ -68,6 +85,12 @@ const initSocket = (io) => {
 
     socket.on("disconnect", () => {
       console.log("User disconnected:", socket.id);
+      for (const [userId, socketId] of userSocketMap.entries()) {
+        if (socketId === socket.id) {
+          userSocketMap.delete(userId);
+          break;
+        }
+      }
     });
   });
 };
