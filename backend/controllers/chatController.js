@@ -39,7 +39,7 @@ export const getChatRooms = async (req, res) => {
           user: {
             _id: otherUser?._id.toString(),
             username: otherUser?.username,
-            profilePic: otherUser?.profilePic,
+            profilePic: otherUser?.avatar,
           },
         };
       })

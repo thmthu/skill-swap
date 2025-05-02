@@ -76,6 +76,7 @@ export default function UserCardList() {
                   name={user.name}
                   tags={user.tags || []}
                   department={user.department || "Unknown Department"}
+                  userId={user.id}
                 />
               ))
             ) : (
