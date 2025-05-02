@@ -3,6 +3,8 @@ import ReceivedCard from "./components/ReceivedCard";
 import SentCard from "./components/SentCard";
 import ConnectionCard from "./components/ConnectionCard";
 import Header from "../../../components/Header/Header";
+import AlertPopup from "./components/AlertPopup";
+import { toast, Toaster } from "react-hot-toast";
 import axios from "axios";
 
 const MyNetworkPage = () => {
@@ -32,6 +34,7 @@ const MyNetworkPage = () => {
 			setData((prevData) =>
 				prevData.filter((item) => item.connectionId !== data.connectionId)
 			);
+			toast.success("Connection withdrawn successfully");
 		} catch (error) {
 			console.error(
 				"Error withdrawing request:",
@@ -56,9 +59,9 @@ const MyNetworkPage = () => {
 				}
 			);
 			// Update the data state by removing the accepted connection
-			setData((prevData) =>
-				prevData.filter((item) => item.connectionId !== data.connectionId)
-			);
+			// setData((prevData) =>
+			// 	prevData.filter((item) => item.connectionId !== data.connectionId)
+			// );
 		} catch (error) {
 			console.error(
 				"Error accepting request:",
@@ -83,9 +86,9 @@ const MyNetworkPage = () => {
 				}
 			);
 			// Update the data state by removing the rejected connection
-			setData((prevData) =>
-				prevData.filter((item) => item.connectionId !== data.connectionId)
-			);
+			// setData((prevData) =>
+			// 	prevData.filter((item) => item.connectionId !== data.connectionId)
+			// );
 		} catch (error) {
 			console.error(
 				"Error rejecting request:",
@@ -107,11 +110,35 @@ const MyNetworkPage = () => {
 			setData((prevData) =>
 				prevData.filter((item) => item.connectionId !== data.connectionId)
 			);
+			toast.success("Connection deleted successfully");
 		} catch (error) {
 			console.error(
 				"Error deleting connection:",
 				error.response?.data || error.message
 			);
+		}
+	};
+
+	const calculateTimeDifference = (updatedAt) => {
+		const now = new Date();
+		const updatedDate = new Date(updatedAt);
+		const nowUTC = new Date(now.toISOString());
+		const updatedDateUTC = new Date(updatedDate.toISOString());
+
+		const diffInMs = nowUTC - updatedDateUTC;
+
+		const days = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+		const hours = Math.floor(
+			(diffInMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+		);
+		const minutes = Math.floor((diffInMs % (1000 * 60 * 60)) / (1000 * 60));
+		// console.log(nowUTC, updatedDateUTC);
+		if (days > 0) {
+			return `${days} day${days > 1 ? "s" : ""} ago`;
+		} else if (hours > 0) {
+			return `${hours} hour${hours > 1 ? "s" : ""} ago`;
+		} else {
+			return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
 		}
 	};
 
@@ -146,31 +173,30 @@ const MyNetworkPage = () => {
 		fetchData();
 	}, [activeTab]);
 
-	const calculateTimeDifference = (updatedAt) => {
-		const now = new Date();
-		const updatedDate = new Date(updatedAt);
-		const nowUTC = new Date(now.toISOString());
-		const updatedDateUTC = new Date(updatedDate.toISOString());
-
-		const diffInMs = nowUTC - updatedDateUTC;
-
-		const days = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
-		const hours = Math.floor(
-			(diffInMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-		);
-		const minutes = Math.floor((diffInMs % (1000 * 60 * 60)) / (1000 * 60));
-		// console.log(nowUTC, updatedDateUTC);
-		if (days > 0) {
-			return `${days} day${days > 1 ? "s" : ""} ago`;
-		} else if (hours > 0) {
-			return `${hours} hour${hours > 1 ? "s" : ""} ago`;
-		} else {
-			return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
-		}
-	};
-
 	return (
 		<div className="w-auto flex flex-col justify-start items-center gap-12">
+			<Toaster
+				position="top-center"
+				reverseOrder={false}
+				gutter={8}
+				containerClassName=""
+				containerStyle={{}}
+				toastOptions={{
+					// Define default options
+					className: "",
+					duration: 5000,
+					removeDelay: 1000,
+
+					// Default options for specific types
+					success: {
+						duration: 4000,
+						iconTheme: {
+							primary: "green",
+							secondary: "white",
+						},
+					},
+				}}
+			/>
 			<Header />
 			<div className="flex w-[84vw]">
 				{["Sent", "Received", "New Connections"].map((item, index) => (
