@@ -1,8 +1,8 @@
 import React from "react";
+import AlertPopup from "./AlertPopup";
 import ActiveButton from "../../../../components/Button/ActiveButton";
 
-const SentCard = ({ data, formatTime }) => {
-
+const SentCard = ({ data, formatTime, handleWithdraw }) => {
 	return (
 		<div
 			data-property-1="Sent"
@@ -35,7 +35,20 @@ const SentCard = ({ data, formatTime }) => {
 
 			{/* Action Button */}
 			<div className="flex justify-end items-center">
-				<ActiveButton children="Withdraw" className="text-text-dark" />
+				<AlertPopup
+					handleWithdraw={handleWithdraw}
+					data={data}
+					className="w-10 h-10 md:w-14 md:h-14 flex justify-center items-center border-none rounded-full"
+					iconClassName="w-6 md:w-8 text-primary"
+					icon={<img src="path/to/withdraw-icon.png" alt="Withdraw" />}
+					tooltipText="Withdraw"
+					title="Confirm Withdrawal"
+					description="Are you sure you want to withdraw?"
+					onCancel={() => console.log("Cancelled")}
+					onConfirm={() => handleWithdraw(data)}
+				>
+					<ActiveButton children="Withdraw" className="text-text-dark" />
+				</AlertPopup>
 			</div>
 		</div>
 	);
