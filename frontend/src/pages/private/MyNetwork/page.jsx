@@ -222,7 +222,13 @@ const MyNetworkPage = () => {
 					},
 				}}
 			/>
-			<Header />
+			<Header
+				title={"My Network"}
+				description={
+					"Expand your network to level up your skills or go beyond your comfort zone. \n At NAB, we always encourage new discovery and support from our beloved colleagues."
+				}
+				buttonText={"Discover"}
+			/>
 			<div className="flex w-[84vw]">
 				{["Sent", "Received", "New Connections"].map((item, index) => (
 					<div
