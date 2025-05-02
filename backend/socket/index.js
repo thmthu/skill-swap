@@ -60,8 +60,10 @@ const initSocket = (io) => {
 
     socket.on("markAsRead", async ({ chatRoomId, userId }) => {
       const room = await ChatRoom.findOne({ chat_room_id: chatRoomId });
-      room.unreadCount.set(userId, 0);
-      await room.save();
+      if (room) {
+        room.unreadCount.set(userId, 0);
+        await room.save();
+      }
     });
 
     socket.on("disconnect", () => {
