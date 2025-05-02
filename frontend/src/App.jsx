@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar/Navbar";
 import { Toaster } from "react-hot-toast";
 import { useTheme } from "@/context/ThemeContext";
 import { SocketProvider } from "./context/SocketContext";
+import Header from "./components/Header/Header";
 
 function App() {
   const element = useRoutes(navRoutes);

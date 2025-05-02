@@ -1,6 +1,7 @@
-import { Card, CardContent, CardTitle, CardFooter } from "../components/ui/card";
+import { Card, CardContent, CardTitle, CardFooter } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
-export function CourseCard({ title, description, image, url }) {
+export function CourseCard({ title, description, image, url, tags }) {
   return (
     <Card
       className="w-full max-w-[300px] flex flex-col h-[300px] md:h-[380px] justify-between overflow-hidden border border-gray-200 
@@ -9,7 +10,6 @@ export function CourseCard({ title, description, image, url }) {
       padding="md"
       hoverable={false}
     >
-      {/* Card Image */}
       {image ? (
         <img
           src={image}
@@ -22,13 +22,18 @@ export function CourseCard({ title, description, image, url }) {
           No Image
         </div>
       )}
-
-      {/* Card Content */}
       <div className="flex flex-col flex-1 justify-between px-3 md:px-4 pt-3 md:pt-4 pb-2">
         <CardTitle className="text-subtitle1 md:text-h3 font-heading line-clamp-2">{title}</CardTitle>
         <p className="text-body2 font-body text-gray-600 mt-1 md:mt-2 line-clamp-3">{description}</p>
-
-        {/* Footer */}
+        {tags?.length > 0 && (
+          <div className="flex gap-2 flex-wrap mt-2">
+            {tags.map((tag, idx) => (
+              <Badge key={idx} variant="custom">
+                {tag}
+              </Badge>
+            ))}
+          </div>
+        )}
         <CardFooter className="mt-auto px-0">
           <a
             href={url}
@@ -43,5 +48,3 @@ export function CourseCard({ title, description, image, url }) {
     </Card>
   );
 }
-
-
