@@ -3,14 +3,20 @@ import ReceivedCard from "./components/ReceivedCard";
 import SentCard from "./components/SentCard";
 import ConnectionCard from "./components/ConnectionCard";
 import Header from "../../../components/Header/Header";
-import AlertPopup from "./components/AlertPopup";
+import { io } from "socket.io-client";
 import { toast, Toaster } from "react-hot-toast";
 import axios from "axios";
+import { useAuth } from "../../../context/AuthContext";
+
+const socket = io("http://localhost:3000");
 
 const MyNetworkPage = () => {
 	const [activeTab, setActiveTab] = useState("Sent");
 	const [data, setData] = useState([]);
 	const [loading, setLoading] = useState(false); // Loading state
+	const { user } = useAuth();
+	const userId = user._id;
+	// console.log(userId);
 
 	const getCookie = (cookieName) => {
 		const cookies = document.cookie.split("; ");
@@ -58,6 +64,10 @@ const MyNetworkPage = () => {
 					},
 				}
 			);
+			socket.emit("acceptConnectRequest", {
+				connectionId: data.connectionId,
+				userId: data._id,
+			});
 			// Update the data state by removing the accepted connection
 			// setData((prevData) =>
 			// 	prevData.filter((item) => item.connectionId !== data.connectionId)
@@ -142,6 +152,21 @@ const MyNetworkPage = () => {
 		}
 	};
 
+	useEffect(() => {
+		socket.emit("joinUser", userId);
+		// Listen for the "requestAccepted" event
+		socket.on("connectRequestAccepted", (data) => {
+			console.log("Rendering request accepted");
+			toast.success(
+				`Your connection request to ${data.receiverName} was accepted!`
+			);
+		});
+
+		return () => {
+			socket.off("connectRequestAccepted");
+		};
+	}, [userId]);
+
 	// Fetch data based on the active tab
 	useEffect(() => {
 		const fetchData = async () => {
@@ -185,11 +210,11 @@ const MyNetworkPage = () => {
 					// Define default options
 					className: "",
 					duration: 5000,
-					removeDelay: 1000,
+					removeDelay: 2000,
 
 					// Default options for specific types
 					success: {
-						duration: 4000,
+						duration: 5000,
 						iconTheme: {
 							primary: "green",
 							secondary: "white",

@@ -54,9 +54,13 @@ export const getAllReceivedConnections = async (req, res) => {
 
 		const result = await Promise.all(
 			connections.map(async (connection) => {
-				const friend = await User.findById(connection.sender).select(
+				let friend = await User.findById(connection.sender).select(
 					"-password"
 				);
+				if (!friend) {
+					console.log("Account is not exist");
+					friend = { _id: "Default" };
+				}
 				const data = {
 					_id: friend._id,
 					connectionId: connection._id,
@@ -89,9 +93,13 @@ export const getAllSentConnections = async (req, res) => {
 
 		const result = await Promise.all(
 			connections.map(async (connection) => {
-				const friend = await User.findById(connection.receiver).select(
+				let friend = await User.findById(connection.receiver).select(
 					"-password"
 				);
+				if (!friend) {
+					console.log("Account is not exist");
+					friend = { _id: "Default" };
+				}
 				const data = {
 					_id: friend._id,
 					connectionId: connection._id,
