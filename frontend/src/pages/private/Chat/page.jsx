@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import ChatSidebar from "../../../components/Chat/ChatSidebar";
 import ChatContent from "../../../components/Chat/ChatContent";
 import axios from "axios";
@@ -12,11 +12,55 @@ const Chat = () => {
   const [recentChats, setRecentChats] = useState([]);
   const location = useLocation();
   const receiverId = location.state?.receiverId;
-  const userFromHome = {
-    receiverId,
-    username: location.state?.username,
-    profilePic: location.state?.profilePic,
-  };
+  const [receiver, setReceiver] = useState({
+    receiverId: "",
+    username: "",
+    profilePic: "",
+  });
+  const flag = useRef(false);
+  useEffect(() => {
+    const fetchChatRoom = async () => {
+      try {
+        const res = await axiosClient.get(`/chat/chat-get-room/${userId}`);
+        if (res.data.data.chatRoom.length > 0) {
+          setRecentChats(res.data.data.chatRoom);
+        }
+      } catch (e) {
+        console.log("error at pages/chat : ", e);
+      }
+    };
+    fetchChatRoom();
+    if (location.state?.username && !flag.current) {
+      console.log("hello");
+      setReceiver({
+        receiverId,
+        username: location.state?.username,
+        profilePic: location.state?.profilePic,
+      });
+      return;
+    }
+  }, []);
+  // useEffect(() => {
+  //   if (location.state?.username && !flag.current) {
+  //     console.log("hello");
+  //     setReceiver({
+  //       receiverId,
+  //       username: location.state?.username,
+  //       profilePic: location.state?.profilePic,
+  //     });
+  //     return;
+  //   } else if (selectedChat != "null") {
+  //     const userFetch = recentChats.find((chat) => {
+  //       return chat.chatRoomId == selectedChat;
+  //     });
+  //     setReceiver({
+  //       receiverId,
+  //       username: userFetch.user.username,
+  //       profilePic: userFetch.user.profilePic || "./NAB.png",
+  //     });
+  //   }
+  //   flag.current = true;
+  // }, [recentChats, selectedChat]);
   useEffect(() => {
     if (receiverId && userId) {
       const temp =
@@ -33,32 +77,19 @@ const Chat = () => {
     }
   }, [receiverId, userId]);
 
-  useEffect(() => {
-    const fetchChatRoom = async () => {
-      try {
-        const res = await axiosClient.get(
-          `/chat/chat-get-room/${userId}`
-        );
-        if (res.data.data.chatRoom.length > 0) {
-          setRecentChats(res.data.data.chatRoom);
-        }
-      } catch (e) {
-        console.log("error at pages/chat : ", e);
-      }
-    };
-    fetchChatRoom();
-  }, []);
   return (
     <div className="flex w-full h-[calc(100vh-120px)] mx-auto  bg-bg-light shadow-lg rounded-lg overflow-hidden">
       <ChatSidebar
         chats={recentChats}
         selectedChat={selectedChat}
         onSelectChat={setSelectedChat}
+        setReceiver={setReceiver}
       />
       <ChatContent
-        userFromHome={userFromHome}
+        userFromHome={receiver}
         setRecentChats={setRecentChats}
         chatRoomId={selectedChat}
+        chats={recentChats}
       />
     </div>
   );

@@ -1,7 +1,6 @@
 import { Send, MessageSquare } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
-import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
 import axiosClient from "../../lib/axiosClient";
 const socket = io("http://localhost:3000");
@@ -11,12 +10,16 @@ const ChatContent = ({ userFromHome, setRecentChats, chatRoomId }) => {
   const [messages, setMessages] = useState([]);
   const messageContainerRef = useRef(null);
   const [receiverId, setReceiverId] = useState("");
+
   useEffect(() => {
+    if (!chatRoomId || chatRoomId === "null") return;
+
     socket.emit("joinRoom", chatRoomId);
     socket.emit("markAsRead", {
       chatRoomId,
       userId: senderId,
     });
+
     setRecentChats((prevChats) =>
       prevChats.map((chat) =>
         chat.chatRoomId === chatRoomId ? { ...chat, unreadCount: 0 } : chat
@@ -25,12 +28,12 @@ const ChatContent = ({ userFromHome, setRecentChats, chatRoomId }) => {
 
     const ids = chatRoomId.split("_");
     setReceiverId(ids.find((id) => id !== senderId));
+
     const fetchMessages = async () => {
       try {
         const res = await axiosClient.get(
           `/chat/chat-get-message/${chatRoomId}`
         );
-        console.log("data:", res.data);
         if (res.data.data.messages) {
           setMessages(res.data.data.messages);
         } else {
@@ -42,53 +45,39 @@ const ChatContent = ({ userFromHome, setRecentChats, chatRoomId }) => {
     };
 
     fetchMessages();
-    if (messageContainerRef.current) {
-      messageContainerRef.current.scrollTop =
-        messageContainerRef.current.scrollHeight;
-    }
-    socket.on("newMessage", (newMsg) => {
-      setMessages((prevMessages) => [...prevMessages, newMsg]);
-      setTimeout(() => {
-        if (messageContainerRef.current) {
-          messageContainerRef.current.scrollTop =
-            messageContainerRef.current.scrollHeight;
-        }
-      }, 50);
-    });
-
     return () => {
       socket.off("newMessage");
     };
+  }, [chatRoomId, senderId]);
+
+  useEffect(() => {
+    const scrollToBottom = () => {
+      if (messageContainerRef.current) {
+        messageContainerRef.current.scrollTop =
+          messageContainerRef.current.scrollHeight;
+      }
+    };
+
+    scrollToBottom();
+
+    const timeoutId = setTimeout(scrollToBottom, 100);
+
+    return () => clearTimeout(timeoutId);
+  }, [messages]);
+
+  useEffect(() => {
+    if (!chatRoomId) return;
+
+    const handleNewMessage = (newMsg) => {
+      setMessages((prevMessages) => [...prevMessages, newMsg]);
+    };
+
+    socket.on("newMessage", handleNewMessage);
+
+    return () => {
+      socket.off("newMessage", handleNewMessage);
+    };
   }, [chatRoomId]);
-
-  const appendMessage = (newMsg) => {
-    if (messageContainerRef.current) {
-      const msgDiv = document.createElement("div");
-      msgDiv.className = `flex ${
-        newMsg.sender_id === senderId ? "justify-end" : "justify-start"
-      }`;
-
-      msgDiv.innerHTML = `
-        <div class="max-w-[70%] rounded-lg p-3 ${
-          newMsg.sender_id === senderId
-            ? "bg-black text-white"
-            : "bg-white text-text-light"
-        }">
-          <p class="text-body1">${newMsg.text}</p>
-          <span class="text-body2 mt-1 block opacity-75">
-            ${new Date(newMsg.createdAt).toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
-          </span>
-        </div>
-      `;
-
-      messageContainerRef.current.appendChild(msgDiv);
-      messageContainerRef.current.scrollTop =
-        messageContainerRef.current.scrollHeight;
-    }
-  };
 
   const handleSend = () => {
     if (message.trim()) {
@@ -104,6 +93,14 @@ const ChatContent = ({ userFromHome, setRecentChats, chatRoomId }) => {
       const month = String(today.getMonth() + 1).padStart(2, "0");
       const year = today.getFullYear();
       const formattedDate = `${day}/${month}/${year}`;
+      const newMsg = {
+        sender_id: senderId,
+        receiver_id: receiverId,
+        text: message.trim(),
+        createdAt: new Date(),
+      };
+      // setMessages((prev) => [...prev, newMsg]);
+
       setMessage("");
       if (messages.length == 0) {
         const newChatRoom = {
@@ -168,9 +165,20 @@ const ChatContent = ({ userFromHome, setRecentChats, chatRoomId }) => {
   return (
     <div className="flex-1 flex flex-col h-full bg-bg-light">
       {/* Chat Header */}
-      <div className="p-4 bg-white border-b border-primary-extra-light">
+      <div className="p-4 bg-white border-b border-primary-extra-light flex items-center">
+        <div className="w-10 h-10 rounded-full overflow-hidden mr-3 flex-shrink-0">
+          <img
+            src={userFromHome.profilePic || "/NAB.png"}
+            alt={`${userFromHome.username}'s avatar`}
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = "/default-avatar.png";
+            }}
+          />
+        </div>
         <h2 className="text-h3 font-heading font-bold text-primary-dark">
-          Chat Title
+          {userFromHome.username}
         </h2>
       </div>
 
