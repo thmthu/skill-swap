@@ -60,15 +60,27 @@ const initSocket = (io) => {
           }
           io.to(chatRoomId).emit("newMessage", message);
 
-          io.to(`user_${receiverId}`).emit("messageNotification", {
-            message: text,
-            chatRoomId: chatRoomId,
-            sender: {
-              id: senderId,
-              name: sender.name || sender.username,
-              avatar: sender.profilePic || "./NAB.png",
-            },
-          });
+          const receiverSocketId = userSocketMap.get(receiverId);
+
+          if (receiverSocketId) {
+            const receiverSocket = io.sockets.sockets.get(receiverSocketId);
+
+            if (receiverSocket) {
+              const isInRoom = receiverSocket.rooms.has(chatRoomId);
+
+              if (!isInRoom) {
+                io.to(`user_${receiverId}`).emit("messageNotification", {
+                  message: text,
+                  chatRoomId: chatRoomId,
+                  sender: {
+                    id: senderId,
+                    name: sender.name || sender.username,
+                    avatar: sender.profilePic || "./NAB.png",
+                  },
+                });
+              }
+            }
+          }
         } catch (e) {
           console.log("error at send message socket: ", e);
         }
