@@ -23,6 +23,7 @@ import cors from 'cors';
 import { createServer } from "http"; 
 import { Server } from "socket.io"; 
 import initSocket from "./socket/index.js";
+import initConnectSocket from './socket/request.js';
 connectMongo();
 
 const app = express();
@@ -68,6 +69,7 @@ const io = new Server(httpServer, {
 });
 
 initSocket(io);
+initConnectSocket(io);
 
 httpServer.listen(port, () => {
   console.log(`Server is running on port ${port}`);

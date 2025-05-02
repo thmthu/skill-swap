@@ -19,13 +19,9 @@ router.get("/received", authMiddleware, getAllReceivedConnections);
 router.get("/sent", authMiddleware, getAllSentConnections);
 router.get("/recent", authMiddleware, getRecentConnections);
 router.post("/create/:senderId/:receiverId", authMiddleware, createConnection);
-router.delete(
-	"/withdraw/:connectionId/:userId",
-	authMiddleware,
-	withdrawRequest
-);
-router.post("/accept/:connectionId/:userId", authMiddleware, acceptRequest);
-router.post("/reject/:connectionId/:userId", authMiddleware, rejectRequest);
+router.delete("/withdraw/:connectionId", authMiddleware, withdrawRequest);
+router.post("/accept/:connectionId", authMiddleware, acceptRequest);
+router.post("/reject/:connectionId", authMiddleware, rejectRequest);
 router.delete("/delete/:connectionId", authMiddleware, deleteConnection);
 
 export default router;
