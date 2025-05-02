@@ -151,6 +151,7 @@ export function AuthProvider({ children }) {
 
   const value = {
     user,
+    setUser, // ✅ THÊM DÒNG NÀY ĐỂ CẬP NHẬT USER TỪ COMPONENT KHÁC
     loading,
     login,
     loginWithGoogle,
