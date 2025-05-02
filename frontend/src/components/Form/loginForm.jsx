@@ -35,10 +35,18 @@ export default function LoginForm() {
     try {
       const { email, password } = values;
       const data = await authService.login(email, password); 
-      await login(data) 
+      console.log('Login response data:', data);
+      
+      await login(data);
+      // Chuyển hướng dựa trên thông tin user
+      if (data.needsPreference) {
+        navigate('/user-preference?message=Please complete your profile');
+      } else {
+        navigate('/home?message=Login successful');
+      }
     } catch (error) {
       console.error('Login error', error);
-      toast.error(error.response?.data?.message || 'Login failed. Please check your credentials and try again.');
+      toast.error(error.message || 'Login failed, please check your login information.');
     }
   }
 

@@ -11,7 +11,7 @@ export const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
 export const COOKIE_OPTIONS = {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    sameSite: 'lax',
     maxAge: REFRESH_TOKEN_EXPIRE_TIME * 1000
 };
 export const REDIS_HOST = process.env.REDIS_HOST;

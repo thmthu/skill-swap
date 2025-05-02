@@ -61,9 +61,20 @@ export const login = async (req, res) => {
             // maxAge: parseInt(60) * 1000
         });
         res.cookie('refreshToken', refreshToken, COOKIE_OPTIONS);
-
-        return res.status(200).json({ message: 'Logged in successfully', 
-                                    user: user });
+        
+        if (user.skills.length === 0 || user.learn.length === 0) {
+            return res.status(200).json({ 
+                message: 'Logged in successfully', 
+                user: user,
+                needsPreference: true
+            });
+        }
+        
+        return res.status(200).json({ 
+            message: 'Logged in successfully', 
+            user: user,
+            needsPreference: false 
+        });
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
