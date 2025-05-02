@@ -8,6 +8,9 @@ export function PublicRoute() {
 
 const PrivateRoute = () => {
   const { isAuthenticated, needsUserPreference } = useAuth();
+  if (needsUserPreference && !window.location.pathname.includes("user-preference")) {
+    return <Navigate to="/user-preference" replace />;
+  }
   return isAuthenticated ? <Outlet /> : <Navigate to="/auth?state=login" replace />; 
 };
 

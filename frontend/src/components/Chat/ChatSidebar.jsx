@@ -1,8 +1,8 @@
 import { MessageSquare, Search } from "lucide-react";
 
-const ChatSidebar = ({ chats, selectedChat, onSelectChat }) => {
+const ChatSidebar = ({ setReceiver, chats, selectedChat, onSelectChat }) => {
   return (
-    <div className="w-80 border-r border-primary-extra-light bg-white">
+    <div className=" h-full border-r border-primary-extra-light bg-white">
       <div className="p-4 bg-white border-b border-primary-extra-light">
         <h2 className="text-h3 font-heading font-bold text-primary-dark">
           MESSAGE
@@ -23,14 +23,30 @@ const ChatSidebar = ({ chats, selectedChat, onSelectChat }) => {
         {chats.map((chat) => (
           <div
             key={chat.chatRoomId}
-            onClick={() => onSelectChat(chat.chatRoomId)}
+            onClick={() => {
+              onSelectChat(chat.chatRoomId);
+              console.log("=====chat===", chat);
+              setReceiver({
+                receiverId: chat.user._id,
+                username: chat.user.username,
+                profilePic: chat.user.profilePic || "./NAB.png",
+              });
+            }}
             className={`p-4 cursor-pointer hover:bg-secondary-light-pink transition-colors ${
               selectedChat === chat.chatRoomId ? "bg-secondary-light-pink" : ""
             }`}
           >
             <div className="flex items-start gap-3">
-              <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
-                <MessageSquare className="w-5 h-5 text-white" />
+              <div className="w-10 h-10 rounded-full overflow-hidden mr-3 flex-shrink-0">
+                <img
+                  src={chat.user.profilePic || "/default-avatar.png"}
+                  alt={`${chat.user.username}'s avatar`}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "/default-avatar.png";
+                  }}
+                />
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex justify-between items-start">
