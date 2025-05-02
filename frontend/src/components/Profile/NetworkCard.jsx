@@ -1,52 +1,38 @@
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardAction,
-} from "@/components/ui/card";
+import React from "react";
+import { XMarkIcon, ChatBubbleOvalLeftIcon } from "@heroicons/react/24/solid";
 
-import { ChatBubbleLeftIcon, XMarkIcon } from "@heroicons/react/24/outline";
-
-export default function NetworkCard({ avatarUrl, name, description }) {
+const NetworkCard = ({ avatarUrl, name, description }) => {
   return (
-    <Card className="border border-primary bg-white text-gray-800 hover:shadow-md transition">
-      {/* ✅ Force dùng flex layout cho header */}
-      <CardHeader className="!flex items-center justify-between gap-6 w-full">
-        {/* 👤 Avatar + Info */}
-        <div className="flex items-center gap-5 flex-1">
-          <div
-            className="w-20 h-20 rounded-xl bg-gray-300 flex-shrink-0"
-            style={{
-              backgroundImage: `url(${avatarUrl})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
+    <div className="w-full px-11 py-7 bg-white border-b-2 flex flex-col justify-start items-start gap-14">
+      <div className="w-full flex justify-start items-center gap-14">
+        {/* Avatar + Info */}
+        <div className="w-full flex justify-start items-center gap-8">
+          <img
+            src={avatarUrl || "https://placehold.co/100x100"}
+            alt={name}
+            className="w-36 h-36 bg-neutral-200 rounded-3xl object-cover"
           />
-          <div className="flex flex-col gap-1">
-            <CardTitle className="text-lg font-semibold">{name}</CardTitle>
-            <CardDescription className="text-gray-600">
-              {description}
-            </CardDescription>
+          <div className="flex flex-col justify-center items-start gap-3 font-sans">
+            <div className="text-text-light text-3xl font-bold">{name}</div>
+            <div className="text-text-light font-semibold">
+              {description || "No description"}
+            </div>
+            <div className="text-text-light font-normal">Connected</div>
           </div>
         </div>
 
-        {/* 🔘 Action Buttons */}
-        <CardAction className="flex-shrink-0 flex gap-2">
-          <button
-            className="w-10 h-10 flex items-center justify-center rounded-md hover:bg-gray-100 transition"
-            onClick={() => console.log("Chat with", name)}
-          >
-            <ChatBubbleLeftIcon className="w-5 h-5 text-blue-600" />
-          </button>
-          <button
-            className="w-10 h-10 flex items-center justify-center rounded-md hover:bg-gray-100 transition"
-            onClick={() => console.log("Remove", name)}
-          >
-            <XMarkIcon className="w-5 h-5 text-red-600" />
-          </button>
-        </CardAction>
-      </CardHeader>
-    </Card>
+        {/* Chat Button */}
+        <div className="w-14 h-14 flex justify-center items-center rounded-full border-2 border-blue-600 cursor-pointer hover:bg-blue-50 transition">
+          <ChatBubbleOvalLeftIcon className="w-8 h-8 text-blue-600" />
+        </div>
+
+        {/* Unfriend Button */}
+        <div className="w-14 h-14 flex justify-center items-center border-2 border-primary rounded-full cursor-pointer hover:bg-red-50 transition">
+          <XMarkIcon className="w-8 h-8 text-primary" />
+        </div>
+      </div>
+    </div>
   );
-}
+};
+
+export default NetworkCard;

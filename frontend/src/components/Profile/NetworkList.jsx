@@ -1,39 +1,46 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import NetworkCard from "./NetworkCard";
-
-const networkUsers = [
-  {
-    id: "u1",
-    avatarUrl: "https://placehold.co/80x80",
-    name: "John Doe",
-    description: "Frontend Developer @ CompanyX",
-  },
-  {
-    id: "u2",
-    avatarUrl: "https://placehold.co/80x80",
-    name: "Jane Smith",
-    description: "UX Designer at DesignIt",
-  },
-  {
-    id: "u3",
-    avatarUrl: "https://placehold.co/80x80",
-    name: "Alice Green",
-    description: "React Enthusiast & Blogger",
-  },
-];
+import axios from "@/lib/axiosClient";
 
 export default function NetworkList() {
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchConnections = async () => {
+      try {
+        const res = await axios.get("/users/connections");
+        setUsers(res.data);
+      } catch (err) {
+        console.error("❌ Failed to fetch connections:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchConnections();
+  }, []);
+
+  if (loading) return <p>Loading connections...</p>;
+
   return (
     <div className="flex-1 flex flex-col gap-4">
       <h2 className="text-4xl font-bold mb-4">My Connections</h2>
-      {networkUsers.map((user) => (
-        <NetworkCard
-          key={user.id}
-          avatarUrl={user.avatarUrl}
-          name={user.name}
-          description={user.description}
-        />
-      ))}
+
+      {users.length === 0 ? (
+        <p className="text-gray-500 text-lg italic">
+          You have no connections yet.
+        </p>
+      ) : (
+        users.map((user) => (
+          <NetworkCard
+            key={user._id}
+            avatarUrl={user.avatar}
+            name={user.username}
+            description={user.bio}
+          />
+        ))
+      )}
     </div>
   );
 }

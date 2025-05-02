@@ -67,8 +67,7 @@ function CardHeader({ className, ...props }) {
   return (
     <div
       className={cn(
-        "grid grid-rows-[auto_auto] items-start gap-1.5",
-        className
+        className || "grid grid-rows-[auto_auto] items-start gap-1.5"
       )}
       {...props}
     />
