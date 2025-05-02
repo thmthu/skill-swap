@@ -14,11 +14,13 @@ export function AuthProvider({ children }) {
   const [isInitialAuthCheckDone, setIsInitialAuthCheckDone] = useState(false);
   const navigate = useNavigate();
   
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  
   const fetchUserData = async () => {
     try {
       const currentUser = await authService.getCurrentUser();
       console.log("Current user data fetched:", currentUser);
-      
+      localStorage.setItem('user', JSON.stringify(currentUser));
       if (currentUser) {
         setUser(currentUser);
         const needsPreference = !currentUser.skills?.length || !currentUser.learn?.length;
@@ -71,12 +73,12 @@ export function AuthProvider({ children }) {
   }, []);
   
   const refreshUserData = async () => {
-    setLoading(true);
+    setIsRefreshing(true);
     try {
-      const userData = await fetchUserData();
+      const userData = await fetchUserData()
       return userData;
     } finally {
-      setLoading(false);
+      setIsRefreshing(false);
     }
   };
   
@@ -84,6 +86,13 @@ export function AuthProvider({ children }) {
     setLoading(true);
     try {
       setUser(userData.user);
+      
+      
+      const needsPreference = !userData.user?.skills?.length || !userData.user?.learn?.length;
+      // console.log("Login data:", userData.user);
+      // console.log("Skills:", userData.user?.skills, "Learn:", userData.user?.learn);
+      // console.log("needsUserPreference after login:", needsPreference);
+      setNeedsUserPreference(needsPreference);
       
       localStorage.setItem('user', JSON.stringify(userData.user));
       
@@ -129,6 +138,7 @@ export function AuthProvider({ children }) {
   const value = {
     user,
     loading,
+    isRefreshing, 
     login,
     loginWithGoogle,
     logout,
