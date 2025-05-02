@@ -54,7 +54,7 @@ export default function SignUpForm() {
       console.log('Registration data:', data);
     } catch (error) {
       console.error('Registration error', error);
-      toast.error(error.response?.data?.message || 'Sign up failed. Please try again.');
+      toast.error(error.message || 'Sign up failed. Please try again.');
     }
   }
 

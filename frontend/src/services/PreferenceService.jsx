@@ -2,7 +2,6 @@
 import axios from "@/lib/axiosClient"
 import { API_CONFIG } from '@/lib/config'
 
-
 const PreferenceService = {
     async postUserPreference(data) {
         const response = await axios.patch(`/users/preference`, 
