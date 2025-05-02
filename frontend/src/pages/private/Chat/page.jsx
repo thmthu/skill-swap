@@ -4,6 +4,7 @@ import ChatContent from "../../../components/Chat/ChatContent";
 import axios from "axios";
 import { useAuth } from "../../../context/AuthContext";
 import { useLocation } from "react-router-dom";
+import axiosClient from "../../../lib/axiosClient";
 
 const Chat = () => {
   const userId = useAuth().user._id;
@@ -35,8 +36,8 @@ const Chat = () => {
   useEffect(() => {
     const fetchChatRoom = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:3000/api/chat/chat-get-room/${userId}`
+        const res = await axiosClient.get(
+          `/chat/chat-get-room/${userId}`
         );
         if (res.data.data.chatRoom.length > 0) {
           setRecentChats(res.data.data.chatRoom);

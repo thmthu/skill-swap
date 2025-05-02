@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
+import axiosClient from "../../lib/axiosClient";
 const socket = io("http://localhost:3000");
 const ChatContent = ({ userFromHome, setRecentChats, chatRoomId }) => {
   const senderId = useAuth().user._id;
@@ -12,12 +13,22 @@ const ChatContent = ({ userFromHome, setRecentChats, chatRoomId }) => {
   const [receiverId, setReceiverId] = useState("");
   useEffect(() => {
     socket.emit("joinRoom", chatRoomId);
+    socket.emit("markAsRead", {
+      chatRoomId,
+      userId: senderId,
+    });
+    setRecentChats((prevChats) =>
+      prevChats.map((chat) =>
+        chat.chatRoomId === chatRoomId ? { ...chat, unreadCount: 0 } : chat
+      )
+    );
+
     const ids = chatRoomId.split("_");
     setReceiverId(ids.find((id) => id !== senderId));
     const fetchMessages = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:3000/api/chat/chat-get-message/${chatRoomId}` 
+        const res = await axiosClient.get(
+          `/chat/chat-get-message/${chatRoomId}`
         );
         console.log("data:", res.data);
         if (res.data.data.messages) {
