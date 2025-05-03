@@ -68,7 +68,8 @@ function CardHeader({ className, ...props }) {
     <div
       data-slot="card-header"
       className={cn(
-        className || "grid grid-rows-[auto_auto] items-start gap-1.5"
+        "grid grid-rows-[auto_auto] items-start gap-1.5",
+        className
       )}
       {...props}
     />
@@ -97,13 +98,21 @@ function CardDescription({ className, ...props }) {
 
 function CardContent({ className, ...props }) {
   return (
-    <div data-slot="card-content" className={cn("flex-1", className)} {...props} />
+    <div
+      data-slot="card-content"
+      className={cn("flex-1", className)}
+      {...props}
+    />
   );
 }
 
 function CardFooter({ className, ...props }) {
   return (
-    <div data-slot="card-footer" className={cn("flex items-center justify-end pt-4", className)} {...props} />
+    <div
+      data-slot="card-footer"
+      className={cn("flex items-center justify-end pt-4", className)}
+      {...props}
+    />
   );
 }
 
