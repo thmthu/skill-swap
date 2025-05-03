@@ -58,21 +58,18 @@ export default function UpdateAvatarDialog({ open, onOpenChange }) {
       const freshUser = await PreferenceService.getCurrentUser();
 
       const payload = {
-        bio: freshUser?.bio || "",
-        skills: freshUser?.skills || [],
-        learn: freshUser?.learn || [],
-        avatar: fileData,
+        ...freshUser,
+        avatar: fileData, // override avatar mới
       };
-      console.log("🚀 Payload gửi lên:", payload);
 
+      console.log("🚀 Payload GỬI LÊN:", payload);
       await PreferenceService.postUserPreference(payload);
 
       const updated = await PreferenceService.getCurrentUser();
       console.log("🧠 Updated user:", updated);
 
       setUser(updated);
-      setPreview(updated.avatar); // ✅ Cập nhật preview sau khi update
-
+      setPreview(updated.avatar);
       toast.success("Avatar updated!");
       onOpenChange(false);
     } catch (error) {
@@ -93,7 +90,7 @@ export default function UpdateAvatarDialog({ open, onOpenChange }) {
         <div className="flex flex-col items-center gap-4">
           <div className="w-32 h-32 rounded-full overflow-hidden border">
             <img
-              src={preview || user?.avatar || "https://placehold.co/300x300"} // ✅ Ưu tiên preview > user.avatar
+              src={preview || user?.avatar || "https://placehold.co/300x300"}
               alt="Preview"
               className="object-cover w-full h-full"
             />
