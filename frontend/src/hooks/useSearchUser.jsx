@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import debounce from 'lodash/debounce';
+import debounce from "lodash/debounce";
 import axios from "@/lib/axiosClient";
 
 export function useSearchUser(initialSearch = "", initialSkills = "") {
@@ -10,7 +10,7 @@ export function useSearchUser(initialSearch = "", initialSkills = "") {
   const [selectedSkills, setSelectedSkills] = useState(initialSkills);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  
+
   const fetchUsers = useCallback(async (search, skills) => {
     try {
       setLoading(true);
@@ -27,11 +27,11 @@ export function useSearchUser(initialSearch = "", initialSkills = "") {
 
       const url = params.toString() ? `/users?${params.toString()}` : `/users`;
       const response = await axios.get(url);
-      
+
       if (Array.isArray(response.data)) {
         const mappedUsers = response.data.map((user) => ({
           id: user._id,
-          image: user.ava || "/NAB.png",
+          image: user.avatar || "/NAB.png",
           name: user.username,
           tags: user.skills || [],
           department: user.bio || "Unknown Department",
@@ -60,7 +60,7 @@ export function useSearchUser(initialSearch = "", initialSkills = "") {
 
   useEffect(() => {
     debouncedFetch(searchTerm, selectedSkills);
-    
+
     return () => {
       debouncedFetch.cancel();
     };

@@ -51,10 +51,10 @@ export default function HomePage() {
 
   return (
     <>
-      {/* <HeroSection />
+      <HeroSection />
       <WhyChoose />
       <HowItWorks />
-      <FAQ /> */}
+      <FAQ />
 
       <UserCardList />
     </>

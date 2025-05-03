@@ -1,4 +1,5 @@
 import { Tilt } from "@/components/ui/tilt";
+import { useNavigate } from "react-router-dom";
 import {
   MorphingDialog,
   MorphingDialogTrigger,
@@ -17,7 +18,18 @@ export default function UserCard({
   tags = [],
   description = "",
   department,
+  userId,
 }) {
+  const navigate = useNavigate();
+
+  const handleChatClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    navigate("/chat", {
+      state: { receiverId: userId, username: name, profilePic: image || "" },
+    });
+  };
+
   return (
     <Tilt rotationFactor={8} isReverse>
       <MorphingDialog
@@ -50,11 +62,7 @@ export default function UserCard({
 
               {/* Chat Icon */}
               <div
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  console.log("Chat icon clicked");
-                }}
+                onClick={handleChatClick}
                 className="ml-4 bg-primary text-white rounded-full p-2 hover:bg-primary-dark transition cursor-pointer"
               >
                 <ChatBubbleLeftEllipsisIcon className="w-5 h-5" />
