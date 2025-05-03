@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import NetworkCard from "./NetworkCard";
-import axios from "@/lib/axiosClient";
 
 export default function NetworkList() {
   const [users, setUsers] = useState([]);
@@ -24,8 +23,6 @@ export default function NetworkList() {
 
     fetchConnections();
   }, []);
-
-  if (loading) return <p>Loading connections...</p>;
 
   return (
     <div className="flex-1 flex flex-col gap-4">
