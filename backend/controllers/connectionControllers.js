@@ -26,14 +26,7 @@ export const getAllConnections = async (req, res) => {
 				if (!friend) {
 					return null;
 				}
-				const data = {
-					_id: friend._id,
-					connectionId: connection._id,
-					username: friend.username,
-					department: friend.department || "Unknown Department",
-					timestamp: connection.updatedAt,
-				};
-				return data;
+				return friend;
 			})
 		);
 		result = result.filter((item) => item !== null);
