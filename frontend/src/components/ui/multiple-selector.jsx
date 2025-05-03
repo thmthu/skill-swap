@@ -351,12 +351,12 @@ const MultipleSelector = forwardRef((props, ref) => {
           inputRef?.current?.focus();
         }}
       >
-        <div className="flex items-center flex-wrap gap-2 px-3 py-2 min-h-[48px] rounded-md border border-input bg-background items-center justify-start">
+        <div className="flex items-center flex-wrap gap-2 px-3 py-2 min-h-[48px] rounded-md border border-input bg-background justify-start">
           {selected.map((option) => (
             <Badge
               key={option.value}
               className={cn(
-                "bg-bg-dark text-text-dark rounded-full px-3 py-1 text-xs font-medium flex items-center gap-1 border-none shadow-none",
+                "bg-bg-dark text-text-dark  rounded-full px-3 py-1 text-xs font-medium flex items-center gap-1 border-none shadow-none ",
                 badgeClassName
               )}
               data-fixed={option.fixed}

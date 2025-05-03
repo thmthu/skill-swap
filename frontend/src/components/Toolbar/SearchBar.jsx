@@ -51,10 +51,9 @@ export default function SearchBar({
           placeholder="Enter mentor name..."
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="w-full min-h-[48px] bg-white text-black dark:bg-white dark:text-black 
+          className="w-full min-h-[48px] bg-white text-black dark:bg-white dark:text-text-light 
              placeholder-gray-500 dark:placeholder-gray-500 
-             focus:placeholder-gray-500 dark:focus:placeholder-gray-500 
-             selection:bg-primary-light selection:text-black 
+             focus:placeholder-gray-500 dark:focus:placeholder-gray-300 
              rounded-md px-3 py-2"
         />
       </div>

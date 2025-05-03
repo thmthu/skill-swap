@@ -14,6 +14,7 @@ import {
   MorphingDialogContainer,
 } from "@/components/ui/morphing-dialog";
 import { ChatBubbleLeftEllipsisIcon } from "@heroicons/react/24/solid";
+import ActiveButton from "@/components/Button/ActiveButton";
 
 export default function UserCard({
   image,
@@ -21,6 +22,7 @@ export default function UserCard({
   tags = [],
   department,
   userId,
+  handleConnect,
 }) {
   const navigate = useNavigate();
 
@@ -105,7 +107,7 @@ export default function UserCard({
                 <MorphingDialogTitle className="text-2xl font-bold font-heading text-text-light dark:text-text-dark">
                   {name}
                 </MorphingDialogTitle>
-                <p className="text-md font-medium text-semantic-orange dark:text-primary-medium ">
+                <p className="text-md font-medium text-muted-foreground dark:text-primary-medium ">
                   {department}
                 </p>
               </div>
@@ -120,6 +122,14 @@ export default function UserCard({
                   </span>
                 ))}
               </MorphingDialogSubtitle>
+
+              <div className="mt-2 flex justify-center">
+                <ActiveButton
+                  onClick={() => handleConnect(userId)}
+                  children="Connect"
+                  className="bg-primary text-white hover:bg-primary-dark dark:bg-gradient-mid dark:hover:bg-gradient-end rounded-md mt-4 px-8 py-3 "
+                />
+              </div>
             </div>
 
             <MorphingDialogClose className="absolute top-4 right-4 text-zinc-400 hover:text-text-light" />
