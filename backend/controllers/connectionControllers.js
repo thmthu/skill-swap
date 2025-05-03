@@ -15,7 +15,7 @@ export const getAllConnections = async (req, res) => {
 		if (!connections) {
 			return res.status(404).json({ message: "No connections found" });
 		}
-		const result = await Promise.all(
+		let result = await Promise.all(
 			connections.map(async (connection) => {
 				// Check if the user is the sender or receiver
 				const otherUserId =
@@ -23,6 +23,9 @@ export const getAllConnections = async (req, res) => {
 						? connection.receiver
 						: connection.sender;
 				const friend = await User.findById(otherUserId).select("-password");
+				if (!friend) {
+					return null;
+				}
 				const data = {
 					_id: friend._id,
 					connectionId: connection._id,
@@ -33,6 +36,7 @@ export const getAllConnections = async (req, res) => {
 				return data;
 			})
 		);
+		result = result.filter((item) => item !== null);
 		return res.status(200).json(result);
 	} catch (error) {
 		return res.status(500).json({ message: error.message });
