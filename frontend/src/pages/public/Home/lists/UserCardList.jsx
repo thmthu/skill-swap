@@ -5,6 +5,8 @@ import { LoadingSkeleton } from "@/components/Skeleton/LoadingSkeleton";
 import SearchBar from "@/components/ToolBar/SearchBar";
 import { useSearchUser } from "@/hooks/useSearchUser";
 import Spinner from "@/components/Skeleton/Spinner";
+import { cn } from "@/lib/utils";
+
 import {
   Pagination,
   PaginationContent,
@@ -63,33 +65,45 @@ export default function UserCardList() {
           <PaginationItem>
             <PaginationPrevious
               onClick={() => paginate(currentPage - 1)}
-              className={
-                currentPage === 1 ? "pointer-events-none opacity-50" : ""
-              }
+              className={cn(
+                "rounded-md px-3 py-1.5 text-sm font-semibold transition-colors",
+                currentPage === 1
+                  ? "pointer-events-none opacity-50 bg-muted text-muted-foreground dark:bg-zinc-800 dark:text-zinc-500"
+                  : "bg-white text-black hover:bg-primary-light dark:bg-zinc-900 dark:text-white dark:hover:bg-zinc-700"
+              )}
             />
           </PaginationItem>
+
           {pageNumbers.map((page, index) => (
             <PaginationItem key={index}>
               {page === "..." ? (
-                <PaginationEllipsis />
+                <PaginationEllipsis className="text-gray-900 dark:text-gray-400" />
               ) : (
                 <PaginationLink
                   isActive={page === currentPage}
                   onClick={() => paginate(page)}
+                  className={cn(
+                    "rounded-md px-3 py-1.5 text-sm font-medium transition-colors border",
+                    page === currentPage
+                      ? "bg-primary text-white border-primary dark:bg-primary dark:text-white"
+                      : "bg-white text-black border border-zinc-300 hover:bg-primary-light dark:bg-zinc-900 dark:text-white dark:hover:bg-zinc-700  dark:border-zinc-600"
+                  )}
                 >
                   {page}
                 </PaginationLink>
               )}
             </PaginationItem>
           ))}
+
           <PaginationItem>
             <PaginationNext
               onClick={() => paginate(currentPage + 1)}
-              className={
+              className={cn(
+                "rounded-md px-3 py-1.5 text-sm font-semibold transition-colors",
                 currentPage === totalPages || totalPages === 0
-                  ? "pointer-events-none opacity-50"
-                  : ""
-              }
+                  ? "pointer-events-none opacity-50 bg-muted text-muted-foreground dark:bg-zinc-800 dark:text-zinc-500"
+                  : "bg-white text-black hover:bg-primary-light dark:bg-zinc-900 dark:text-white dark:hover:bg-zinc-700"
+              )}
             />
           </PaginationItem>
         </PaginationContent>

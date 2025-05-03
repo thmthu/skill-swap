@@ -59,7 +59,9 @@ export default function UserCard({
                 <MorphingDialogTitle className="truncate text-h2 font-semibold font-heading text-text-light dark:text-text-dark">
                   {name}
                 </MorphingDialogTitle>
-                <p className="text-sm text-muted-foreground">{department}</p>
+                <p className="text-sm text-muted-foreground  dark:text-semantic-orange">
+                  {department}
+                </p>
               </div>
 
               {/* Chat Icon */}
@@ -102,7 +104,7 @@ export default function UserCard({
                 <MorphingDialogTitle className="text-2xl font-bold font-heading text-text-light dark:text-text-dark">
                   {name}
                 </MorphingDialogTitle>
-                <p className="text-md font-medium text-zinc-500 dark:text-zinc-400">
+                <p className="text-md font-medium text-semantic-orange dark:text-semantic-orange ">
                   {department}
                 </p>
               </div>
