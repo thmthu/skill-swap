@@ -13,7 +13,7 @@ export const authMiddleware = async (req, res, next) => {
         const decoded = verifyAccessToken(token);
         req.userId = decoded.userId;
         next();
-    } catch (error) {
+    } catch (error) {   
         return res.status(401).json({ 
             message: 'Auth Middlewares: Access denied. Invalid token.', 
             error: error.message });

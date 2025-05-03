@@ -3,6 +3,9 @@
 import { Input } from "@/components/ui/input";
 import MultipleSelector from "@/components/ui/multiple-selector";
 import { OPTIONS } from "@/components/ToolBar/skill-options";
+import { useEffect, useState } from "react";
+import PreferenceService from "@/services/PreferenceService";
+// import { Spinner } from "@/components/ui/spinner"; // Giả sử bạn có component Spinner
 
 export default function SearchBar({
   value,
@@ -10,6 +13,32 @@ export default function SearchBar({
   selectedSkills,
   onSkillsChange,
 }) {
+  const [skills, setSkills] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchSkillsDepartment = async () => {
+      try {
+        setIsLoading(true);
+        const { data } = await PreferenceService.getSkillsDepartment();
+        console.log(data);
+        setSkills(data["SKILLS"] || []);
+      } catch (error) {
+        console.error("Failed to fetch skills:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchSkillsDepartment();
+  }, []);
+
+  const OPTIONS = skills.map((skill) => ({
+    value: skill,
+    label: skill,
+  }));
+
+  console.log("Skills options:", OPTIONS);
+
   return (
     <div className="flex flex-col md:flex-row gap-8 w-full">
       {/* Search by name */}
@@ -31,26 +60,38 @@ export default function SearchBar({
         <p className="text-sm font-medium text-muted-foreground mb-2">
           Filter by Skills
         </p>
-        <MultipleSelector
-          defaultOptions={OPTIONS}
-          className="w-full min-h-[48px]"
-          value={(Array.isArray(selectedSkills) ? selectedSkills : []).map(
-            (skill) => ({
-              label: skill,
-              value: skill,
-            })
-          )}
-          onChange={(options) =>
-            onSkillsChange(options.map((opt) => opt.value))
-          }
-          placeholder="Select skills..."
-          hidePlaceholderWhenSelected={true}
-          emptyIndicator={
-            <p className="text-center text-muted-foreground">
-              No skills found.
-            </p>
-          }
-        />
+
+        {isLoading ? (
+          <div className="flex items-center justify-center min-h-[48px] border rounded-md">
+            <span className="text-sm text-muted-foreground">
+              Loading skills...
+            </span>
+            {/* Hoặc sử dụng component Spinner nếu có */}
+          </div>
+        ) : (
+          <MultipleSelector
+            defaultOptions={OPTIONS}
+            className="w-full min-h-[48px]"
+            value={(Array.isArray(selectedSkills) ? selectedSkills : []).map(
+              (skill) => ({
+                label: skill,
+                value: skill,
+              })
+            )}
+            onChange={(options) =>
+              onSkillsChange(options.map((opt) => opt.value))
+            }
+            placeholder="Select skills..."
+            hidePlaceholderWhenSelected={true}
+            emptyIndicator={
+              <p className="text-center text-muted-foreground">
+                {skills.length > 0
+                  ? "No matching skills found."
+                  : "No skills available."}
+              </p>
+            }
+          />
+        )}
       </div>
     </div>
   );
