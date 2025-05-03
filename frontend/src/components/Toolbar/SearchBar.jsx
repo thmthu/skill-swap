@@ -51,7 +51,11 @@ export default function SearchBar({
           placeholder="Enter mentor name..."
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="w-full min-h-[48px] rounded-md border border-input bg-background px-3 py-2"
+          className="w-full min-h-[48px] bg-white text-black dark:bg-white dark:text-black 
+             placeholder-gray-500 dark:placeholder-gray-500 
+             focus:placeholder-gray-500 dark:focus:placeholder-gray-500 
+             selection:bg-primary-light selection:text-black 
+             rounded-md px-3 py-2"
         />
       </div>
 
@@ -71,7 +75,7 @@ export default function SearchBar({
         ) : (
           <MultipleSelector
             defaultOptions={OPTIONS}
-            className="w-full min-h-[48px]"
+            className="w-full min-h-[48px] bg-white text-black  dark:bg-zinc-900 dark:text-white rounded-md"
             value={(Array.isArray(selectedSkills) ? selectedSkills : []).map(
               (skill) => ({
                 label: skill,

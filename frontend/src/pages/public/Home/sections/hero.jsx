@@ -6,8 +6,12 @@ import { LineShadowText } from "@/components/magicui/line-shadow-text";
 
 export default function HeroSection() {
   return (
-    <section className="flex h-[700px] w-full flex-col items-center justify-center overflow-hidden rounded-lg bg-background">
-      <div className="max-w-4xl space-y-4 z-10 ">
+    <section className="relative flex h-[700px] w-full flex-col items-center justify-center overflow-hidden bg-white dark:bg-black">
+      {/* Retro Grid Background */}
+      <RetroGrid className="absolute inset-0 h-full w-full bg-transparent z-0" />
+
+      {/* Content */}
+      <div className="relative max-w-4xl space-y-6 z-10 flex flex-col items-center">
         <h1
           style={{ fontSize: "3.2em", lineHeight: "1.1" }}
           className="text-display font-heading font-bold  text-text-light dark:text-text-dark"
@@ -40,8 +44,6 @@ export default function HeroSection() {
           </Button>
         </div>
       </div>
-
-      <RetroGrid className="h-[700px] w-full bg-transparent dark:bg-transparent" />
     </section>
   );
 }
