@@ -18,8 +18,8 @@ function App() {
         {/* 🔒 Navbar cố định */}
         <Navbar />
 
-        {/* 📄 Main content cuộn riêng */}
-        <main className="pt-20 h-[calc(100vh-64px)] overflow-hidden">
+        {/* 📄 Main content cuộn chung */}
+        <main className="pt-20 min-h-[calc(100vh-64px)] overflow-y-auto">
           {element}
         </main>
       </div>
