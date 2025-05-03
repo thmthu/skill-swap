@@ -54,9 +54,7 @@ export const getAllReceivedConnections = async (req, res) => {
 
 		const result = await Promise.all(
 			connections.map(async (connection) => {
-				let friend = await User.findById(connection.sender).select(
-					"-password"
-				);
+				let friend = await User.findById(connection.sender).select("-password");
 				if (!friend) {
 					console.log("Account is not exist");
 					friend = { _id: "Default" };
@@ -164,7 +162,9 @@ export const getRecentConnections = async (req, res) => {
 
 export const createConnection = async (req, res) => {
 	try {
-		const { senderId, receiverId } = req.body;
+		const { receiverId } = req.params;
+		const user = await getUserById(req.userId);
+		const senderId = user._id;
 		// Check if the receiver send the request to the sender
 		const oldConnection = await Connection.findOne({
 			sender: receiverId,
@@ -184,11 +184,14 @@ export const createConnection = async (req, res) => {
 		const existingConnection = await Connection.findOne({
 			sender: senderId,
 			receiver: receiverId,
-			isDeleted: true,
 		});
-		if (existingConnection) {
+		if (existingConnection && existingConnection.isDeleted) {
 			existingConnection.isDeleted = false;
 			await existingConnection.save();
+		} else if (!existingConnection.isDeleted) {
+			return res.status(200).json({
+				message: "Connection already exists!",
+			});
 		} else {
 			const connection = new Connection({
 				sender: senderId,
@@ -198,7 +201,7 @@ export const createConnection = async (req, res) => {
 			});
 			await connection.save();
 		}
-		return res.status(200).json({ message: "Connection created", connection });
+		return res.status(200).json({ message: "Connection request sent" });
 	} catch (error) {
 		return res.status(500).json({ message: error.message });
 	}

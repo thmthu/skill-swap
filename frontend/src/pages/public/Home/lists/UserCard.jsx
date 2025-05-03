@@ -3,15 +3,15 @@
 import { Tilt } from "@/components/ui/tilt";
 import { useNavigate } from "react-router-dom";
 import {
-  MorphingDialog,
-  MorphingDialogTrigger,
-  MorphingDialogContent,
-  MorphingDialogTitle,
-  MorphingDialogImage,
-  MorphingDialogSubtitle,
-  MorphingDialogClose,
-  MorphingDialogDescription,
-  MorphingDialogContainer,
+	MorphingDialog,
+	MorphingDialogTrigger,
+	MorphingDialogContent,
+	MorphingDialogTitle,
+	MorphingDialogImage,
+	MorphingDialogSubtitle,
+	MorphingDialogClose,
+	MorphingDialogDescription,
+	MorphingDialogContainer,
 } from "@/components/ui/morphing-dialog";
 import { ChatBubbleLeftEllipsisIcon } from "@heroicons/react/24/solid";
 import ActiveButton from "@/components/Button/ActiveButton";
@@ -23,16 +23,18 @@ export default function UserCard({
   department,
   userId,
   handleConnect,
-}) {
-  const navigate = useNavigate();
 
-  const handleChatClick = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    navigate("/chat", {
-      state: { receiverId: userId, username: name, profilePic: image || "" },
-    });
-  };
+}) {
+	const navigate = useNavigate();
+
+	const handleChatClick = (e) => {
+		e.preventDefault();
+		e.stopPropagation();
+		navigate("/chat", {
+			state: { receiverId: userId, username: name, profilePic: image || "" },
+		});
+	};
+
 
   return (
     <Tilt rotationFactor={8} isReverse>
@@ -132,10 +134,12 @@ export default function UserCard({
               </div>
             </div>
 
-            <MorphingDialogClose className="absolute top-4 right-4 text-zinc-400 hover:text-text-light" />
-          </MorphingDialogContent>
-        </MorphingDialogContainer>
-      </MorphingDialog>
-    </Tilt>
-  );
+	
+
+						<MorphingDialogClose className="absolute top-4 right-4 text-zinc-400 hover:text-text-light" />
+					</MorphingDialogContent>
+				</MorphingDialogContainer>
+			</MorphingDialog>
+		</Tilt>
+	);
 }

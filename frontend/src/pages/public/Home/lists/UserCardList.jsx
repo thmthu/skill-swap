@@ -4,8 +4,11 @@ import GradientHeading from "@/components/Text/GradientHeading";
 import { LoadingSkeleton } from "@/components/Skeleton/LoadingSkeleton";
 import SearchBar from "@/components/ToolBar/SearchBar";
 import { useSearchUser } from "@/hooks/useSearchUser";
+
 import Spinner from "@/components/Skeleton/Spinner";
 import { cn } from "@/lib/utils";
+import axios from "axios";
+import { toast, Toaster } from "react-hot-toast";
 
 import {
   Pagination,
@@ -49,6 +52,37 @@ export default function UserCardList() {
     }
   };
 
+  	const getCookie = (cookieName) => {
+		const cookies = document.cookie.split("; ");
+		const tokenCookie = cookies.find((cookie) =>
+			cookie.startsWith(`${cookieName}=`)
+		);
+		return tokenCookie ? tokenCookie.split("=")[1] : null;
+	};
+  
+  const handleConnect = async (receiverId) => {
+		const token = getCookie("accessToken");
+		// console.log(token);
+		if (!token) throw new Error("Missing auth token");
+		const endpoint = `http://localhost:3000/api/connections/create/${receiverId}`;
+		const response = await axios.post(
+			endpoint,
+			{},
+			{
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			}
+		);
+		if (response.status == 200) {
+			toast.success(response.data.message);
+			// console.log("Connection request sent successfully");
+		} else {
+			toast.error("Failed to send connection request");
+			// console.error("Failed to send connection request");
+		}
+	};
+  
   const renderPagination = () => {
     const pageNumbers = [];
     for (let i = 1; i <= totalPages; i++) {
@@ -113,6 +147,28 @@ export default function UserCardList() {
 
   return (
     <section className="max-w-6xl mx-auto px-6 space-y-8">
+    	<Toaster
+				position="top-center"
+				reverseOrder={false}
+				gutter={8}
+				containerClassName=""
+				containerStyle={{}}
+				toastOptions={{
+					// Define default options
+					className: "",
+					duration: 5000,
+					removeDelay: 2000,
+
+					// Default options for specific types
+					success: {
+						duration: 5000,
+						iconTheme: {
+							primary: "green",
+							secondary: "white",
+						},
+					},
+				}}
+			/>
       {/* Heading + Search/Filter Bar */}
       <div className="flex flex-col gap-6">
         <div className="text-center">
@@ -129,11 +185,16 @@ export default function UserCardList() {
         </div>
       </div>
 
-      {error && (
-        <div className="text-center text-red-500 dark:text-primary-medium mt-8">
-          {error}
-        </div>
-      )}
+      	{/* Loading or Error */}
+			{loading && (
+				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-8">
+					{Array.from({ length: 6 }).map((_, idx) => (
+						<LoadingSkeleton key={idx} />
+					))}
+				</div>
+			)}
+
+			{error && <div className="text-center text-red-500 mt-8">{error}</div>}
 
       {/* Cards Grid */}
       {!loading && !error && (
@@ -148,6 +209,7 @@ export default function UserCardList() {
                   tags={user.tags || []}
                   department={user.department || "Unknown Department"}
                   userId={user.id}
+                  handleConnect={handleConnect}
                 />
               ))
             ) : (
@@ -165,4 +227,5 @@ export default function UserCardList() {
       )}
     </section>
   );
+
 }
