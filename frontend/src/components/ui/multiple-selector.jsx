@@ -352,7 +352,7 @@ const MultipleSelector = forwardRef((props, ref) => {
           inputRef?.current?.focus();
         }}
       >
-        <div className="flex items-center flex-nowrap gap-2 px-3 py-2 min-h-[48px] rounded-md border border-input bg-background overflow-hidden">
+        <div className="flex items-center flex-wrap gap-2 px-3 py-2 min-h-[48px] rounded-md border border-input bg-background items-center justify-start">
           {selected.map((option) => (
             <Badge
               key={option.value}
@@ -405,8 +405,7 @@ const MultipleSelector = forwardRef((props, ref) => {
                 : placeholder
             }
             className={cn(
-              "flex-2 !min-w-0 !p-0 bg-transparent outline-none placeholder:text-muted-foreground",
-
+              "flex-1 min-w-0 !p-0 bg-transparent outline-none placeholder:text-muted-foreground text-left",
               inputProps?.className
             )}
           />
@@ -423,7 +422,7 @@ const MultipleSelector = forwardRef((props, ref) => {
                 disabled ||
                 selected.length < 1 ||
                 selected.filter((s) => s.fixed).length === selected.length) &&
-                "hidden"
+              "hidden"
             )}
           >
             <X className="h-3 w-3" />
@@ -475,7 +474,7 @@ const MultipleSelector = forwardRef((props, ref) => {
                         className={cn(
                           "cursor-pointer",
                           option.disable &&
-                            "cursor-default text-muted-foreground"
+                          "cursor-default text-muted-foreground"
                         )}
                       >
                         {option.label}

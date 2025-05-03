@@ -1,3 +1,5 @@
+"use client";
+
 import { Tilt } from "@/components/ui/tilt";
 import { useNavigate } from "react-router-dom";
 import {
@@ -12,6 +14,7 @@ import {
   MorphingDialogContainer,
 } from "@/components/ui/morphing-dialog";
 import { ChatBubbleLeftEllipsisIcon } from "@heroicons/react/24/solid";
+
 export default function UserCard({
   image,
   name,
@@ -41,7 +44,7 @@ export default function UserCard({
       >
         <MorphingDialogTrigger
           style={{ borderRadius: "12px" }}
-          className="group relative flex w-full max-w-[300px] flex-col overflow-hidden border border-zinc-950/10 bg-bg-light dark:bg-bg-dark !p-0"
+          className="group relative flex w-full max-w-[300px] h-full flex-col overflow-hidden border border-zinc-950/10 bg-bg-light dark:bg-bg-dark !p-0"
         >
           {/* Image */}
           <MorphingDialogImage
@@ -50,11 +53,11 @@ export default function UserCard({
             className="h-48 w-full object-cover"
           />
 
-          <div className="flex flex-col grow px-4 py-5 space-y-2">
+          <div className="flex flex-col grow px-4 py-5 space-y-2 h-full">
             {/* Name + Department + Chat Icon in one row */}
             <div className="flex items-center justify-between w-full">
               <div className="text-left space-y-1">
-                <MorphingDialogTitle className="text-h2 font-semibold font-heading text-text-light dark:text-text-dark">
+                <MorphingDialogTitle className="truncate text-h2 font-semibold font-heading text-text-light dark:text-text-dark">
                   {name}
                 </MorphingDialogTitle>
                 <p className="text-sm text-muted-foreground">{department}</p>
@@ -74,7 +77,7 @@ export default function UserCard({
               {tags.map((tag, index) => (
                 <span
                   key={index}
-                  className="px-3 py-0.5 rounded-full bg-secondary-light-pink text-primary text-xs font-medium"
+                  className=" truncate px-3 py-0.5 rounded-full bg-secondary-light-pink text-primary text-xs font-medium"
                 >
                   {tag}
                 </span>

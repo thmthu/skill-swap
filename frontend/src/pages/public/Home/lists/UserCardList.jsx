@@ -61,7 +61,7 @@ export default function UserCardList() {
       {/* Cards Grid */}
       {!loading && !error && (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-8 items-stretch">
             {currentUsers.length > 0 ? (
               currentUsers.map((user) => (
                 <UserCard

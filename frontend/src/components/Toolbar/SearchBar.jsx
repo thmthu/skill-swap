@@ -43,7 +43,7 @@ export default function SearchBar({
     <div className="flex flex-col md:flex-row gap-8 w-full">
       {/* Search by name */}
       <div className="flex flex-col w-full">
-        <p className="text-sm font-medium text-muted-foreground mb-2">
+        <p className="text-base font-semibold text-primary-dark dark:text-white mb-2">
           Search by Name
         </p>
         <Input
@@ -51,13 +51,13 @@ export default function SearchBar({
           placeholder="Enter mentor name..."
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="w-full min-h-[48px]"
+          className="w-full min-h-[48px] rounded-md border border-input bg-background px-3 py-2"
         />
       </div>
 
       {/* Filter by skills */}
       <div className="flex flex-col w-full">
-        <p className="text-sm font-medium text-muted-foreground mb-2">
+        <p className="text-base font-semibold text-primary-dark dark:text-white mb-2">
           Filter by Skills
         </p>
 
