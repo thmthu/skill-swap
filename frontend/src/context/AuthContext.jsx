@@ -13,9 +13,13 @@ export function AuthProvider({ children }) {
   const [isInitialAuthCheckDone, setIsInitialAuthCheckDone] = useState(false);
   const navigate = useNavigate();
 
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
   const fetchUserData = async () => {
     try {
       const currentUser = await authService.getCurrentUser();
+      console.log("Current user data fetched:", currentUser);
+      localStorage.setItem("user", JSON.stringify(currentUser));
       if (currentUser) {
         setUser(currentUser);
         const needsPreference =
@@ -67,49 +71,29 @@ export function AuthProvider({ children }) {
   }, []);
 
   const refreshUserData = async () => {
-    setLoading(true);
+    setIsRefreshing(true);
     try {
       const userData = await fetchUserData();
       return userData;
     } finally {
-      setLoading(false);
+      setIsRefreshing(false);
     }
   };
-
-  useEffect(() => {
-    if (!user) return;
-
-    const checkUserPreference = async () => {
-      try {
-        const currentUser = await authService.getCurrentUser();
-        const needsPreference =
-          !currentUser.skills?.length || !currentUser.learn?.length;
-        setNeedsUserPreference(needsPreference);
-
-        const currentPath = window.location.pathname;
-
-        // ✅ Chỉ redirect nếu thiếu và không đang ở /user-preference
-        if (needsPreference && currentPath !== "/user-preference") {
-          navigate("/user-preference");
-        }
-
-        // ✅ Nếu login xong mà ở /auth, thì đi thẳng về /home
-        if (!needsPreference && currentPath === "/auth") {
-          navigate("/home");
-        }
-      } catch (error) {
-        console.error("Error checking user preferences", error);
-      }
-    };
-
-    checkUserPreference();
-  }, [user]);
 
   const login = async (userData) => {
     setLoading(true);
     try {
       setUser(userData.user);
+
+      const needsPreference =
+        !userData.user?.skills?.length || !userData.user?.learn?.length;
+      // console.log("Login data:", userData.user);
+      // console.log("Skills:", userData.user?.skills, "Learn:", userData.user?.learn);
+      // console.log("needsUserPreference after login:", needsPreference);
+      setNeedsUserPreference(needsPreference);
+
       localStorage.setItem("user", JSON.stringify(userData.user));
+
       return userData;
     } finally {
       setLoading(false);
@@ -153,6 +137,7 @@ export function AuthProvider({ children }) {
     user,
     setUser, // ✅ THÊM DÒNG NÀY ĐỂ CẬP NHẬT USER TỪ COMPONENT KHÁC
     loading,
+    isRefreshing,
     login,
     loginWithGoogle,
     logout,

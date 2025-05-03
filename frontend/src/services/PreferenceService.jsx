@@ -1,5 +1,6 @@
 "use client";
-import axios from "axios";
+import axios from "@/lib/axiosClient";
+import { API_CONFIG } from "@/lib/config";
 
 const PreferenceService = {
   // ✅ Gửi toàn bộ thông tin preference (bio, skills, learn, avatar nếu có)

@@ -29,28 +29,28 @@ export const authService = {
     }
   },
 
-  async loginWithGoogle() {
-    try {
-      window.location.href = `${API_CONFIG.BASE_URL}/auth/google/login`;
-    } catch (error) {
-      throw new Error(
-        error.response?.data?.message ||
-          "Failed to login with Google" + error + API_CONFIG.BASE_URL
-      );
-    }
-  },
+	async loginWithGoogle() {
+		try {
+			window.location.href = `${API_CONFIG.BASE_URL}/auth/google/login`;
+		} catch (error) {
+			throw new Error(
+				error.response?.data?.message ||
+					"Failed to login with Google" + error + API_CONFIG.BASE_URL
+			);
+		}
+	},
 
-  async signupWithGoogle() {
-    try {
-      window.location.href = `${API_CONFIG.BASE_URL}/auth/google/signup`;
-    } catch (error) {
-      console.log(error);
-      throw new Error(
-        error.response?.data?.message ||
-          "Failed to signup with Google" + error + API_CONFIG.BASE_URL
-      );
-    }
-  },
+	async signupWithGoogle() {
+		try {
+			window.location.href = `${API_CONFIG.BASE_URL}/auth/google/signup`;
+		} catch (error) {
+			console.log(error);
+			throw new Error(
+				error.response?.data?.message ||
+					"Failed to signup with Google" + error + API_CONFIG.BASE_URL
+			);
+		}
+	},
 
   // Logout user
   async logout() {
@@ -70,11 +70,11 @@ export const authService = {
         }
       });
 
-      return response.data;
-    } catch (error) {
-      console.error("getCurrentUser error:", error);
-      localStorage.removeItem("user");
-      return null;
-    }
-  },
+			return response.data;
+		} catch (error) {
+			console.error("getCurrentUser error:", error);
+			localStorage.removeItem("user");
+			return null;
+		}
+	},
 };
