@@ -44,7 +44,8 @@ export default function UserCard({
       >
         <MorphingDialogTrigger
           style={{ borderRadius: "12px" }}
-          className="group relative flex w-full max-w-[300px] h-full flex-col overflow-hidden border border-zinc-950/10 bg-bg-light dark:bg-bg-dark !p-0"
+          className="group relative flex w-full max-w-[300px] h-full flex-col overflow-hidden shadow-md dark:shadow-lg bg-bg-light dark:bg-bg-dark !p-0 
+    focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0;"
         >
           {/* Image */}
           <MorphingDialogImage
@@ -66,7 +67,7 @@ export default function UserCard({
               {/* Chat Icon */}
               <div
                 onClick={handleChatClick}
-                className="ml-4 bg-primary text-white rounded-full p-2 hover:bg-primary-dark transition cursor-pointer"
+                className="ml-4 bg-primary text-white rounded-full p-2 hover:bg-primary-dark transition cursor-pointer  !focus:outline-none !focus:ring-0 !focus:ring-offset-0 !important"
               >
                 <ChatBubbleLeftEllipsisIcon className="w-5 h-5" />
               </div>
@@ -90,7 +91,7 @@ export default function UserCard({
         <MorphingDialogContainer>
           <MorphingDialogContent
             style={{ borderRadius: "24px" }}
-            className="pointer-events-auto relative flex h-auto w-full flex-col overflow-hidden border border-zinc-950/10 bg-bg-light dark:border-zinc-50/10 dark:bg-bg-dark sm:w-[500px]"
+            className="pointer-events-auto relative flex h-auto w-full flex-col overflow-hidden  bg-bg-light dark:border-zinc-50/10 dark:bg-bg-dark sm:w-[500px]"
           >
             <MorphingDialogImage
               src={image}
