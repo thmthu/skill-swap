@@ -85,8 +85,8 @@ export default function UserCardList() {
                   className={cn(
                     "rounded-md px-3 py-1.5 text-sm font-medium transition-colors border",
                     page === currentPage
-                      ? "bg-primary text-white border-primary dark:bg-primary dark:text-white"
-                      : "bg-white text-black border border-zinc-300 hover:bg-primary-light dark:bg-zinc-900 dark:text-white dark:hover:bg-zinc-700  dark:border-zinc-600"
+                      ? "bg-primary text-white border-primary dark:bg-primary-medium dark:text-black"
+                      : "bg-white text-black  hover:bg-primary-light dark:bg-zinc-900 dark:text-white dark:hover:bg-zinc-700  dark:border-zinc-600"
                   )}
                 >
                   {page}
@@ -129,7 +129,11 @@ export default function UserCardList() {
         </div>
       </div>
 
-      {error && <div className="text-center text-red-500 mt-8">{error}</div>}
+      {error && (
+        <div className="text-center text-red-500 dark:text-primary-medium mt-8">
+          {error}
+        </div>
+      )}
 
       {/* Cards Grid */}
       {!loading && !error && (

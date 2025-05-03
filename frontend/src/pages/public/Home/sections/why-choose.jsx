@@ -42,28 +42,28 @@ export default function WhyChoose() {
         {[
           {
             icon: (
-              <UserGroupIcon className="h-10 w-10 text-primary dark:text-primary-light" />
+              <UserGroupIcon className="h-10 w-10 text-primary dark:text-primary-medium" />
             ),
             title: "Connect with Experts",
             desc: "Find mentors already working inside your company.",
           },
           {
             icon: (
-              <AcademicCapIcon className="h-10 w-10 text-primary dark:text-primary-light" />
+              <AcademicCapIcon className="h-10 w-10 text-primary dark:text-primary-medium" />
             ),
             title: "Upskill for Your Next Role",
             desc: "Learn new skills from trusted colleagues and industry leaders.",
           },
           {
             icon: (
-              <MapIcon className="h-10 w-10 text-primary dark:text-primary-light" />
+              <MapIcon className="h-10 w-10 text-primary dark:text-primary-medium" />
             ),
             title: "Personalized Paths",
             desc: "Get mentorship and training customized to your career goals.",
           },
           {
             icon: (
-              <BriefcaseIcon className="h-10 w-10 text-primary dark:text-primary-light" />
+              <BriefcaseIcon className="h-10 w-10 text-primary dark:text-primary-medium" />
             ),
             title: "Internal Career Mobility",
             desc: "Move across departments and grow without leaving your company.",

@@ -59,7 +59,7 @@ export default function UserCard({
                 <MorphingDialogTitle className="truncate text-h2 font-semibold font-heading text-text-light dark:text-text-dark">
                   {name}
                 </MorphingDialogTitle>
-                <p className="text-sm text-muted-foreground  dark:text-semantic-orange">
+                <p className="text-sm text-muted-foreground dark:text-primary-medium">
                   {department}
                 </p>
               </div>
@@ -67,7 +67,8 @@ export default function UserCard({
               {/* Chat Icon */}
               <div
                 onClick={handleChatClick}
-                className="ml-4 bg-primary text-white rounded-full p-2 hover:bg-primary-dark transition cursor-pointer"
+                className="ml-4 bg-primary text-white rounded-full p-2 hover:bg-primary-dark transition cursor-pointer dark:text-bg-dark dark:bg-primary-medium dark:hover:bg-primary-extra-light 
+             shadow-md"
               >
                 <ChatBubbleLeftEllipsisIcon className="w-5 h-5" />
               </div>
@@ -78,7 +79,7 @@ export default function UserCard({
               {tags.map((tag, index) => (
                 <span
                   key={index}
-                  className=" truncate px-3 py-0.5 rounded-full bg-secondary-light-pink text-primary text-xs font-medium"
+                  className=" truncate px-3 py-0.5 rounded-full bg-secondary-light-pink text-primary text-xs font-medium dark:bg-primary-light dark:text-primary-dark"
                 >
                   {tag}
                 </span>
@@ -104,7 +105,7 @@ export default function UserCard({
                 <MorphingDialogTitle className="text-2xl font-bold font-heading text-text-light dark:text-text-dark">
                   {name}
                 </MorphingDialogTitle>
-                <p className="text-md font-medium text-semantic-orange dark:text-semantic-orange ">
+                <p className="text-md font-medium text-semantic-orange dark:text-primary-medium ">
                   {department}
                 </p>
               </div>
@@ -113,7 +114,7 @@ export default function UserCard({
                 {tags.map((tag, index) => (
                   <span
                     key={index}
-                    className="px-2 py-0.5 rounded-full bg-secondary-light-pink text-primary text-xs font-medium"
+                    className="px-2 py-0.5 rounded-full bg-secondary-light-pink text-primary text-xs font-medium dark:bg-primary-light dark:text-primary-dark"
                   >
                     {tag}
                   </span>
