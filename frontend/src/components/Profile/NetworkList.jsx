@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from "react";
 import axios from "axios";
 import NetworkCard from "./NetworkCard";
-import axios from "axios";
 import { useState, useEffect } from "react";
 
 // const networkUsers = [

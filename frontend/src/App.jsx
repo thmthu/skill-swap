@@ -12,10 +12,16 @@ function App() {
 
   return (
     <SocketProvider>
-      <div className="min-h-screen w-screen overflow-x-hidden bg-bg-light flex flex-col">
+      <div className="min-h-screen w-screen overflow-x-hidden bg-bg-light relative">
         <Toaster />
+
+        {/* 🔒 Navbar cố định */}
         <Navbar />
-        <main className="flex-1 p-6">{element}</main>
+
+        {/* 📄 Main content cuộn riêng */}
+        <main className="pt-20 h-[calc(100vh-64px)] overflow-hidden">
+          {element}
+        </main>
       </div>
     </SocketProvider>
   );

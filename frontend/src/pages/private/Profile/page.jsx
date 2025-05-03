@@ -5,11 +5,14 @@ import LayoutContainer from "../../../components/LayoutContainer/LayoutContainer
 
 export default function ProfilePage() {
   return (
-    <LayoutContainer>
-      <div className="col-span-4">
+    <LayoutContainer className="grid grid-cols-12 h-full gap-6 px-6">
+      {/* 🔒 ProfileCard cố định */}
+      <div className="col-span-4 overflow-hidden">
         <ProfileCard />
       </div>
-      <div className="col-span-8">
+
+      {/* 🔽 NetworkList cuộn riêng */}
+      <div className="col-span-8 overflow-y-auto pr-2">
         <NetworkList />
       </div>
     </LayoutContainer>
