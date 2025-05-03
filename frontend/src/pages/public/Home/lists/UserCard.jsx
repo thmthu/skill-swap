@@ -19,7 +19,6 @@ export default function UserCard({
   image,
   name,
   tags = [],
-  description = "",
   department,
   userId,
 }) {
@@ -44,8 +43,7 @@ export default function UserCard({
       >
         <MorphingDialogTrigger
           style={{ borderRadius: "12px" }}
-          className="group relative flex w-full max-w-[300px] h-full flex-col overflow-hidden shadow-md dark:shadow-lg bg-bg-light dark:bg-bg-dark !p-0 
-    focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0;"
+          className="group relative flex w-full max-w-[300px] h-full flex-col overflow-hidden shadow-md dark:shadow-lg bg-bg-light dark:bg-bg-dark !p-0 "
         >
           {/* Image */}
           <MorphingDialogImage
@@ -67,7 +65,7 @@ export default function UserCard({
               {/* Chat Icon */}
               <div
                 onClick={handleChatClick}
-                className="ml-4 bg-primary text-white rounded-full p-2 hover:bg-primary-dark transition cursor-pointer  !focus:outline-none !focus:ring-0 !focus:ring-offset-0 !important"
+                className="ml-4 bg-primary text-white rounded-full p-2 hover:bg-primary-dark transition cursor-pointer"
               >
                 <ChatBubbleLeftEllipsisIcon className="w-5 h-5" />
               </div>
@@ -119,19 +117,6 @@ export default function UserCard({
                   </span>
                 ))}
               </MorphingDialogSubtitle>
-
-              <MorphingDialogDescription
-                disableLayoutAnimation
-                variants={{
-                  initial: { opacity: 0, scale: 0.8, y: 100 },
-                  animate: { opacity: 1, scale: 1, y: 0 },
-                  exit: { opacity: 0, scale: 0.8, y: 100 },
-                }}
-              >
-                <p className="pt-2 text-body1 md:text-body1 text-zinc-500 dark:text-zinc-400 leading-relaxed">
-                  {description}
-                </p>
-              </MorphingDialogDescription>
             </div>
 
             <MorphingDialogClose className="absolute top-4 right-4 text-zinc-400 hover:text-text-light" />
