@@ -1,22 +1,17 @@
-<<<<<<< HEAD
 "use client";
-import axios from "axios";
-=======
-'use client'
-import axios from "@/lib/axiosClient"
-import { API_CONFIG } from '@/lib/config'
->>>>>>> fe/feature/qui/my-network
+import axios from "@/lib/axiosClient";
+import { API_CONFIG } from "@/lib/config";
 
 const PreferenceService = {
   // ✅ Gửi toàn bộ thông tin preference (bio, skills, learn, avatar nếu có)
   async postUserPreference(data) {
-    const response = await axios.patch(`/api/users/preference`, data);
+    const response = await axios.patch(`/users/preference`, data);
     return response.data;
   },
 
   // ✅ Cập nhật chỉ riêng avatar
   async updateAvatar(base64Image) {
-    const response = await axios.patch(`/api/users/preference`, {
+    const response = await axios.patch(`S/users/preference`, {
       avatar: base64Image,
     });
     return response.data;
@@ -24,7 +19,7 @@ const PreferenceService = {
 
   // ✅ Lấy thông tin người dùng hiện tại (bổ sung để tránh lỗi)
   async getCurrentUser() {
-    const response = await axios.get(`/api/users/me`);
+    const response = await axios.get(`/users/me`);
     return response.data;
   },
 
