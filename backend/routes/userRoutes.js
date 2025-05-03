@@ -6,7 +6,8 @@ import {
     addLearn,
     deleteSkill,
     deleteLearn,
-    updateUserPreference
+    updateUserPreference,
+    getUserReccommendations
 } from '../controllers/userControllers.js';
 import { authMiddleware } from '../middlewares/authMiddlewares.js';
 
@@ -14,6 +15,7 @@ export const router = Router();
 
 router.get('/', getAllUsers);
 router.get('/me', authMiddleware, getUserProfile);
+router.get('/recommendations', authMiddleware, getUserReccommendations);
 router.post('/skills', authMiddleware, addSkill);
 router.post('/learn', authMiddleware, addLearn);
 router.delete('/skills', authMiddleware, deleteSkill);
