@@ -8,14 +8,18 @@ export default function NetworkList() {
 
   useEffect(() => {
     const fetchConnections = async () => {
-      try {
-        const res = await axios.get("/users/connections");
-        setUsers(res.data);
-      } catch (err) {
-        console.error("❌ Failed to fetch connections:", err);
-      } finally {
-        setLoading(false);
+      let endpoint = "/api/connections/";
+      const response = await axios.get(endpoint, {
+          headers: {
+              Authorization: Bearer ${getCookiesByName("accessToken")},
+          },
+      });
+      if (response.status !== 200) {
+          console.error("Error fetching network users");
+          return;
       }
+      setConnection(response.data);
+      console.log(response.data);
     };
 
     fetchConnections();

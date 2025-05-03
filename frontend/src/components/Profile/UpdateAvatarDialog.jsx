@@ -23,7 +23,7 @@ const convertToBase64 = (file) => {
 };
 
 export default function UpdateAvatarDialog({ open, onOpenChange }) {
-  const { user, setUser } = useAuth(); // ✅ dùng setUser thay vì login
+  const { user, setUser } = useAuth();
   const [preview, setPreview] = useState(user?.avatar || null);
   const [fileData, setFileData] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -69,11 +69,12 @@ export default function UpdateAvatarDialog({ open, onOpenChange }) {
 
       const updated = await PreferenceService.getCurrentUser();
       console.log("🧠 Updated user:", updated);
-      setUser(updated); //
-      console.log("📸 File base64:", fileData);
+
+      setUser(updated);
+      setPreview(updated.avatar); // ✅ Cập nhật preview sau khi update
 
       toast.success("Avatar updated!");
-      onOpenChange(false); // ✅ Đóng dialog
+      onOpenChange(false);
     } catch (error) {
       toast.error("Failed to update avatar");
       console.error(error);
@@ -92,7 +93,7 @@ export default function UpdateAvatarDialog({ open, onOpenChange }) {
         <div className="flex flex-col items-center gap-4">
           <div className="w-32 h-32 rounded-full overflow-hidden border">
             <img
-              src={preview || "https://placehold.co/300x300"}
+              src={preview || user?.avatar || "https://placehold.co/300x300"} // ✅ Ưu tiên preview > user.avatar
               alt="Preview"
               className="object-cover w-full h-full"
             />
