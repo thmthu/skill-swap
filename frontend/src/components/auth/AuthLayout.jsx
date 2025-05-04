@@ -4,12 +4,12 @@ export default function AuthLayout({ children }) {
       <div
         className="fixed inset-0"
         style={{
-          backgroundImage: 'url(/login_register.png)', 
-          backgroundSize: 'cover', 
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          height: '100vh',
-          width: '100vw',
+          backgroundImage: "url(/login_register.png)",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          height: "100vh",
+          width: "100vw",
         }}
       >
         {/* Dark gradient overlay */}
