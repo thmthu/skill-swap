@@ -10,21 +10,21 @@ function App() {
 	const element = useRoutes(navRoutes);
 	const { theme } = useTheme();
 
-  return (
-    <SocketProvider>
-      <div className="min-h-screen w-screen overflow-x-hidden bg-bg-light relative">
-        <Toaster />
+	return (
+		<SocketProvider>
+			<div className="min-h-screen w-screen overflow-x-hidden bg-bg-light relative">
+				<Toaster />
 
-        {/* 🔒 Navbar cố định */}
-        <Navbar />
+				{/* 🔒 Navbar cố định */}
+				<Navbar />
 
-        {/* 📄 Main content cuộn chung */}
-        <main className="pt-20 min-h-[calc(100vh-64px)] overflow-y-auto">
-          {element}
-        </main>
-      </div>
-    </SocketProvider>
-  );
+				{/* 📄 Main content cuộn chung */}
+				<main className=" min-h-[calc(100vh-64px)] overflow-y-auto">
+					{element}
+				</main>
+			</div>
+		</SocketProvider>
+	);
 }
 
 export default App;

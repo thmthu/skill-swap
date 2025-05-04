@@ -56,17 +56,15 @@ export default function HomePage() {
 
 	return (
 		<>
-      <div className="min-h-screen bg-background dark:bg-black">
-  			<HeroSection />
-  			<WhyChoose />
-  			<HowItWorks />
-  			<FAQ />
-			{ isAuthenticated && <RecommendedMatches /> }
+			<div className="min-h-screen bg-background dark:bg-black">
+				<HeroSection />
+				{isAuthenticated && <RecommendedMatches />}
 				<UserCardList />
+				<WhyChoose />
+				<HowItWorks />
+				<FAQ />
 				<Footer />
-      </div >
+			</div>
 		</>
-
-
 	);
 }
