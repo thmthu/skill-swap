@@ -22,6 +22,7 @@ export default function UserCard({
 	department,
 	userId,
 	handleConnect,
+	isLoggedIn,
 }) {
 	const navigate = useNavigate();
 
@@ -130,11 +131,11 @@ export default function UserCard({
 								<p className="pt-2 text-body1 md:text-body1 text-zinc-500 dark:text-zinc-400 leading-relaxed">
 									{description}
 								</p>
-								<ActiveButton
+								{!isLoggedIn || <ActiveButton
 									onClick={() => handleConnect(userId)}
 									children="Connect"
 									className="text-text-dark"
-								/>
+								/>}
 							</MorphingDialogDescription>
 						</div>
 

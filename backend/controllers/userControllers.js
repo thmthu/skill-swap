@@ -106,7 +106,7 @@ export const updateUserPreference = async (req, res) => {
     }
 }
 
-export const getUserReccommendations = async (req, res) => {
+export const getUserRecommendations = async (req, res) => {
     try {
         const user = await User.findById(req.userId).select('-password');
         if (!user) {
@@ -129,4 +129,4 @@ export default { getAllUsers,
                 deleteSkill, 
                 deleteLearn, 
                 updateUserPreference,
-                getUserReccommendations };
+                getUserRecommendations };
