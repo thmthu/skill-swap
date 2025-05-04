@@ -81,12 +81,6 @@ function CardDescription({ className, ...props }) {
   );
 }
 
-function CardContent({ className, ...props }) {
-  return (
-    <div data-slot="card-content" className={cn("flex-1", className)} {...props} />
-  );
-}
-
 function CardFooter({ className, ...props }) {
   return (
     <div data-slot="card-footer" className={cn("flex items-center justify-end pt-4", className)} {...props} />
@@ -105,7 +99,12 @@ function CardAction({ className, ...props }) {
     />
   );
 }
-
+function CardContent({
+  className,
+  ...props
+}) {
+  return (<div data-slot="card-content" className={cn("px-6", className)} {...props} />);
+}
 // Export all parts
 export {
   Card,

@@ -2,13 +2,17 @@ FROM node:18-alpine
 
 WORKDIR /app
 
+# Copy package files
 COPY package*.json ./
 
-RUN npm install
+# Xóa node_modules nếu tồn tại và cài đặt dependencies
+RUN rm -rf node_modules && npm install
 
+# Copy rest of the application
 COPY . .
 
-EXPOSE 3000
+# Expose port 5173 for Vite
+EXPOSE 5173
 
-CMD ["npm", "start", "--", "--host", "0.0.0.0", "--port", "3000", "--public", "localhost:3001", "--watch-poll"]
-# CMD ["npm", "run", "build"]
+# Start development server
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]

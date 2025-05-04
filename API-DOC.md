@@ -30,8 +30,6 @@ https://localhost:8080/api/
 | POST | `/register` | `username`: String - User's username (Required)<br>`email`: String - User's email (Required)<br>`password`: String - User's password (Required) | `userId`: String - Unique user identifier (Required)<br>`username`: String - User's username (Required)<br>`email`: String - User's email (Required)<br>`message`: String - Success message (Required) |
 | POST | `/login` | `username`: String - Username (Required)<br>`password`: String - User's password (Required) | `token`: String - JWT token for authentication (Required)<br>`userId`: String - Unique user identifier (Required)<br>`username`: String - User's username (Required) |
 | POST | `/logout` | None | `message`:  |
-| POST | `/forgot-pass` | `email`: String - user's email | `message`: String - success message if sending OTP successfully |
-| POST | `/otp` | `otp`: String - otp sent by user | `message`: String - message whether otp is correct or not |
 
 | POST | `/refresh` | None | `message`: String - message |
 

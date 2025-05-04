@@ -84,10 +84,14 @@ export const logout = async (req, res) => {
     try {
         const accessToken = req.headers.authorization?.split(' ')[1] || req.cookies['accessToken'];
         // console.log("Logout accessToken: ", accessToken)
+        const refreshToken = req.cookies['refreshToken'];
         if (accessToken) {
             const decoded = verifyAccessToken(accessToken);
             const expiry = decoded.exp - Math.floor(Date.now() / 1000);
             await addToBlacklist(accessToken, expiry);
+            if (refreshToken) {
+                await addToBlacklist(refreshToken, expiry);
+            }
         }
 
         res.clearCookie('accessToken');

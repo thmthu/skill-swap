@@ -11,6 +11,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - app-network
 
   backend:
     build: ./backend
@@ -24,6 +26,26 @@ services:
     env_file:
       - .env
     environment:
-      - MONGODB_URI=mongodb+srv://root:123@projects.0xua05v.mongodb.net/nab_camp?retryWrites=true&w=majority&authSource=admin
+      - MONGODB_URI=${MONGODB_URI}
     ports:
       - "3000:3000"
+    networks:
+      - app-network
+      
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://backend:3000/api
+    networks:
+      - app-network
+networks:
+  app-network:
+    driver: bridge
