@@ -10,18 +10,26 @@ const ChatContent = ({ userFromHome, setRecentChats, chatRoomId }) => {
   const [messages, setMessages] = useState([]);
   const messageContainerRef = useRef(null);
   const [receiverId, setReceiverId] = useState("");
-  const { socket, joinRoom, markAsRead, sendMessage } = useSocket();
+  const { socket, joinRoom, markAsRead, sendMessage, setUnreadMessagesCount } =
+    useSocket();
   useEffect(() => {
     if (!chatRoomId || chatRoomId === "null" || !socket) return;
 
     joinRoom(chatRoomId);
     markAsRead(chatRoomId, senderId);
-    setRecentChats((prevChats) =>
-      prevChats.map((chat) =>
-        chat.chatRoomId === chatRoomId ? { ...chat, unreadCount: 0 } : chat
-      )
-    );
+    setRecentChats((prevChats) => {
+      const currentChat = prevChats.find(
+        (chat) => chat.chatRoomId === chatRoomId
+      );
+      const unreadCount = currentChat?.unreadCount || 0;
+      if (unreadCount > 0) {
+        setUnreadMessagesCount((prev) => Math.max(0, prev - unreadCount));
+      }
 
+      return prevChats.map((chat) =>
+        chat.chatRoomId === chatRoomId ? { ...chat, unreadCount: 0 } : chat
+      );
+    });
     const ids = chatRoomId.split("_");
     setReceiverId(ids.find((id) => id !== senderId));
 
