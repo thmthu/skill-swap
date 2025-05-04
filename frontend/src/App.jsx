@@ -19,19 +19,17 @@ function App() {
 
   return (
     <SocketProvider>
-      <div className="min-h-screen w-screen overflow-x-hidden bg-bg-light relative">
+      <div
+        className={`min-h-screen w-screen overflow-x-hidden relative transition-colors duration-300 
+          bg-white text-black dark:bg-[#0c111c] dark:text-white`}
+      >
         <Toaster />
 
         {/* ❌ Ẩn Navbar nếu đang ở các trang auth hoặc preference */}
         {!shouldHideNavbar && <Navbar />}
 
         {/* 📄 Nội dung chính */}
-        <main
-          className={`
-            overflow-y-auto
-            ${shouldHideNavbar ? "pt-12" : "pt-20"}
-          `}
-        >
+        <main className={`${shouldHideNavbar ? "pt-12" : "pt-20"}`}>
           {element}
         </main>
       </div>

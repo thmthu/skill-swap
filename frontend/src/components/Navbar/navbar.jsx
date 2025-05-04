@@ -7,14 +7,10 @@ export default function Navbar() {
   const { isAuthenticated, user, loading } = useAuth();
   const navigate = useNavigate();
 
-  if (loading) {
-    return null; // hoặc <div>Loading...</div>
-  }
-
-  console.log("Current User:", user);
+  if (loading) return null;
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 h-16 bg-gradient-to-l from-gradient-start via-gradient-mid to-gradient-end text-text-dark px-6 md:px-8 flex items-center justify-between shadow">
+    <header className="fixed top-0 left-0 right-0 z-50 h-16 bg-gradient-to-l from-gradient-start via-gradient-mid to-gradient-end px-6 md:px-8 flex items-center justify-between shadow text-white">
       {/* Logo */}
       <div className="flex items-center gap-3">
         <Link to="/home" className="logo-link flex items-center gap-3">
@@ -25,35 +21,35 @@ export default function Navbar() {
         </Link>
       </div>
 
-      {/* Nav & Actions */}
+      {/* Navigation & Actions */}
       <div className="flex items-center gap-4 md:gap-6">
         <nav className="flex gap-5 font-semibold text-btn2 md:text-btn1 font-heading">
           <Link
             to="/home"
-            className="text-text-dark hover:text-primary-light transition duration-300"
+            className="text-white hover:text-primary-light transition duration-300"
           >
             Home
           </Link>
           <Link
             to="/resources"
-            className="text-text-dark hover:text-primary-light transition duration-300"
+            className="text-white hover:text-primary-light transition duration-300"
           >
             Resources
           </Link>
           {isAuthenticated && (
             <Link
               to="/mynetwork"
-              className="text-text-dark hover:text-primary-light transition duration-300"
+              className="text-white hover:text-primary-light transition duration-300"
             >
               My Network
             </Link>
           )}
         </nav>
 
-        {/* Toggle theme */}
+        {/* Toggle Theme */}
         <ThemeToggle />
 
-        {/* Chat and User Actions */}
+        {/* User & Chat or Auth buttons */}
         {isAuthenticated ? (
           <div className="flex items-center gap-3">
             <img
@@ -71,13 +67,13 @@ export default function Navbar() {
           <div className="flex gap-2 font-semibold text-btn2 md:text-btn1 font-heading">
             <button
               onClick={() => navigate("/auth?state=login")}
-              className="text-text-dark hover:text-primary-light transition duration-300"
+              className="text-white hover:text-primary-light transition duration-300"
             >
               Login
             </button>
             <button
               onClick={() => navigate("/auth?state=signup")}
-              className="text-text-dark hover:text-primary-light transition duration-300"
+              className="text-white hover:text-primary-light transition duration-300"
             >
               Sign Up
             </button>

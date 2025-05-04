@@ -5,7 +5,6 @@ import GradientHeading from "@/components/Text/GradientHeading";
 import { Loader2 } from "lucide-react";
 import { docCategories, docs } from "../data/docs";
 
-
 export function RecommendedDocs() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [filteredDocs, setFilteredDocs] = useState(docs);
@@ -25,7 +24,7 @@ export function RecommendedDocs() {
   };
 
   return (
-    <section className="max-w-[1280px] mx-auto px-4 py-12">
+    <section className="max-w-[1280px] mx-auto px-4 py-12 text-foreground">
       <h2 className="text-2xl md:text-4xl font-heading text-center mb-6 text-primary">
         <GradientHeading>Recommended Docs</GradientHeading>
       </h2>

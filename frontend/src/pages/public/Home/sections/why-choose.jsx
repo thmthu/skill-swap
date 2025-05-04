@@ -35,7 +35,7 @@ export default function WhyChoose() {
 
       {/* Feature Cards */}
       <AnimatedGroup
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pt-8 text-text-light dark:text-text-dark"
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pt-8"
         preset="scale"
       >
         {/* Feature Card Template */}
@@ -63,7 +63,7 @@ export default function WhyChoose() {
         ].map((item, index) => (
           <div
             key={index}
-            className="flex flex-col items-center space-y-4 rounded-lg bg-bg-light dark:bg-bg-dark p-8 shadow-sm hover:shadow-md transition"
+            className="flex flex-col items-center space-y-4 rounded-lg bg-white dark:bg-gray-800 text-black dark:text-white p-8 shadow-sm hover:shadow-md transition"
           >
             {item.icon}
             <h3 className="text-h2 font-semibold font-heading">{item.title}</h3>

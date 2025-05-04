@@ -62,7 +62,7 @@ const ProfileCard = forwardRef((props, ref) => {
   }));
 
   return (
-    <div className="w-[400px] rounded-xl shadow-xl overflow-hidden border border-primary relative bg-white">
+    <div className="w-[400px] rounded-xl shadow-xl overflow-hidden border border-primary relative bg-white dark:bg-gray-900">
       <div className="bg-gradient-to-r from-gradient-start via-gradient-mid to-gradient-end h-32" />
 
       <div className="absolute top-12 left-1/2 transform -translate-x-1/2">
@@ -104,14 +104,14 @@ const ProfileCard = forwardRef((props, ref) => {
         </h2>
       </div>
 
-      <div className="p-6 pt-4 flex flex-col gap-6 text-gray-800">
+      <div className="p-6 pt-4 flex flex-col gap-6 text-text-light dark:text-white">
         <div className="flex flex-col gap-3 text-base">
           <div className="flex items-center gap-3">
-            <UsersIcon className="w-5 h-5 text-gray-600" />
+            <UsersIcon className="w-5 h-5 text-gray-500 dark:text-zinc-400" />
             <span>{connectionCount} Connections</span>
           </div>
           <div className="flex items-center gap-3">
-            <EnvelopeIcon className="w-5 h-5 text-gray-600" />
+            <EnvelopeIcon className="w-5 h-5 text-gray-500 dark:text-zinc-400" />
             <span className="truncate">{user?.email || "you@example.com"}</span>
           </div>
         </div>
@@ -119,7 +119,7 @@ const ProfileCard = forwardRef((props, ref) => {
         <div className="flex flex-col gap-4 text-sm">
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between">
-              <span className="font-semibold text-gray-700">
+              <span className="font-semibold text-gray-700 dark:text-gray-300">
                 Current Skill:
               </span>
               <EditSkillDialog
@@ -143,7 +143,7 @@ const ProfileCard = forwardRef((props, ref) => {
 
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between">
-              <span className="font-semibold text-gray-700">
+              <span className="font-semibold text-gray-700 dark:text-gray-300">
                 Target Skills:
               </span>
               <EditSkillDialog
@@ -166,10 +166,10 @@ const ProfileCard = forwardRef((props, ref) => {
           </div>
         </div>
 
-        <div className="border-t border-gray-200" />
+        <div className="border-t border-gray-200 dark:border-gray-700" />
 
         <ActiveButton
-          className="w-full flex items-center justify-center gap-2 text-red-500 font-semibold py-3 rounded-xl border border-red-500 bg-white hover:bg-red-500/10 transition-all"
+          className="w-full flex items-center justify-center gap-2 text-red-500 font-semibold py-3 rounded-xl border border-red-500 bg-white dark:bg-transparent hover:bg-red-500/10 dark:hover:bg-red-500/20 transition-all"
           onClick={logout}
         >
           <ArrowRightStartOnRectangleIcon className="w-5 h-5" />

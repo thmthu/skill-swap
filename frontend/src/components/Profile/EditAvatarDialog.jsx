@@ -73,7 +73,7 @@ export default function EditAvatarDialog({ trigger }) {
   return (
     <Dialog>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md bg-white dark:bg-gray-900 text-black dark:text-white">
         <DialogHeader>
           <DialogTitle>Change Profile Picture</DialogTitle>
         </DialogHeader>
@@ -84,20 +84,21 @@ export default function EditAvatarDialog({ trigger }) {
             type="file"
             accept="image/png, image/jpeg"
             onChange={handleFileChange}
+            className="text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:bg-primary-dark dark:file:bg-primary dark:hover:file:bg-primary-dark"
           />
 
           {preview && (
             <img
               src={preview}
               alt="Preview"
-              className="max-h-60 object-contain rounded-lg"
+              className="max-h-60 object-contain rounded-lg border dark:border-gray-600"
             />
           )}
         </div>
 
         <div className="flex justify-end gap-2 pt-4">
           <DialogClose asChild>
-            <button className="px-4 py-2 text-sm border rounded hover:bg-gray-100">
+            <button className="px-4 py-2 text-sm border rounded text-black dark:text-white border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800">
               Cancel
             </button>
           </DialogClose>
