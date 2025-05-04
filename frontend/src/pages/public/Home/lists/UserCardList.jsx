@@ -42,7 +42,7 @@ export default function UserCardList() {
 	const currentUsers = useMemo(() => {
 		return users.slice(indexOfFirstUser, indexOfLastUser);
 	}, [users, indexOfFirstUser, indexOfLastUser]);
-	console.log("Current Users", currentUsers);
+	// console.log("Current Users", currentUsers);
 
 	const totalPages = useMemo(
 		() => Math.ceil(users.length / usersPerPage),

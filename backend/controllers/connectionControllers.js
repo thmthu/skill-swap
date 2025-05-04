@@ -118,6 +118,7 @@ export const getRecentConnections = async (req, res) => {
 		// Calculate the date 7 days ago
 		const oneWeekAgo = new Date();
 		oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+		console.log(oneWeekAgo);
 
 		const connections = await Connection.find({
 			$or: [{ sender: user._id }, { receiver: user._id }],
@@ -171,11 +172,9 @@ export const createConnection = async (req, res) => {
 			receiver: senderId,
 		});
 		if (oldConnection) {
-			if (oldConnection.isDeleted) {
-				oldConnection.isDeleted = false;
-				await oldConnection.save();
+			if (!oldConnection.isDeleted) {
 				return res.status(200).json({
-					message: "Connection request sent",
+					message: "Connection already exists!",
 				});
 			}
 			// Need else condition to check if the connection is already accepted
