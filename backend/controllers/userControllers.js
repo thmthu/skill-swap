@@ -95,7 +95,8 @@ export const updateUserPreference = async (req, res) => {
     if (!user) {
       return res.status(401).json({ message: "User not found" });
     }
-    const { bio, skills, learn } = req.body;
+
+    const { bio, skills, learn, avatar } = req.body; // ✅ FIXED HERE
     user.bio = bio;
     user.skills = skills;
     user.learn = learn;
