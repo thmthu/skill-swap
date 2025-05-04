@@ -57,6 +57,7 @@ export const getAllReceivedConnections = async (req, res) => {
 				}
 				const data = {
 					_id: friend._id,
+					avatar: friend.avatar,
 					connectionId: connection._id,
 					username: friend.username,
 					department: friend.bio || "Unknown Department",
@@ -96,6 +97,7 @@ export const getAllSentConnections = async (req, res) => {
 				}
 				const data = {
 					_id: friend._id,
+					avatar: friend.avatar,
 					connectionId: connection._id,
 					username: friend.username,
 					department: friend.bio || "Unknown Department",
@@ -145,6 +147,7 @@ export const getRecentConnections = async (req, res) => {
 				}
 				const data = {
 					_id: friend._id,
+					avatar: friend.avatar,
 					connectionId: connection._id,
 					username: friend.username,
 					department: friend.bio || "Unknown Department",

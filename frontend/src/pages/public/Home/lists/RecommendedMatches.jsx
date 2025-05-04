@@ -7,6 +7,15 @@ import { useAuth } from "../../../../context/AuthContext";
 import axios from "axios";
 import { toast, Toaster } from "react-hot-toast";
 import { cn } from "@/lib/utils";
+import {
+	Pagination,
+	PaginationContent,
+	PaginationLink,
+	PaginationItem,
+	PaginationPrevious,
+	PaginationNext,
+	PaginationEllipsis,
+} from "@/components/ui/pagination";
 
 export default function RecommendedMatches() {
 	const { isAuthenticated } = useAuth();
