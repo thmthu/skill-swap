@@ -2,6 +2,7 @@ import HeroSection from "./sections/hero";
 import HowItWorks from "./sections/how-it-works";
 import WhyChoose from "./sections/why-choose";
 import FAQ from "./sections/faq";
+import Footer from "../../../components/Footer/footer";
 
 import UserCardList from "./lists/UserCardList";
 import RecommendedMatches from "./lists/RecommendedMatches";
@@ -65,7 +66,8 @@ export default function HomePage() {
   			<HowItWorks />
   			<FAQ />
 			{ getCookie("accessToken") && <RecommendedMatches /> }
-  			<UserCardList />
+				<UserCardList />
+				<Footer />
       </div >
 		</>
 
