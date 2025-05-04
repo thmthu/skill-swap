@@ -14,7 +14,7 @@ export default function Navbar() {
   console.log("Current User:", user);
 
   return (
-    <header className="w-full bg-gradient-to-l from-gradient-start via-gradient-mid to-gradient-end text-text-dark px-6 py-2 md:px-8 md:py-3 flex items-center justify-between">
+    <header className="fixed top-0 left-0 right-0 z-50 h-16 bg-gradient-to-l from-gradient-start via-gradient-mid to-gradient-end text-text-dark px-6 md:px-8 flex items-center justify-between shadow">
       {/* Logo */}
       <div className="flex items-center gap-3">
         <Link to="/home" className="logo-link flex items-center gap-3">
