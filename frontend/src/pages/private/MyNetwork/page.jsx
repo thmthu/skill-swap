@@ -246,7 +246,7 @@ const MyNetworkPage = () => {
 						onClick={() => setActiveTab(item)}
 						key={index}
 					>
-						<div className="text-center text-black text-lg md:text-3xl font-semibold font-['Poppins']">
+						<div className="text-center text-text-dark text-lg md:text-3xl font-semibold font-['Poppins']">
 							{item}
 						</div>
 						<div
