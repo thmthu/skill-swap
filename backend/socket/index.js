@@ -56,7 +56,6 @@ const initSocket = (io) => {
                 room.unreadCount.get(receiverId) + 1
               );
             }
-            await room.save();
           }
           io.to(chatRoomId).emit("newMessage", message);
 
@@ -78,9 +77,14 @@ const initSocket = (io) => {
                     avatar: sender.profilePic || "./NAB.png",
                   },
                 });
+
+                io.to(`user_${receiverId}`).emit("updateUnreadCount", {
+                  type: "increment",
+                });
               }
             }
           }
+          await room.save();
         } catch (e) {
           console.log("error at send message socket: ", e);
         }
@@ -90,8 +94,16 @@ const initSocket = (io) => {
     socket.on("markAsRead", async ({ chatRoomId, userId }) => {
       const room = await ChatRoom.findOne({ chat_room_id: chatRoomId });
       if (room) {
+        const unreadCount = room.unreadCount.get(userId) || 0;
         room.unreadCount.set(userId, 0);
         await room.save();
+
+        if (unreadCount > 0) {
+          io.to(`user_${userId}`).emit("updateUnreadCount", {
+            type: "decrement",
+            count: unreadCount,
+          });
+        }
       }
     });
 
