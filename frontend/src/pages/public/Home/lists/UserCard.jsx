@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/morphing-dialog";
 import { ChatBubbleLeftEllipsisIcon } from "@heroicons/react/24/solid";
 import ActiveButton from "@/components/Button/ActiveButton";
+import { useState } from "react";
 
 export default function UserCard({
 	image,
@@ -25,6 +26,7 @@ export default function UserCard({
 	handleConnect,
 	isLoggedIn,
 }) {
+	const [isConnected, setIsConnected] = useState(false);
 	const navigate = useNavigate();
 
 	const handleChatClick = (e) => {
@@ -134,8 +136,9 @@ export default function UserCard({
 								</p>
 								{!isLoggedIn || (
 									<ActiveButton
-										onClick={() => handleConnect(userId)}
-										children="Connect"
+										onClick={() => {handleConnect(userId), setIsConnected(true)}}
+										children={isConnected ? "Connected" : "Connect"}
+										disabled={isConnected}
 										className="bg-primary text-white hover:bg-primary-dark dark:bg-primary-medium dark:text-text-light dark:hover:bg-red-300 rounded-md mt-4 px-8 py-3 "
 									/>
 								)}

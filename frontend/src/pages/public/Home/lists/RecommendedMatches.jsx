@@ -55,7 +55,7 @@ export default function RecommendedMatches() {
 			const token = getCookie("accessToken");
 			if (!token) throw new Error("Missing auth token");
 
-			setLoading(true); // Set loading state when connecting
+			// setLoading(true); // Set loading state when connecting
 			const endpoint = `http://localhost:3000/api/connections/create/${receiverId}`;
 			const response = await axios.post(
 				endpoint,
@@ -74,9 +74,7 @@ export default function RecommendedMatches() {
 		} catch (error) {
 			toast.error("Failed to send connection request");
 			console.error("Error:", error.response?.data || error.message);
-		} finally {
-			setLoading(false); // Reset loading state
-		}
+		} 
 	};
 
 	useEffect(() => {
