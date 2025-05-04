@@ -16,7 +16,6 @@ const ChatContent = ({ userFromHome, setRecentChats, chatRoomId }) => {
 
     joinRoom(chatRoomId);
     markAsRead(chatRoomId, senderId);
-
     setRecentChats((prevChats) =>
       prevChats.map((chat) =>
         chat.chatRoomId === chatRoomId ? { ...chat, unreadCount: 0 } : chat
@@ -60,27 +59,10 @@ const ChatContent = ({ userFromHome, setRecentChats, chatRoomId }) => {
           messageContainerRef.current.scrollHeight;
       }
     };
-
     scrollToBottom();
-
     const timeoutId = setTimeout(scrollToBottom, 100);
-
     return () => clearTimeout(timeoutId);
   }, [messages]);
-
-  // useEffect(() => {
-  //   if (!chatRoomId || !socket) return;
-
-  //   const handleNewMessage = (newMsg) => {
-  //     setMessages((prevMessages) => [...prevMessages, newMsg]);
-  //   };
-
-  //   socket.on("newMessage", handleNewMessage);
-
-  //   return () => {
-  //     socket.off("newMessage", handleNewMessage);
-  //   };
-  // }, [chatRoomId]);
 
   const handleSend = () => {
     if (message.trim()) {
@@ -100,14 +82,6 @@ const ChatContent = ({ userFromHome, setRecentChats, chatRoomId }) => {
       const month = String(today.getMonth() + 1).padStart(2, "0");
       const year = today.getFullYear();
       const formattedDate = `${day}/${month}/${year}`;
-      const newMsg = {
-        sender_id: senderId,
-        receiver_id: receiverId,
-        text: message.trim(),
-        createdAt: new Date(),
-      };
-      // setMessages((prev) => [...prev, newMsg]);
-
       setMessage("");
       if (messages.length == 0) {
         const newChatRoom = {

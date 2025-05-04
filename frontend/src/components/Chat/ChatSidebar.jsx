@@ -14,7 +14,7 @@ const ChatSidebar = ({ setReceiver, chats, selectedChat, onSelectChat }) => {
           <input
             type="text"
             placeholder="Search conversations..."
-            className="w-full pl-10 pr-4 py-2 rounded-lg border border-primary-extra-light bg-bg-light text-body1 focus:outline-none focus:border-primary-medium"
+            className="w-full pl-10 pr-4 py-2 rounded-lg border border-primary-extra-light bg-bg-light text-body1 focus:outline-none focus:border-primary-medium text-red-950"
           />
           <Search className="absolute left-3 top-2.5 h-5 w-5 text-primary-medium" />
         </div>
@@ -25,7 +25,6 @@ const ChatSidebar = ({ setReceiver, chats, selectedChat, onSelectChat }) => {
             key={chat.chatRoomId}
             onClick={() => {
               onSelectChat(chat.chatRoomId);
-              console.log("=====chat===", chat);
               setReceiver({
                 receiverId: chat.user._id,
                 username: chat.user.username,
@@ -53,9 +52,7 @@ const ChatSidebar = ({ setReceiver, chats, selectedChat, onSelectChat }) => {
                   <h3 className="text-subtitle1 font-semibold text-text-light truncate">
                     {chat.user.username}
                   </h3>
-                  <span className="text-body2 text-primary-medium">
-                    {chat.time}
-                  </span>
+                  <span className="text-body1 text-gray-500">{chat.time}</span>
                 </div>
                 <p className="text-body2 text-primary-medium truncate mt-1">
                   {chat.lastMessage}

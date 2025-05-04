@@ -29,13 +29,12 @@ const Chat = () => {
       }
     };
     fetchChatRoom();
-    if (location.state?.username ) {
+    if (location.state?.username) {
       setReceiver({
         receiverId,
         username: location.state?.username,
         profilePic: location.state?.profilePic,
       });
-      return;
     }
   }, []);
 
@@ -46,12 +45,6 @@ const Chat = () => {
           ? `${receiverId}_${userId}`
           : `${userId}_${receiverId}`;
       setSelectedChat(temp);
-      const chatRoomExists = recentChats.some(
-        (chat) => chat.chatRoomId === temp
-      );
-      if (!chatRoomExists) {
-        console.log("Creating new chat room:", temp);
-      }
     }
   }, [receiverId, userId]);
 
