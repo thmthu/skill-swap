@@ -1,4 +1,3 @@
-import { get } from "mongoose";
 import Connection from "../models/Connection.js";
 import User from "../models/User.js";
 import { getUserById } from "../utils/user.js";
@@ -183,13 +182,15 @@ export const createConnection = async (req, res) => {
 			sender: senderId,
 			receiver: receiverId,
 		});
-		if (existingConnection && existingConnection.isDeleted) {
-			existingConnection.isDeleted = false;
-			await existingConnection.save();
-		} else if (!existingConnection.isDeleted) {
-			return res.status(200).json({
-				message: "Connection already exists!",
-			});
+		if (existingConnection) {
+			if (existingConnection.isDeleted) {
+				existingConnection.isDeleted = false;
+				await existingConnection.save();
+			} else if (!existingConnection.isDeleted) {
+				return res.status(200).json({
+					message: "Connection already exists!",
+				});
+			}
 		} else {
 			const connection = new Connection({
 				sender: senderId,
@@ -302,31 +303,33 @@ export const deleteConnection = async (req, res) => {
 
 export const deleteConnectionByUser = async (req, res) => {
 	try {
-			const { userId } = req.params;
-			console.log(userId);
+		const { userId } = req.params;
+		console.log(userId);
 
-			const connections = await Connection.find({
-					$or: [{ sender: userId }, { receiver: userId }],
-					status: "accepted",
-					isDeleted: false,
-			});
+		const connections = await Connection.find({
+			$or: [{ sender: userId }, { receiver: userId }],
+			status: "accepted",
+			isDeleted: false,
+		});
 
-			if (!connections || connections.length === 0) {
-					return res.status(404).json({ message: "No connections found" });
-			}
+		if (!connections || connections.length === 0) {
+			return res.status(404).json({ message: "No connections found" });
+		}
 
-			// Update each connection
-			await Promise.all(
-					connections.map(async (connection) => {
-							connection.isDeleted = true;
-							connection.updatedAt = Date.now();
-							connection.status = "pending";
-							await connection.save();
-					})
-			);
+		// Update each connection
+		await Promise.all(
+			connections.map(async (connection) => {
+				connection.isDeleted = true;
+				connection.updatedAt = Date.now();
+				connection.status = "pending";
+				await connection.save();
+			})
+		);
 
-			return res.status(200).json({ message: "Connections deleted successfully" });
+		return res
+			.status(200)
+			.json({ message: "Connections deleted successfully" });
 	} catch (error) {
-			return res.status(500).json({ message: error.message });
+		return res.status(500).json({ message: error.message });
 	}
 };
