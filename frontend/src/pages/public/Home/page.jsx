@@ -59,12 +59,16 @@ export default function HomePage() {
 
 	return (
 		<>
-			<HeroSection />
-			<WhyChoose />
-			<HowItWorks />
-			<FAQ />
+      <div className="min-h-screen bg-background dark:bg-black">
+  			<HeroSection />
+  			<WhyChoose />
+  			<HowItWorks />
+  			<FAQ />
 			{ getCookie("accessToken") && <RecommendedMatches /> }
-			<UserCardList />
+  			<UserCardList />
+      </div >
 		</>
+
+
 	);
 }
