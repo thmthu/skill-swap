@@ -1,4 +1,3 @@
-import { get } from "mongoose";
 import Connection from "../models/Connection.js";
 import User from "../models/User.js";
 import { getUserById } from "../utils/user.js";
@@ -159,50 +158,52 @@ export const getRecentConnections = async (req, res) => {
 };
 
 export const createConnection = async (req, res) => {
-  try {
-    const { receiverId } = req.params;
-    const user = await getUserById(req.userId);
-    const senderId = user._id;
-    // Check if the receiver send the request to the sender
-    const oldConnection = await Connection.findOne({
-      sender: receiverId,
-      receiver: senderId,
-    });
-    if (oldConnection) {
-      if (oldConnection.isDeleted) {
-        oldConnection.isDeleted = false;
-        await oldConnection.save();
-        return res.status(200).json({
-          message: "Connection request sent",
-        });
-      }
-      // Need else condition to check if the connection is already accepted
-    }
-    // Check if the connection already exists
-    const existingConnection = await Connection.findOne({
-      sender: senderId,
-      receiver: receiverId,
-    });
-    if (existingConnection && existingConnection.isDeleted) {
-      existingConnection.isDeleted = false;
-      await existingConnection.save();
-    } else if (!existingConnection.isDeleted) {
-      return res.status(200).json({
-        message: "Connection already exists!",
-      });
-    } else {
-      const connection = new Connection({
-        sender: senderId,
-        receiver: receiverId,
-        status: "pending",
-        isDeleted: false,
-      });
-      await connection.save();
-    }
-    return res.status(200).json({ message: "Connection request sent" });
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
-  }
+	try {
+		const { receiverId } = req.params;
+		const user = await getUserById(req.userId);
+		const senderId = user._id;
+		// Check if the receiver send the request to the sender
+		const oldConnection = await Connection.findOne({
+			sender: receiverId,
+			receiver: senderId,
+		});
+		if (oldConnection) {
+			if (oldConnection.isDeleted) {
+				oldConnection.isDeleted = false;
+				await oldConnection.save();
+				return res.status(200).json({
+					message: "Connection request sent",
+				});
+			}
+			// Need else condition to check if the connection is already accepted
+		}
+		// Check if the connection already exists
+		const existingConnection = await Connection.findOne({
+			sender: senderId,
+			receiver: receiverId,
+		});
+		if (existingConnection) {
+			if (existingConnection.isDeleted) {
+				existingConnection.isDeleted = false;
+				await existingConnection.save();
+			} else if (!existingConnection.isDeleted) {
+				return res.status(200).json({
+					message: "Connection already exists!",
+				});
+			}
+		} else {
+			const connection = new Connection({
+				sender: senderId,
+				receiver: receiverId,
+				status: "pending",
+				isDeleted: false,
+			});
+			await connection.save();
+		}
+		return res.status(200).json({ message: "Connection request sent" });
+	} catch (error) {
+		return res.status(500).json({ message: error.message });
+	}
 };
 
 export const withdrawRequest = async (req, res) => {

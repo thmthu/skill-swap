@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import debounce from "lodash/debounce";
+import axios from "axios";
 
 const mockUsers = [
   {
@@ -136,8 +137,12 @@ export function useSearchUser(initialSearch = "", initialSkills = "") {
       setLoading(true);
       setError("");
 
+      const response = await axios.get(
+        "http://localhost:3000/api/users/"
+      );
+
       // Use mock data instead of API call
-      let filteredUsers = [...mockUsers];
+      let filteredUsers = response.data || mockUsers;
 
       // Filter by search term
       if (search.trim() !== "") {
