@@ -1,36 +1,69 @@
-import React from "react";
-import ActiveButton from "../Button/ActiveButton";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardAction,
+} from "@/components/ui/card";
+import axios from "axios";
 
-const NetworkCard = ({ avatarUrl, name, description }) => {
+export default function NetworkCard({ avatarUrl, name, description, userId }) {
+  const handleDelete = async () => {
+    try {
+      const endpoint = `http://localhost:3000/api/connections/delete/user/${userId}`;
+      const response = await axios.delete(endpoint, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${
+            document.cookie
+              .split("; ")
+              .find((row) => row.startsWith("accessToken="))
+              ?.split("=")[1]
+          }`,
+        },
+      });
+
+      if (response.status === 200) {
+        console.log("Connection deleted successfully");
+      } else {
+        console.error("Error deleting connection");
+      }
+    } catch (error) {
+      console.error(
+        "Error deleting connection:",
+        error.response?.data || error.message
+      );
+    }
+  };
   return (
-    <div className="w-full px-6 py-5 bg-white border border-gray-200 border-l-4 border-primary rounded-xl shadow-sm hover:shadow-md transition flex justify-between items-center">
-      {/* Info */}
-      <div className="flex items-center gap-4">
-        <img
-          src={avatarUrl || "https://placehold.co/100x100"}
-          alt={name}
-          className="w-14 h-14 rounded-xl object-cover border-2 border-primary/50 bg-neutral-100"
-        />
-        <div className="flex flex-col">
-          <span className="text-base font-semibold text-gray-900">{name}</span>
-          <span className="text-sm text-gray-500">
-            {description || "No description"}
-          </span>
-          <span className="text-sm text-primary font-medium">Connected</span>
+    <Card className="bg-white border border-primary text-gray-800 shadow-sm transition hover:shadow-md hover:border-primary-dark">
+      <CardHeader className="flex items-center justify-between gap-6">
+        <div className="flex items-center gap-5">
+          <div
+            className="w-20 h-20 rounded-xl bg-gray-300"
+            style={{
+              backgroundImage: `url(${avatarUrl})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
+          />
+          <div className="flex flex-col gap-1">
+            <CardTitle className="text-lg font-semibold">{name}</CardTitle>
+            <CardDescription className="text-gray-600">
+              {description}
+            </CardDescription>
+          </div>
         </div>
-      </div>
 
-      {/* Buttons */}
-      <div className="flex gap-2 shrink-0">
-        <ActiveButton className="bg-primary/10 text-primary hover:bg-primary/20 text-sm px-3 py-1 rounded-md">
-          Chat
-        </ActiveButton>
-        <ActiveButton className="bg-primary text-white hover:bg-primary/90 text-sm px-3 py-1 rounded-md">
-          Remove
-        </ActiveButton>
-      </div>
-    </div>
+        <CardAction className="flex gap-2">
+          <div className="w-10 h-10" onClick={handleDelete}>
+            <div className="w-[31.5px] h-[31.5px] outline outline-[1.5px] outline-red-700 outline-offset-[-0.75px] mx-auto my-auto rounded" />
+          </div>
+          <div className="w-10 h-10">
+            <div className="w-[31.5px] h-[31.5px] outline outline-[1.5px] outline-[#699A23] outline-offset-[-0.75px] mx-auto my-auto rounded" />
+          </div>
+        </CardAction>
+      </CardHeader>
+    </Card>
   );
-};
-
-export default NetworkCard;
+}

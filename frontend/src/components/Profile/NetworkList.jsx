@@ -56,6 +56,7 @@ export default function NetworkList() {
           avatarUrl={user.avatar}
           name={user.username}
           description={user.bio}
+          userId={user._id}
         />
       ))}
     </div>
