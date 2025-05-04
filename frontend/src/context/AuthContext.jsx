@@ -7,21 +7,23 @@ import { authService } from "@/services/AuthService";
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-  // User state
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [needsUserPreference, setNeedsUserPreference] = useState(null);
   const [isInitialAuthCheckDone, setIsInitialAuthCheckDone] = useState(false);
   const navigate = useNavigate();
-  
+
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
   const fetchUserData = async () => {
     try {
       const currentUser = await authService.getCurrentUser();
       console.log("Current user data fetched:", currentUser);
-      
+      localStorage.setItem("user", JSON.stringify(currentUser));
       if (currentUser) {
         setUser(currentUser);
-        const needsPreference = !currentUser.skills?.length || !currentUser.learn?.length;
+        const needsPreference =
+          !currentUser.skills?.length || !currentUser.learn?.length;
         setNeedsUserPreference(needsPreference);
         return currentUser;
       }
@@ -31,33 +33,31 @@ export function AuthProvider({ children }) {
       return null;
     }
   };
-  
+
   useEffect(() => {
     const checkUserLoggedIn = async () => {
       try {
         const url = new URL(window.location.href);
-        if (url.pathname === '/auth' && (
-            url.searchParams.get('reason') === 'session_expired' || 
-            url.searchParams.get('state') === 'login'
-          )) {
-          console.log("Skipping auth check for login page");
+        if (
+          url.pathname === "/auth" &&
+          (url.searchParams.get("reason") === "session_expired" ||
+            url.searchParams.get("state") === "login")
+        ) {
           setLoading(false);
           setIsInitialAuthCheckDone(true);
           return;
         }
-        
-        const savedUser = localStorage.getItem('user');
+
+        const savedUser = localStorage.getItem("user");
         if (savedUser) {
           try {
             const parsedUser = JSON.parse(savedUser);
             setUser(parsedUser);
-            console.log("User loaded from localStorage:", parsedUser);
           } catch (e) {
-            console.error("Error parsing user from localStorage:", e);
-            localStorage.removeItem('user');
+            localStorage.removeItem("user");
           }
         }
-        
+
         await fetchUserData();
       } catch (error) {
         console.error("Auth initialization error:", error);
@@ -69,24 +69,31 @@ export function AuthProvider({ children }) {
 
     checkUserLoggedIn();
   }, []);
-  
+
   const refreshUserData = async () => {
-    setLoading(true);
+    setIsRefreshing(true);
     try {
       const userData = await fetchUserData();
       return userData;
     } finally {
-      setLoading(false);
+      setIsRefreshing(false);
     }
   };
-  
+
   const login = async (userData) => {
     setLoading(true);
     try {
       setUser(userData.user);
-      
-      localStorage.setItem('user', JSON.stringify(userData.user));
-      
+
+      const needsPreference =
+        !userData.user?.skills?.length || !userData.user?.learn?.length;
+      // console.log("Login data:", userData.user);
+      // console.log("Skills:", userData.user?.skills, "Learn:", userData.user?.learn);
+      // console.log("needsUserPreference after login:", needsPreference);
+      setNeedsUserPreference(needsPreference);
+
+      localStorage.setItem("user", JSON.stringify(userData.user));
+
       return userData;
     } finally {
       setLoading(false);
@@ -119,7 +126,7 @@ export function AuthProvider({ children }) {
     try {
       await authService.logout();
       setUser(null);
-      localStorage.removeItem('user');
+      localStorage.removeItem("user");
       navigate("/home?message=Logout successful");
     } finally {
       setLoading(false);
@@ -128,14 +135,16 @@ export function AuthProvider({ children }) {
 
   const value = {
     user,
+    setUser, // ✅ THÊM DÒNG NÀY ĐỂ CẬP NHẬT USER TỪ COMPONENT KHÁC
     loading,
+    isRefreshing,
     login,
     loginWithGoogle,
     logout,
     register,
     isAuthenticated: !!user,
     needsUserPreference,
-    refreshUserData, 
+    refreshUserData,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

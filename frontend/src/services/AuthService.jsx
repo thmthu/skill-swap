@@ -18,14 +18,11 @@ export const authService = {
   },
   async register(fullName, email, password) {
     try {
-      const response = await axios.post(
-        "/auth/register",
-        {
-          username: fullName,
-          email: email,
-          password: password,
-        }
-      );
+      const response = await axios.post("/auth/register", {
+        username: fullName,
+        email: email,
+        password: password,
+      });
       return response.data;
     } catch (error) {
       throw new Error(error.response?.data?.message || "Failed to signup");

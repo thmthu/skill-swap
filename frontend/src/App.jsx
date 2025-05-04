@@ -4,20 +4,27 @@ import Navbar from "@/components/Navbar/Navbar";
 import { Toaster } from "react-hot-toast";
 import { useTheme } from "@/context/ThemeContext";
 import { SocketProvider } from "./context/SocketContext";
+import Header from "./components/Header/Header";
 
 function App() {
-  const element = useRoutes(navRoutes);
-  const { theme } = useTheme();
+	const element = useRoutes(navRoutes);
+	const { theme } = useTheme();
 
-  return (
-    <SocketProvider>
-      <div className="min-h-screen w-screen overflow-x-hidden bg-bg-light flex flex-col">
-        <Toaster />
-        <Navbar />
-        <main className="flex-1 p-6">{element}</main>
-      </div>
-    </SocketProvider>
-  );
+	return (
+		<SocketProvider>
+			<div className="min-h-screen w-screen overflow-x-hidden bg-bg-light relative">
+				<Toaster />
+
+				{/* 🔒 Navbar cố định */}
+				<Navbar />
+
+				{/* 📄 Main content cuộn chung */}
+				<main className=" min-h-[calc(100vh-64px)] overflow-y-auto">
+					{element}
+				</main>
+			</div>
+		</SocketProvider>
+	);
 }
 
 export default App;
