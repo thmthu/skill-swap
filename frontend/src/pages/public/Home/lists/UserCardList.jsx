@@ -36,7 +36,7 @@ export default function UserCardList() {
 	const paginate = (pageNumber) => {
 		if (pageNumber > 0 && pageNumber <= totalPages) {
 			setCurrentPage(pageNumber);
-			window.scrollTo({ top: 0, behavior: "smooth" });
+			// window.scrollTo({ top: 0, behavior: "smooth" });
 		}
 	};
 
