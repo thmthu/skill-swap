@@ -156,35 +156,32 @@ const ChatContent = ({ userFromHome, setRecentChats, chatRoomId }) => {
 
   if (!chatRoomId || chatRoomId === "null") {
     return (
-      <div className=" h-full overflow-y-auto flex-1 flex items-center justify-center bg-bg-light">
+      <div className="h-full overflow-y-auto flex-1 flex items-center justify-center bg-bg-light dark:bg-bg-dark">
         <div className="text-center">
           <MessageSquare className="w-16 h-16 text-primary-medium mx-auto mb-4" />
-          <h2 className="text-h2 font-heading font-bold text-primary-dark">
+          <h2 className="text-h2 font-heading font-bold text-primary-dark dark:text-primary-light">
             Select a conversation
           </h2>
-          <p className="text-body1 secondary-light-pink mt-2">
+          <p className="text-body1 text-secondary dark:text-muted-foreground mt-2">
             Choose a chat from the sidebar to start messaging
           </p>
         </div>
       </div>
     );
   }
+
   return (
-    <div className="flex-1 flex flex-col h-full bg-bg-light">
-      {/* Chat Header */}
-      <div className="p-4 bg-white border-b border-primary-extra-light flex items-center">
-        <div className="w-10 h-10 rounded-full overflow-hidden mr-3 flex-shrink-0">
+    <div className="flex-1 flex flex-col h-full bg-bg-light dark:bg-bg-dark">
+      {/* Header */}
+      <div className="p-4 bg-white dark:bg-gray-800 border-b border-primary-extra-light dark:border-gray-700 flex items-center">
+        <div className="w-10 h-10 rounded-full overflow-hidden mr-3">
           <img
             src={userFromHome.profilePic || "/NAB.png"}
             alt={`${userFromHome.username}'s avatar`}
             className="w-full h-full object-cover"
-            onError={(e) => {
-              e.target.onerror = null;
-              e.target.src = "/default-avatar.png";
-            }}
           />
         </div>
-        <h2 className="text-h3 font-heading font-bold text-primary-dark">
+        <h2 className="text-h3 font-heading font-bold text-primary-dark dark:text-white">
           {userFromHome.username}
         </h2>
       </div>
@@ -205,7 +202,7 @@ const ChatContent = ({ userFromHome, setRecentChats, chatRoomId }) => {
               className={`max-w-[70%] rounded-lg p-3 ${
                 msg.sender_id === senderId
                   ? "bg-black text-white"
-                  : "bg-white text-text-light"
+                  : "bg-gray-200 dark:bg-gray-700 text-text-light dark:text-white"
               }`}
             >
               <p className="text-body1">{msg.text}</p>
@@ -218,25 +215,18 @@ const ChatContent = ({ userFromHome, setRecentChats, chatRoomId }) => {
             </div>
           </div>
         ))}
-        {messages.length === 0 && (
-          <div className="flex items-center justify-center h-full">
-            <p className="text-body1 text-gray-400">
-              No messages yet. Start a conversation!
-            </p>
-          </div>
-        )}
       </div>
 
-      {/* Message Input */}
-      <div className="p-4 bg-white border-t border-primary-extra-light">
+      {/* Input */}
+      <div className="p-4 bg-white dark:bg-gray-800 border-t border-primary-extra-light dark:border-gray-700">
         <div className="flex gap-2">
           <input
             type="text"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Type your message..."
-            className="flex-1 p-2 rounded-lg border border-primary-extra-light focus:outline-none focus:border-primary-medium text-body1"
-            onKeyPress={(e) => e.key === "Enter" && handleSend()}
+            className="flex-1 p-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-bg-light dark:bg-gray-700 text-black dark:text-white focus:outline-none"
+            onKeyDown={(e) => e.key === "Enter" && handleSend()}
           />
           <button
             onClick={handleSend}
