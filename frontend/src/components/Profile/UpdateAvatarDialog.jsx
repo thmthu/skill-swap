@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "react-hot-toast";
 import PreferenceService from "@/services/PreferenceService";
 import { useAuth } from "@/context/AuthContext";
-
+import imageCompression from "browser-image-compression";
 const convertToBase64 = (file) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -33,21 +33,27 @@ export default function UpdateAvatarDialog({ open, onOpenChange }) {
     if (!file) return;
 
     const validTypes = ["image/jpeg", "image/png"];
-    const maxSize = 1 * 1024 * 1024;
-
     if (!validTypes.includes(file.type)) {
       toast.error("Only JPG and PNG files are allowed");
       return;
     }
 
-    if (file.size > maxSize) {
-      toast.error("File size must be under 1MB");
-      return;
-    }
+    // Cấu hình resize ảnh
+    const options = {
+      maxSizeMB: 1, // tối đa 1MB
+      maxWidthOrHeight: 512, // resize chiều dài lớn nhất
+      useWebWorker: true, // tăng hiệu suất
+    };
 
-    const base64 = await convertToBase64(file);
-    setPreview(base64);
-    setFileData(base64);
+    try {
+      const compressedFile = await imageCompression(file, options);
+      const base64 = await convertToBase64(compressedFile);
+      setPreview(base64);
+      setFileData(base64);
+    } catch (error) {
+      console.error("Image compression failed:", error);
+      toast.error("Failed to process image");
+    }
   };
 
   const handleSave = async () => {
