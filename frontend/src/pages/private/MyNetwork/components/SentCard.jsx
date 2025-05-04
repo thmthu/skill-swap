@@ -37,7 +37,7 @@ const SentCard = ({ data, formatTime, handleWithdraw }) => {
           onCancel={() => console.log("Cancelled")}
           onConfirm={() => handleWithdraw(data)}
         >
-          <ActiveButton children="Withdraw" className="text-text-dark" />
+          <ActiveButton children="Withdraw" className="text-white" />
         </AlertPopup>
       </div>
     </div>
