@@ -169,7 +169,7 @@ const ProfileCard = forwardRef((props, ref) => {
         <div className="border-t border-gray-200" />
 
         <ActiveButton
-          className="w-full flex items-center justify-center gap-2 text-red-500 font-semibold py-3 rounded-xl border border-red-500 hover:bg-red-500/10 transition-all"
+          className="w-full flex items-center justify-center gap-2 text-red-500 font-semibold py-3 rounded-xl border border-red-500 bg-white hover:bg-red-500/10 transition-all"
           onClick={logout}
         >
           <ArrowRightStartOnRectangleIcon className="w-5 h-5" />
