@@ -1,4 +1,9 @@
-import React, { useState } from "react";
+import React, {
+  useState,
+  useEffect,
+  useImperativeHandle,
+  forwardRef,
+} from "react";
 import {
   EnvelopeIcon,
   UsersIcon,
@@ -19,20 +24,47 @@ import EditSkillDialog from "@/components/Profile/EditSkillDialog";
 import ViewAvatarDialog from "./ViewAvatarDialog";
 import UpdateAvatarDialog from "./UpdateAvatarDialog";
 
-export default function ProfileCard() {
+import axios from "axios";
+
+const ProfileCard = forwardRef((props, ref) => {
   const { logout, user } = useAuth();
 
   const [currentSkills, setCurrentSkills] = useState(user?.skills || []);
   const [wantToLearn, setWantToLearn] = useState(user?.learn || []);
   const [isAvatarDialogOpen, setIsAvatarDialogOpen] = useState(false);
-  const [isUpdateAvatarOpen, setIsUpdateAvatarOpen] = useState(false); // ✅ NEW
+  const [isUpdateAvatarOpen, setIsUpdateAvatarOpen] = useState(false);
+  const [connectionCount, setConnectionCount] = useState(0);
+
+  const fetchConnectionCount = async () => {
+    try {
+      const res = await axios.get("/api/connections", {
+        headers: {
+          Authorization: `Bearer ${
+            document.cookie
+              .split("; ")
+              .find((row) => row.startsWith("accessToken="))
+              ?.split("=")[1]
+          }`,
+        },
+      });
+      setConnectionCount(res.data.length);
+    } catch (error) {
+      console.error("Failed to fetch connection count:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchConnectionCount();
+  }, []);
+
+  useImperativeHandle(ref, () => ({
+    refreshConnectionCount: fetchConnectionCount,
+  }));
 
   return (
     <div className="w-[400px] rounded-xl shadow-xl overflow-hidden border border-primary relative bg-white">
-      {/* 🔝 Header background */}
       <div className="bg-gradient-to-r from-gradient-start via-gradient-mid to-gradient-end h-32" />
 
-      {/* 👤 Avatar Dropdown */}
       <div className="absolute top-12 left-1/2 transform -translate-x-1/2">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -54,33 +86,29 @@ export default function ProfileCard() {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        {/* 🔍 View dialog */}
         <ViewAvatarDialog
           avatarUrl={user?.avatar || "https://placehold.co/300x300"}
           open={isAvatarDialogOpen}
           onOpenChange={setIsAvatarDialogOpen}
         />
 
-        {/* 🖼 Update avatar dialog */}
         <UpdateAvatarDialog
           open={isUpdateAvatarOpen}
           onOpenChange={setIsUpdateAvatarOpen}
         />
       </div>
 
-      {/* 👤 Name */}
       <div className="mt-24 flex flex-col items-center gap-2">
         <h2 className="text-3xl font-bold bg-gradient-to-r from-gradient-start to-gradient-end bg-clip-text text-transparent">
           {user?.username || "Your Name"}
         </h2>
       </div>
 
-      {/* 📧 Email + Skills */}
       <div className="p-6 pt-4 flex flex-col gap-6 text-gray-800">
         <div className="flex flex-col gap-3 text-base">
           <div className="flex items-center gap-3">
             <UsersIcon className="w-5 h-5 text-gray-600" />
-            <span>{user?.connections?.length || 0} Connections</span>
+            <span>{connectionCount} Connections</span>
           </div>
           <div className="flex items-center gap-3">
             <EnvelopeIcon className="w-5 h-5 text-gray-600" />
@@ -89,7 +117,6 @@ export default function ProfileCard() {
         </div>
 
         <div className="flex flex-col gap-4 text-sm">
-          {/* 🎯 Current Skill */}
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between">
               <span className="font-semibold text-gray-700">
@@ -114,7 +141,6 @@ export default function ProfileCard() {
             </div>
           </div>
 
-          {/* 📘 Want to Learn */}
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between">
               <span className="font-semibold text-gray-700">
@@ -140,10 +166,8 @@ export default function ProfileCard() {
           </div>
         </div>
 
-        {/* Divider */}
         <div className="border-t border-gray-200" />
 
-        {/* 🔴 Logout Button */}
         <ActiveButton
           className="w-full flex items-center justify-center gap-2 text-red-500 font-semibold py-3 rounded-xl border border-red-500 hover:bg-red-500/10 transition-all"
           onClick={logout}
@@ -154,4 +178,6 @@ export default function ProfileCard() {
       </div>
     </div>
   );
-}
+});
+
+export default ProfileCard;

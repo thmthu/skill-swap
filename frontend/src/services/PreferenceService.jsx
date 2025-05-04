@@ -1,17 +1,24 @@
 "use client";
 import axios from "@/lib/axiosClient";
-import { API_CONFIG } from "@/lib/config";
 
 const PreferenceService = {
   // ✅ Gửi toàn bộ thông tin preference (bio, skills, learn, avatar nếu có)
   async postUserPreference(data) {
-    const response = await axios.patch(`/users/preference`, data);
+    // Bổ sung fallback mặc định nếu thiếu
+    const safePayload = {
+      bio: data.bio || "",
+      skills: Array.isArray(data.skills) ? data.skills : [],
+      learn: Array.isArray(data.learn) ? data.learn : [],
+      avatar: data.avatar || "",
+    };
+
+    const response = await axios.patch(`/users/preference`, safePayload);
     return response.data;
   },
 
   // ✅ Cập nhật chỉ riêng avatar
   async updateAvatar(base64Image) {
-    const response = await axios.patch(`S/users/preference`, {
+    const response = await axios.patch(`/users/preference`, {
       avatar: base64Image,
     });
     return response.data;

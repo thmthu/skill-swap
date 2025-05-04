@@ -58,11 +58,13 @@ export default function UpdateAvatarDialog({ open, onOpenChange }) {
       const freshUser = await PreferenceService.getCurrentUser();
 
       const payload = {
-        ...freshUser,
-        avatar: fileData, // override avatar mới
+        avatar: fileData,
+        bio: freshUser.bio || "",
+        skills: freshUser.skills || [],
+        learn: freshUser.learn || [],
       };
 
-      console.log("🚀 Payload GỬI LÊN:", payload);
+      console.log("🚀 Payload gửi lên:", payload);
       await PreferenceService.postUserPreference(payload);
 
       const updated = await PreferenceService.getCurrentUser();
