@@ -9,6 +9,7 @@ export const getAllConnections = async (req, res) => {
 		const connections = await Connection.find({
 			$or: [{ sender: user._id }, { receiver: user._id }],
 			isDeleted: false,
+			status: "accepted",
 		})
 			.populate("sender", "-password")
 			.populate("receiver", "-password");
@@ -296,5 +297,36 @@ export const deleteConnection = async (req, res) => {
 		return res.status(200).json({ message: "Connection deleted" });
 	} catch (error) {
 		return res.status(500).json({ message: error.message });
+	}
+};
+
+export const deleteConnectionByUser = async (req, res) => {
+	try {
+			const { userId } = req.params;
+			console.log(userId);
+
+			const connections = await Connection.find({
+					$or: [{ sender: userId }, { receiver: userId }],
+					status: "accepted",
+					isDeleted: false,
+			});
+
+			if (!connections || connections.length === 0) {
+					return res.status(404).json({ message: "No connections found" });
+			}
+
+			// Update each connection
+			await Promise.all(
+					connections.map(async (connection) => {
+							connection.isDeleted = true;
+							connection.updatedAt = Date.now();
+							connection.status = "pending";
+							await connection.save();
+					})
+			);
+
+			return res.status(200).json({ message: "Connections deleted successfully" });
+	} catch (error) {
+			return res.status(500).json({ message: error.message });
 	}
 };
