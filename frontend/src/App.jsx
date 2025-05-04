@@ -7,18 +7,18 @@ import { SocketProvider } from "./context/SocketContext";
 import Header from "./components/Header/Header";
 
 function App() {
-  const element = useRoutes(navRoutes);
-  const { theme } = useTheme();
+	const element = useRoutes(navRoutes);
+	const { theme } = useTheme();
 
-  return (
-    <SocketProvider>
-      <div className="min-h-screen w-screen overflow-x-hidden bg-bg-light flex flex-col">
-        <Toaster />
-        <Navbar />
-        <main className="flex-1 p-6">{element}</main>
-      </div>
-    </SocketProvider>
-  );
+	return (
+		<SocketProvider>
+			<div className="min-h-screen w-screen overflow-x-hidden bg-bg-light flex flex-col">
+				<Toaster />
+				<Navbar />
+				<main className="flex-1">{element}</main>
+			</div>
+		</SocketProvider>
+	);
 }
 
 export default App;
