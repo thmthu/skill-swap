@@ -7,14 +7,10 @@ import Footer from "../../../components/Footer/footer";
 import UserCardList from "./lists/UserCardList";
 import RecommendedMatches from "./lists/RecommendedMatches";
 
+import { useAuth } from "../../../context/AuthContext";
+
 export default function HomePage() {
-  const getCookie = (cookieName) => {
-		const cookies = document.cookie.split("; ");
-		const tokenCookie = cookies.find((cookie) =>
-			cookie.startsWith(`${cookieName}=`)
-		);
-		return tokenCookie ? tokenCookie.split("=")[1] : null;
-	};
+	const { isAuthenticated } = useAuth();
 	// const mockUsers = [
 	//   {
 	//     id: 1,
@@ -65,7 +61,7 @@ export default function HomePage() {
   			<WhyChoose />
   			<HowItWorks />
   			<FAQ />
-			{ getCookie("accessToken") && <RecommendedMatches /> }
+			{ isAuthenticated && <RecommendedMatches /> }
 				<UserCardList />
 				<Footer />
       </div >

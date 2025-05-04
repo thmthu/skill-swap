@@ -3,10 +3,12 @@ import React, { useEffect } from "react";
 import { useState, useMemo } from "react";
 import UserCard from "@/pages/public/Home/lists/UserCard";
 import GradientHeading from "@/components/Text/GradientHeading";
+import { useAuth } from "../../../../context/AuthContext";
 import axios from "axios";
 import { toast, Toaster } from "react-hot-toast";
 
 export default function RecommendedMatches() {
+	const { isAuthenticated } = useAuth();
 	const [users, setUsers] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [currentPage, setCurrentPage] = useState(1);
@@ -135,8 +137,8 @@ export default function RecommendedMatches() {
 									tags={user.skills || []}
 									department={user.department || "Unknown Department"}
 									userId={user.id}
-                  handleConnect={handleConnect}
-                  isLoggedIn={getCookie("accessToken") !== null}
+									handleConnect={handleConnect}
+									isLoggedIn={isAuthenticated}
 								/>
 							))
 						) : (
