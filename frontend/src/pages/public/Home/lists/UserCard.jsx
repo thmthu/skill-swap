@@ -34,6 +34,7 @@ export default function UserCard({
 			state: { receiverId: userId, username: name, profilePic: image || "" },
 		});
 	};
+	console.log("UserId", userId);
 
 	return (
 		<Tilt rotationFactor={8} isReverse>

@@ -12,6 +12,7 @@ const socket = io("http://localhost:3000");
 
 const MyNetworkPage = () => {
 	const [activeTab, setActiveTab] = useState("Sent");
+	const [error, setError] = useState("");
 	const [data, setData] = useState([]);
 	const [loading, setLoading] = useState(false); // Loading state
 	const { user } = useAuth();
@@ -187,8 +188,14 @@ const MyNetworkPage = () => {
 				const response = await axios.get(endpoint, {
 					headers: { Authorization: `Bearer ${token}` },
 				});
-				// console.log(response);
-				setData(response.data);
+				// console.log("Response data:", response.data);
+				if (response.data.length > 0) {
+					setData(response.data);
+				} else {
+					// console.log("No data found");
+					setData([]);
+					setError(response.data.message);
+				}
 			} catch (error) {
 				console.error("Error fetching data:", error);
 			} finally {
@@ -250,6 +257,8 @@ const MyNetworkPage = () => {
 			<div className="flex flex-col w-[84vw]">
 				{loading ? ( // Show loading spinner or placeholder while fetching
 					<div className="text-center text-gray-500">Loading...</div>
+				) : data.length === 0 ? (
+					<div className="text-center text-gray-500">{error}</div>
 				) : (
 					data.map((item, index) =>
 						activeTab === "Sent" ? (

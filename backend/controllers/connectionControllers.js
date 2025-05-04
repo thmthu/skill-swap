@@ -75,6 +75,7 @@ export const getAllReceivedConnections = async (req, res) => {
 export const getAllSentConnections = async (req, res) => {
 	try {
 		const user = await getUserById(req.userId);
+		console.log(user._id);
 		const connections = await Connection.find({
 			sender: user._id,
 			status: "pending",
@@ -87,7 +88,7 @@ export const getAllSentConnections = async (req, res) => {
 
 		let result = await Promise.all(
 			connections.map(async (connection) => {
-				let friend = await User.findById(connection.receiver).select(
+				const friend = await User.findById(connection.receiver).select(
 					"-password"
 				);
 				if (!friend) {
@@ -128,7 +129,7 @@ export const getRecentConnections = async (req, res) => {
 			.populate("receiver", "-password");
 
 		if (!connections || connections.length === 0) {
-			return res.status(404).json({ message: "No recent connections found" });
+			return res.status(200).json({ message: "No recent connections found" });
 		}
 
 		let result = await Promise.all(
@@ -161,6 +162,7 @@ export const getRecentConnections = async (req, res) => {
 export const createConnection = async (req, res) => {
 	try {
 		const { receiverId } = req.params;
+		console.log(receiverId);
 		const user = await getUserById(req.userId);
 		const senderId = user._id;
 		// Check if the receiver send the request to the sender

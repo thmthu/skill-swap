@@ -131,12 +131,12 @@ export default function RecommendedMatches() {
 						{currentUsers.length > 0 ? (
 							currentUsers.map((user) => (
 								<UserCard
-									key={user.id}
+									key={user._id}
 									image={user.image || "/NAB.png"}
 									name={user.username}
 									tags={user.skills || []}
 									department={user.department || "Unknown Department"}
-									userId={user.id}
+									userId={user._id}
 									handleConnect={handleConnect}
 									isLoggedIn={isAuthenticated}
 								/>
