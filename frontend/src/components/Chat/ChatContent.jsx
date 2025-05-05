@@ -208,7 +208,7 @@ const ChatContent = ({ userFromHome, setRecentChats, chatRoomId }) => {
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Type your message..."
             className="flex-1 p-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-bg-light dark:bg-gray-700 text-black dark:text-white focus:outline-none"
-            onKeyDown={(e) => e.key === "Enter" && handleSend()}
+            onKeyPress={(e) => e.key === "Enter" && handleSend()}
           />
           <button
             onClick={handleSend}
