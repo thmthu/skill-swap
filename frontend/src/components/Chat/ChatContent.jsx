@@ -10,19 +10,26 @@ const ChatContent = ({ userFromHome, setRecentChats, chatRoomId }) => {
   const [messages, setMessages] = useState([]);
   const messageContainerRef = useRef(null);
   const [receiverId, setReceiverId] = useState("");
-  const { socket, joinRoom, markAsRead, sendMessage } = useSocket();
+  const { socket, joinRoom, markAsRead, sendMessage, setUnreadMessagesCount } =
+    useSocket();
   useEffect(() => {
     if (!chatRoomId || chatRoomId === "null" || !socket) return;
 
     joinRoom(chatRoomId);
     markAsRead(chatRoomId, senderId);
+    setRecentChats((prevChats) => {
+      const currentChat = prevChats.find(
+        (chat) => chat.chatRoomId === chatRoomId
+      );
+      const unreadCount = currentChat?.unreadCount || 0;
+      if (unreadCount > 0) {
+        setUnreadMessagesCount((prev) => Math.max(0, prev - unreadCount));
+      }
 
-    setRecentChats((prevChats) =>
-      prevChats.map((chat) =>
+      return prevChats.map((chat) =>
         chat.chatRoomId === chatRoomId ? { ...chat, unreadCount: 0 } : chat
-      )
-    );
-
+      );
+    });
     const ids = chatRoomId.split("_");
     setReceiverId(ids.find((id) => id !== senderId));
 
@@ -60,27 +67,10 @@ const ChatContent = ({ userFromHome, setRecentChats, chatRoomId }) => {
           messageContainerRef.current.scrollHeight;
       }
     };
-
     scrollToBottom();
-
     const timeoutId = setTimeout(scrollToBottom, 100);
-
     return () => clearTimeout(timeoutId);
   }, [messages]);
-
-  // useEffect(() => {
-  //   if (!chatRoomId || !socket) return;
-
-  //   const handleNewMessage = (newMsg) => {
-  //     setMessages((prevMessages) => [...prevMessages, newMsg]);
-  //   };
-
-  //   socket.on("newMessage", handleNewMessage);
-
-  //   return () => {
-  //     socket.off("newMessage", handleNewMessage);
-  //   };
-  // }, [chatRoomId]);
 
   const handleSend = () => {
     if (message.trim()) {
@@ -100,14 +90,6 @@ const ChatContent = ({ userFromHome, setRecentChats, chatRoomId }) => {
       const month = String(today.getMonth() + 1).padStart(2, "0");
       const year = today.getFullYear();
       const formattedDate = `${day}/${month}/${year}`;
-      const newMsg = {
-        sender_id: senderId,
-        receiver_id: receiverId,
-        text: message.trim(),
-        createdAt: new Date(),
-      };
-      // setMessages((prev) => [...prev, newMsg]);
-
       setMessage("");
       if (messages.length == 0) {
         const newChatRoom = {
@@ -156,35 +138,32 @@ const ChatContent = ({ userFromHome, setRecentChats, chatRoomId }) => {
 
   if (!chatRoomId || chatRoomId === "null") {
     return (
-      <div className=" h-full overflow-y-auto flex-1 flex items-center justify-center bg-bg-light">
+      <div className="h-full overflow-y-auto flex-1 flex items-center justify-center bg-bg-light dark:bg-bg-dark">
         <div className="text-center">
           <MessageSquare className="w-16 h-16 text-primary-medium mx-auto mb-4" />
-          <h2 className="text-h2 font-heading font-bold text-primary-dark">
+          <h2 className="text-h2 font-heading font-bold text-primary-dark dark:text-primary-light">
             Select a conversation
           </h2>
-          <p className="text-body1 secondary-light-pink mt-2">
+          <p className="text-body1 text-secondary dark:text-muted-foreground mt-2">
             Choose a chat from the sidebar to start messaging
           </p>
         </div>
       </div>
     );
   }
+
   return (
-    <div className="flex-1 flex flex-col h-full bg-bg-light">
-      {/* Chat Header */}
-      <div className="p-4 bg-white border-b border-primary-extra-light flex items-center">
-        <div className="w-10 h-10 rounded-full overflow-hidden mr-3 flex-shrink-0">
+    <div className="flex-1 flex flex-col h-full bg-bg-light dark:bg-bg-dark">
+      {/* Header */}
+      <div className="p-4 bg-white dark:bg-gray-800 border-b border-primary-extra-light dark:border-gray-700 flex items-center">
+        <div className="w-10 h-10 rounded-full overflow-hidden mr-3">
           <img
             src={userFromHome.profilePic || "/NAB.png"}
             alt={`${userFromHome.username}'s avatar`}
             className="w-full h-full object-cover"
-            onError={(e) => {
-              e.target.onerror = null;
-              e.target.src = "/default-avatar.png";
-            }}
           />
         </div>
-        <h2 className="text-h3 font-heading font-bold text-primary-dark">
+        <h2 className="text-h3 font-heading font-bold text-primary-dark dark:text-white">
           {userFromHome.username}
         </h2>
       </div>
@@ -205,7 +184,7 @@ const ChatContent = ({ userFromHome, setRecentChats, chatRoomId }) => {
               className={`max-w-[70%] rounded-lg p-3 ${
                 msg.sender_id === senderId
                   ? "bg-black text-white"
-                  : "bg-white text-text-light"
+                  : "bg-gray-200 dark:bg-gray-700 text-text-light dark:text-white"
               }`}
             >
               <p className="text-body1">{msg.text}</p>
@@ -218,25 +197,18 @@ const ChatContent = ({ userFromHome, setRecentChats, chatRoomId }) => {
             </div>
           </div>
         ))}
-        {messages.length === 0 && (
-          <div className="flex items-center justify-center h-full">
-            <p className="text-body1 text-gray-400">
-              No messages yet. Start a conversation!
-            </p>
-          </div>
-        )}
       </div>
 
-      {/* Message Input */}
-      <div className="p-4 bg-white border-t border-primary-extra-light">
+      {/* Input */}
+      <div className="p-4 bg-white dark:bg-gray-800 border-t border-primary-extra-light dark:border-gray-700">
         <div className="flex gap-2">
           <input
             type="text"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Type your message..."
-            className="flex-1 p-2 rounded-lg border border-primary-extra-light focus:outline-none focus:border-primary-medium text-body1"
-            onKeyPress={(e) => e.key === "Enter" && handleSend()}
+            className="flex-1 p-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-bg-light dark:bg-gray-700 text-black dark:text-white focus:outline-none"
+            onKeyDown={(e) => e.key === "Enter" && handleSend()}
           />
           <button
             onClick={handleSend}

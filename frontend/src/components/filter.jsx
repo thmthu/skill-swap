@@ -20,5 +20,3 @@ export function CategoryFilter({ categories, selected, onSelect }) {
     </div>
   );
 }
-
-

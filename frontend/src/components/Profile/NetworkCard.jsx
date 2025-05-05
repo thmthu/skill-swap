@@ -44,7 +44,7 @@ export default function NetworkCard({
 
       if (response.status === 200) {
         console.log("Connection deleted successfully");
-        onDeleted?.(userId); // 🔥 Gọi hàm xoá bên ngoài
+        onDeleted?.(userId);
         setOpen(false);
       } else {
         console.error("Error deleting connection");
@@ -58,11 +58,11 @@ export default function NetworkCard({
   };
 
   return (
-    <Card className="bg-white border border-primary text-gray-800 shadow-sm transition hover:shadow-md hover:border-primary-dark">
+    <Card className="bg-white dark:bg-gray-900 border border-primary dark:border-gray-700 text-gray-800 dark:text-white shadow-sm transition hover:shadow-md hover:border-primary-dark dark:hover:border-primary">
       <CardHeader className="flex items-center justify-between gap-6">
         <div className="flex items-center gap-5">
           <div
-            className="w-20 h-20 rounded-xl bg-gray-300"
+            className="w-20 h-20 rounded-xl bg-gray-300 dark:bg-gray-700"
             style={{
               backgroundImage: `url(${avatarUrl})`,
               backgroundSize: "cover",
@@ -71,7 +71,7 @@ export default function NetworkCard({
           />
           <div className="flex flex-col gap-1">
             <CardTitle className="text-lg font-semibold">{name}</CardTitle>
-            <CardDescription className="text-gray-600">
+            <CardDescription className="text-gray-600 dark:text-gray-300">
               {description}
             </CardDescription>
           </div>
@@ -82,16 +82,20 @@ export default function NetworkCard({
             <DialogTrigger asChild>
               <Button variant="destructive">Remove</Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-md">
+            <DialogContent className="sm:max-w-md bg-white dark:bg-gray-900 text-gray-800 dark:text-white">
               <DialogHeader>
                 <DialogTitle>Remove Connection</DialogTitle>
-                <DialogDescription>
+                <DialogDescription className="text-gray-600 dark:text-gray-300">
                   Are you sure you want to remove{" "}
                   <span className="font-medium">{name}</span> from your network?
                 </DialogDescription>
               </DialogHeader>
               <DialogFooter className="flex gap-4 justify-end mt-4">
-                <Button variant="outline" onClick={() => setOpen(false)}>
+                <Button
+                  variant="outline"
+                  className="dark:bg-transparent dark:text-white dark:border-gray-600"
+                  onClick={() => setOpen(false)}
+                >
                   Cancel
                 </Button>
                 <Button variant="destructive" onClick={handleDelete}>

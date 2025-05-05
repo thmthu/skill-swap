@@ -11,7 +11,8 @@ import { useAuth } from "../../../context/AuthContext";
 const socket = io("http://localhost:3000");
 
 const MyNetworkPage = () => {
-	const [activeTab, setActiveTab] = useState("Sent");
+	const [activeTab, setActiveTab] = useState("Sent Requests");
+	const [error, setError] = useState("");
 	const [data, setData] = useState([]);
 	const [loading, setLoading] = useState(false); // Loading state
 	const { user } = useAuth();
@@ -142,13 +143,16 @@ const MyNetworkPage = () => {
 			(diffInMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
 		);
 		const minutes = Math.floor((diffInMs % (1000 * 60 * 60)) / (1000 * 60));
+		const seconds = Math.floor(diffInMs / 1000);
 		// console.log(nowUTC, updatedDateUTC);
 		if (days > 0) {
 			return `${days} day${days > 1 ? "s" : ""} ago`;
 		} else if (hours > 0) {
 			return `${hours} hour${hours > 1 ? "s" : ""} ago`;
-		} else {
+		} else if (minutes > 0) {
 			return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
+		} else {
+			return `${seconds} second${seconds > 1 ? "s" : ""} ago`;
 		}
 	};
 
@@ -176,9 +180,9 @@ const MyNetworkPage = () => {
 				if (!token) throw new Error("Missing auth token");
 
 				let endpoint;
-				if (activeTab === "Sent") {
+				if (activeTab === "Sent Requests") {
 					endpoint = "http://localhost:3000/api/connections/sent";
-				} else if (activeTab === "Received") {
+				} else if (activeTab === "Received Requests") {
 					endpoint = "/api/connections/received";
 				} else if (activeTab === "New Connections") {
 					endpoint = "/api/connections/recent";
@@ -187,8 +191,14 @@ const MyNetworkPage = () => {
 				const response = await axios.get(endpoint, {
 					headers: { Authorization: `Bearer ${token}` },
 				});
-				// console.log(response);
-				setData(response.data);
+				// console.log("Response data:", response.data);
+				if (response.data.length > 0) {
+					setData(response.data);
+				} else {
+					// console.log("No data found");
+					setData([]);
+					setError(response.data.message);
+				}
 			} catch (error) {
 				console.error("Error fetching data:", error);
 			} finally {
@@ -230,36 +240,40 @@ const MyNetworkPage = () => {
 				buttonText={"Discover"}
 			/>
 			<div className="flex w-[84vw]">
-				{["Sent", "Received", "New Connections"].map((item, index) => (
-					<div
-						className="w-full md:w-[33%] flex flex-col justify-start items-center gap-1"
-						onClick={() => setActiveTab(item)}
-						key={index}
-					>
-						<div className="text-center text-black text-lg md:text-3xl font-semibold font-['Poppins']">
-							{item}
-						</div>
+				{["Sent Requests", "Received Requests", "New Connections"].map(
+					(item, index) => (
 						<div
-							className={`self-stretch h-1 rounded-sm ${
-								activeTab === item ? "bg-red-800" : "bg-[#D9D9D9]"
-							}`}
-						/>
-					</div>
-				))}
+							className=" font-heading font-bold w-full md:w-[33%] flex flex-col justify-start items-center gap-1"
+							onClick={() => setActiveTab(item)}
+							key={index}
+						>
+							<div className="text-center text-text-dark text-lg md:text-3xl font-semibold">
+								{item}
+							</div>
+							<div
+								className={`self-stretch h-1 rounded-sm ${
+									activeTab === item ? "bg-red-800" : "bg-[#D9D9D9]"
+								}`}
+							/>
+						</div>
+					)
+				)}
 			</div>
 			<div className="flex flex-col w-[84vw]">
 				{loading ? ( // Show loading spinner or placeholder while fetching
 					<div className="text-center text-gray-500">Loading...</div>
+				) : data.length === 0 ? (
+					<div className="text-center text-gray-500">{error}</div>
 				) : (
 					data.map((item, index) =>
-						activeTab === "Sent" ? (
+						activeTab === "Sent Requests" ? (
 							<SentCard
 								data={item}
 								key={index}
 								formatTime={calculateTimeDifference}
 								handleWithdraw={handleWithdraw}
 							/>
-						) : activeTab === "Received" ? (
+						) : activeTab === "Received Requests" ? (
 							<ReceivedCard
 								data={item}
 								key={index}

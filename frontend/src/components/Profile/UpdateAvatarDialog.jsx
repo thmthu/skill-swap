@@ -13,6 +13,7 @@ import { toast } from "react-hot-toast";
 import PreferenceService from "@/services/PreferenceService";
 import { useAuth } from "@/context/AuthContext";
 import imageCompression from "browser-image-compression";
+
 const convertToBase64 = (file) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -38,11 +39,10 @@ export default function UpdateAvatarDialog({ open, onOpenChange }) {
       return;
     }
 
-    // Cấu hình resize ảnh
     const options = {
-      maxSizeMB: 1, // tối đa 1MB
-      maxWidthOrHeight: 512, // resize chiều dài lớn nhất
-      useWebWorker: true, // tăng hiệu suất
+      maxSizeMB: 1,
+      maxWidthOrHeight: 512,
+      useWebWorker: true,
     };
 
     try {
@@ -70,12 +70,9 @@ export default function UpdateAvatarDialog({ open, onOpenChange }) {
         learn: freshUser.learn || [],
       };
 
-      console.log("🚀 Payload gửi lên:", payload);
       await PreferenceService.postUserPreference(payload);
 
       const updated = await PreferenceService.getCurrentUser();
-      console.log("🧠 Updated user:", updated);
-
       setUser(updated);
       setPreview(updated.avatar);
       toast.success("Avatar updated!");
@@ -90,13 +87,13 @@ export default function UpdateAvatarDialog({ open, onOpenChange }) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-md dark:bg-bg-dark dark:text-white">
         <DialogHeader>
           <DialogTitle>Update Profile Picture</DialogTitle>
         </DialogHeader>
 
         <div className="flex flex-col items-center gap-4">
-          <div className="w-32 h-32 rounded-full overflow-hidden border">
+          <div className="w-32 h-32 rounded-full overflow-hidden border dark:border-zinc-700">
             <img
               src={preview || user?.avatar || "https://placehold.co/300x300"}
               alt="Preview"
@@ -108,7 +105,7 @@ export default function UpdateAvatarDialog({ open, onOpenChange }) {
             type="file"
             accept="image/*"
             onChange={handleFileChange}
-            className="w-full text-sm"
+            className="w-full text-sm dark:bg-bg-dark dark:text-white"
           />
 
           <div className="flex justify-end w-full gap-2 pt-4">
