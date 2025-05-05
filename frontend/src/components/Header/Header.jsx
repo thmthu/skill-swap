@@ -25,7 +25,7 @@ const Header = ({ title, description, buttonText }) => {
 			</div>
 
 			{/* Desktop Version */}
-			<div className="hidden md:block w-[100vw] h-full bg-[url('/header-background-desktop.jpg')] bg-fit bg-center bg-no-repeat">
+			<div className="hidden md:block w-full h-full bg-[url('/header-background-desktop.jpg')] bg-cover bg-center bg-no-repeat">
 				{/* Content Container */}
 				<div className="absolute top-6 left-4 md:top-[100px] md:left-[100px] w-[90%] max-w-[400px] md:max-w-[500px] px-4 py-5 md:px-8 md:py-10 bg-gray-50 rounded-xl shadow-lg flex flex-col gap-4">
 					{/* Title Section */}
