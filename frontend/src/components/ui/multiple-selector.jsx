@@ -342,7 +342,6 @@ const MultipleSelector = forwardRef((props, ref) => {
         className={cn(
           "min-h-10 rounded-md  text-base ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 md:text-sm",
           {
-            "px-3 py-2": selected.length !== 0,
             "cursor-text": !disabled && selected.length !== 0,
           },
           className
@@ -352,12 +351,12 @@ const MultipleSelector = forwardRef((props, ref) => {
           inputRef?.current?.focus();
         }}
       >
-        <div className="flex items-center flex-nowrap gap-2 px-3 py-2 min-h-[48px] rounded-md border border-input bg-background overflow-hidden">
+        <div className="flex items-center flex-wrap gap-2 px-3 py-2 min-h-[48px] rounded-md border border-input bg-background justify-start">
           {selected.map((option) => (
             <Badge
               key={option.value}
               className={cn(
-                "bg-bg-dark text-text-dark rounded-full px-3 py-1 text-xs font-medium flex items-center gap-1 border-none shadow-none",
+                "bg-bg-dark text-text-dark  rounded-full px-3 py-1 text-xs font-medium flex items-center gap-1 border-none shadow-none ",
                 badgeClassName
               )}
               data-fixed={option.fixed}
@@ -405,8 +404,7 @@ const MultipleSelector = forwardRef((props, ref) => {
                 : placeholder
             }
             className={cn(
-              "flex-2 !min-w-0 !p-0 bg-transparent outline-none placeholder:text-muted-foreground",
-
+              "flex-1 min-w-0 !p-0 bg-transparent outline-none placeholder:text-muted-foreground text-left",
               inputProps?.className
             )}
           />
