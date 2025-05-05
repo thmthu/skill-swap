@@ -36,7 +36,6 @@ app.use(cors({
   credentials: true,
 }));
 
-// redisClient.connect();
 app.use(session({
   secret: SESSION_SECRET,
   resave: false,

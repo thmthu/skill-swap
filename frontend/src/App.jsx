@@ -15,6 +15,7 @@ function App() {
       <div className="min-h-screen w-screen overflow-x-hidden bg-bg-light flex flex-col">
         <Toaster />
         <Navbar />
+        <Header />
         <main className="flex-1 p-6">{element}</main>
       </div>
     </SocketProvider>
