@@ -25,7 +25,7 @@ export default function CourseSection() {
   };
 
   return (
-    <section className="mb-12">
+    <section className="mb-12 pt-12">
       <div className="flex justify-center items-center mb-6 md:text-2xl lg:text-3xl">
         <GradientHeading>Popular Courses</GradientHeading>
       </div>
@@ -41,7 +41,7 @@ export default function CourseSection() {
           <Loader2 className="h-10 w-10 animate-spin text-primary" />
         </div>
       ) : (
-        <div className="max-w-[90%] mx-auto">
+        <div className="w-full overflow-hidden mx-auto">
           <CourseCarousel courses={filteredCourses} />
         </div>
       )}

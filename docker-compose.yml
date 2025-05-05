@@ -25,5 +25,7 @@ services:
       - .env
     environment:
       - MONGODB_URI=mongodb+srv://root:123@projects.0xua05v.mongodb.net/nab_camp?retryWrites=true&w=majority&authSource=admin
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
     ports:
       - "3000:3000"
