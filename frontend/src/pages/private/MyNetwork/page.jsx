@@ -11,7 +11,7 @@ import { useAuth } from "../../../context/AuthContext";
 const socket = io("http://localhost:3000");
 
 const MyNetworkPage = () => {
-	const [activeTab, setActiveTab] = useState("Sent");
+	const [activeTab, setActiveTab] = useState("Sent Requests");
 	const [error, setError] = useState("");
 	const [data, setData] = useState([]);
 	const [loading, setLoading] = useState(false); // Loading state
@@ -180,9 +180,9 @@ const MyNetworkPage = () => {
 				if (!token) throw new Error("Missing auth token");
 
 				let endpoint;
-				if (activeTab === "Sent") {
+				if (activeTab === "Sent Requests") {
 					endpoint = "http://localhost:3000/api/connections/sent";
-				} else if (activeTab === "Received") {
+				} else if (activeTab === "Received Requests") {
 					endpoint = "/api/connections/received";
 				} else if (activeTab === "New Connections") {
 					endpoint = "/api/connections/recent";
@@ -240,22 +240,24 @@ const MyNetworkPage = () => {
 				buttonText={"Discover"}
 			/>
 			<div className="flex w-[84vw]">
-				{["Sent", "Received", "New Connections"].map((item, index) => (
-					<div
-						className=" font-heading font-bold w-full md:w-[33%] flex flex-col justify-start items-center gap-1"
-						onClick={() => setActiveTab(item)}
-						key={index}
-					>
-						<div className="text-center text-text-dark text-lg md:text-3xl font-semibold">
-							{item}
-						</div>
+				{["Sent Requests", "Received Requests", "New Connections"].map(
+					(item, index) => (
 						<div
-							className={`self-stretch h-1 rounded-sm ${
-								activeTab === item ? "bg-red-800" : "bg-[#D9D9D9]"
-							}`}
-						/>
-					</div>
-				))}
+							className=" font-heading font-bold w-full md:w-[33%] flex flex-col justify-start items-center gap-1"
+							onClick={() => setActiveTab(item)}
+							key={index}
+						>
+							<div className="text-center text-text-dark text-lg md:text-3xl font-semibold">
+								{item}
+							</div>
+							<div
+								className={`self-stretch h-1 rounded-sm ${
+									activeTab === item ? "bg-red-800" : "bg-[#D9D9D9]"
+								}`}
+							/>
+						</div>
+					)
+				)}
 			</div>
 			<div className="flex flex-col w-[84vw]">
 				{loading ? ( // Show loading spinner or placeholder while fetching
@@ -264,14 +266,14 @@ const MyNetworkPage = () => {
 					<div className="text-center text-gray-500">{error}</div>
 				) : (
 					data.map((item, index) =>
-						activeTab === "Sent" ? (
+						activeTab === "Sent Requests" ? (
 							<SentCard
 								data={item}
 								key={index}
 								formatTime={calculateTimeDifference}
 								handleWithdraw={handleWithdraw}
 							/>
-						) : activeTab === "Received" ? (
+						) : activeTab === "Received Requests" ? (
 							<ReceivedCard
 								data={item}
 								key={index}
