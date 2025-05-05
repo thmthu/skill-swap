@@ -2,20 +2,20 @@ import { MessageSquare, Search } from "lucide-react";
 
 const ChatSidebar = ({ setReceiver, chats, selectedChat, onSelectChat }) => {
 	return (
-		<div className="h-full border-r border-primary-extra-light bg-white md:w-auto w-16 transition-all">
-			<div className="p-4 py-6 bg-white border-b border-primary-extra-light flex justify-center">
-				<h2 className="text-h3 font-heading font-bold text-primary-dark md:block hidden">
+		<div className="h-full border-r border-primary-extra-light dark:border-gray-700 bg-white dark:bg-gray-900">
+			<div className="p-4 bg-white dark:bg-gray-800 border-b border-primary-extra-light dark:border-gray-700">
+				<h2 className="text-h3 font-heading font-bold text-primary-dark dark:text-white">
 					MESSAGE
 				</h2>
 				<MessageSquare className="h-6 w-6 text-primary-dark md:hidden block" />
 			</div>
 			{/* Search - hidden on small screens */}
-			<div className="p-4 md:block hidden">
+			<div className="p-4">
 				<div className="relative">
 					<input
 						type="text"
 						placeholder="Search conversations..."
-						className="w-full pl-10 pr-4 py-2 rounded-lg border border-primary-extra-light bg-bg-light text-body1 focus:outline-none focus:border-primary-medium text-red-950"
+						className="w-full pl-10 pr-4 py-2 rounded-lg border border-primary-extra-light bg-bg-light text-body1 focus:outline-none focus:border-primary-medium text-white dark:bg-gray-800 dark:border-gray-700 dark:text-white"
 					/>
 					<Search className="absolute left-3 top-2.5 h-5 w-5 text-primary-medium" />
 				</div>
@@ -34,8 +34,10 @@ const ChatSidebar = ({ setReceiver, chats, selectedChat, onSelectChat }) => {
 								profilePic: chat.user.profilePic || "./NAB.png",
 							});
 						}}
-						className={`p-4 cursor-pointer hover:bg-secondary-light-pink transition-colors ${
-							selectedChat === chat.chatRoomId ? "bg-secondary-light-pink" : ""
+						className={`p-4 cursor-pointer hover:bg-secondary-light-pink dark:hover:bg-gray-700 transition-colors ${
+							selectedChat === chat.chatRoomId
+								? "bg-secondary-light-pink dark:bg-gray-800"
+								: ""
 						} flex justify-center md:justify-start`}
 					>
 						<div className="flex items-start gap-3 md:w-full w-auto">
@@ -62,7 +64,7 @@ const ChatSidebar = ({ setReceiver, chats, selectedChat, onSelectChat }) => {
 							</div>
 							<div className="flex-1 min-w-0 md:block hidden">
 								<div className="flex justify-between items-start relative">
-									<h3 className="text-subtitle1 font-semibold text-text-light truncate">
+									<h3 className="text-subtitle1 font-semibold text-text-light dark:text-white truncate">
 										{chat.user.username}
 									</h3>
 									<span className="text-body1 text-gray-500">{chat.time}</span>
