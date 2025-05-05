@@ -1,40 +1,27 @@
+"use client";
+import React, { useEffect } from "react";
 import { useState, useMemo } from "react";
 import UserCard from "@/pages/public/Home/lists/UserCard";
 import GradientHeading from "@/components/Text/GradientHeading";
-import { LoadingSkeleton } from "@/components/Skeleton/LoadingSkeleton";
-import SearchBar from "@/components/ToolBar/SearchBar";
-import { useSearchUser } from "@/hooks/useSearchUser";
-
-import Spinner from "@/components/Skeleton/Spinner";
-import { useAuth } from "@/context/AuthContext";
-import { cn } from "@/lib/utils";
+import { useAuth } from "../../../../context/AuthContext";
 import axios from "axios";
 import { toast, Toaster } from "react-hot-toast";
-
+import { cn } from "@/lib/utils";
 import {
 	Pagination,
 	PaginationContent,
-	PaginationEllipsis,
-	PaginationItem,
 	PaginationLink,
-	PaginationNext,
+	PaginationItem,
 	PaginationPrevious,
+	PaginationNext,
+	PaginationEllipsis,
 } from "@/components/ui/pagination";
 
-export default function UserCardList({ connections, sentRequest }) {
-	const {
-		users,
-		loading,
-		error,
-		searchTerm,
-		setSearchTerm,
-		selectedSkills,
-		setSelectedSkills,
-	} = useSearchUser("");
-
+export default function RecommendedMatches({ connections, sentRequest }) {
 	const { isAuthenticated, user } = useAuth();
 	const userId = user ? user._id : null;
-
+	const [users, setUsers] = useState([]);
+	const [loading, setLoading] = useState(false);
 	const [currentPage, setCurrentPage] = useState(1);
 	const usersPerPage = 6;
 
@@ -43,7 +30,6 @@ export default function UserCardList({ connections, sentRequest }) {
 	const currentUsers = useMemo(() => {
 		return users.slice(indexOfFirstUser, indexOfLastUser);
 	}, [users, indexOfFirstUser, indexOfLastUser]);
-	// console.log("Current Users", currentUsers);
 
 	const totalPages = useMemo(
 		() => Math.ceil(users.length / usersPerPage),
@@ -53,7 +39,7 @@ export default function UserCardList({ connections, sentRequest }) {
 	const paginate = (pageNumber) => {
 		if (pageNumber > 0 && pageNumber <= totalPages) {
 			setCurrentPage(pageNumber);
-			// window.scrollTo({ top: 0, behavior: "smooth" });
+			window.scrollTo({ top: 0, behavior: "smooth" });
 		}
 	};
 
@@ -66,27 +52,54 @@ export default function UserCardList({ connections, sentRequest }) {
 	};
 
 	const handleConnect = async (receiverId) => {
-		const token = getCookie("accessToken");
-		// console.log(token);
-		if (!token) throw new Error("Missing auth token");
-		const endpoint = `http://localhost:3000/api/connections/create/${receiverId}`;
-		const response = await axios.post(
-			endpoint,
-			{},
-			{
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
+		try {
+			const token = getCookie("accessToken");
+			if (!token) throw new Error("Missing auth token");
+
+			// setLoading(true); // Set loading state when connecting
+			const endpoint = `http://localhost:3000/api/connections/create/${receiverId}`;
+			const response = await axios.post(
+				endpoint,
+				{},
+				{
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			);
+			if (response.status === 200) {
+				toast.success(response.data.message);
+			} else {
+				toast.error("Failed to send connection request");
 			}
-		);
-		if (response.status == 200) {
-			toast.success(response.data.message);
-			// console.log("Connection request sent successfully");
-		} else {
+		} catch (error) {
 			toast.error("Failed to send connection request");
-			// console.error("Failed to send connection request");
+			console.error("Error:", error.response?.data || error.message);
 		}
 	};
+
+	useEffect(() => {
+		const fetchData = async () => {
+			setLoading(true); // Set loading to true before fetching
+			try {
+				const token = getCookie("accessToken");
+				if (!token) throw new Error("Missing auth token");
+
+				let endpoint = "http://localhost:3000/api/users/recommendations";
+
+				const response = await axios.get(endpoint, {
+					headers: { Authorization: `Bearer ${token}` },
+				});
+				setUsers(response.data);
+			} catch (error) {
+				console.error("Error fetching data:", error);
+				toast.error("Failed to fetch recommended matches");
+			} finally {
+				setLoading(false); // Set loading to false after fetching
+			}
+		};
+		fetchData();
+	}, []);
 
 	const renderPagination = () => {
 		const pageNumbers = [];
@@ -151,7 +164,7 @@ export default function UserCardList({ connections, sentRequest }) {
 	};
 
 	return (
-		<section className="max-w-6xl mx-auto px-6 space-y-8">
+		<section className="max-w-6xl mx-auto px-6 space-y-8 mb-12">
 			<Toaster
 				position="top-center"
 				reverseOrder={false}
@@ -159,12 +172,9 @@ export default function UserCardList({ connections, sentRequest }) {
 				containerClassName=""
 				containerStyle={{}}
 				toastOptions={{
-					// Define default options
 					className: "",
 					duration: 5000,
 					removeDelay: 2000,
-
-					// Default options for specific types
 					success: {
 						duration: 5000,
 						iconTheme: {
@@ -177,49 +187,33 @@ export default function UserCardList({ connections, sentRequest }) {
 			{/* Heading + Search/Filter Bar */}
 			<div className="flex flex-col gap-6">
 				<div className="text-center">
-					<GradientHeading>Explore Our Mentors</GradientHeading>
-				</div>
-
-				<div className="flex flex-col md:flex-row items-center justify-center gap-6 mt-4">
-					<SearchBar
-						value={searchTerm}
-						onChange={setSearchTerm}
-						selectedSkills={selectedSkills}
-						onSkillsChange={setSelectedSkills}
-					/>
+					<GradientHeading>Your Best Matches</GradientHeading>
 				</div>
 			</div>
 
-			{/* Loading or Error */}
-			{loading && (
-				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-8">
-					{Array.from({ length: 6 }).map((_, idx) => (
-						<LoadingSkeleton key={idx} />
-					))}
+			{/* Loading State Display */}
+			{loading ? (
+				<div className="flex justify-center items-center py-12">
+					<div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
 				</div>
-			)}
-
-			{error && <div className="text-center text-red-500 mt-8">{error}</div>}
-
-			{/* Cards Grid */}
-			{!loading && !error && (
+			) : (
 				<>
-					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-8 items-stretch">
+					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-8">
 						{currentUsers.length > 0 ? (
 							currentUsers.map(
 								(user) =>
-									user.id !== userId && (
+									user._id !== userId && (
 										<UserCard
-											key={user.id}
-											image={user.image || "/NAB.png"}
-											name={user.name}
-											tags={user.tags || []}
-											department={user.department || "Unknown Department"}
-											userId={user.id}
+											key={user._id}
+											image={user.avatar || "/NAB.png"}
+											name={user.username}
+											tags={user.skills || []}
+											department={user.bio || "Unknown Department"}
+											userId={user._id}
 											handleConnect={handleConnect}
 											isLoggedIn={isAuthenticated}
-											isConnected={connections.includes(user.id)}
-											isRequested={sentRequest.includes(user.id)}
+											isConnected={connections.includes(user._id)}
+											isRequested={sentRequest.includes(user._id)}
 										/>
 									)
 							)
@@ -231,7 +225,8 @@ export default function UserCardList({ connections, sentRequest }) {
 					</div>
 
 					{/* Pagination Controls */}
-					{users.length > 0 && (
+					{/* Pagination Controls */}
+					{users.length > 6 && (
 						<div className="pt-8 flex justify-center">{renderPagination()}</div>
 					)}
 				</>

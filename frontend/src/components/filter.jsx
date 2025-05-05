@@ -1,39 +1,22 @@
-import { useState } from "react";
-import { FilterIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
-export default function Filter({ filters = [], selected, onChange }) {
-  const [isOpen, setIsOpen] = useState(false);
-
+export function CategoryFilter({ categories, selected, onSelect }) {
   return (
-    <div className="relative text-foreground">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm hover:shadow transition"
-      >
-        <FilterIcon className="w-4 h-4 text-primary" />
-        <span className="text-sm font-medium">{selected}</span>
-      </button>
-
-      {isOpen && (
-        <ul className="absolute mt-2 w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-lg z-10">
-          {filters.map((item) => (
-            <li
-              key={item}
-              className={`px-4 py-2 text-sm cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 ${
-                selected === item
-                  ? "font-semibold text-primary"
-                  : "text-foreground"
-              }`}
-              onClick={() => {
-                onChange(item);
-                setIsOpen(false);
-              }}
-            >
-              {item}
-            </li>
-          ))}
-        </ul>
-      )}
+    <div className="hidden md:flex flex-wrap justify-center gap-2 md:gap-4 mb-4 md:mb-8">
+      {categories.map((cat) => (
+        <Button
+          key={cat}
+          variant="secondary"
+          className={`!transition-colors font-heading focus:!outline-none focus:!ring-0 text-btn2 md:text-btn1 ${
+            selected === cat
+              ? "!bg-primary !text-white hover:!bg-primary-light"
+              : "!border-gray-300 !text-gray-600 hover:!bg-gray-100"
+          }`}
+          onClick={() => onSelect(cat)}
+        >
+          {cat}
+        </Button>
+      ))}
     </div>
   );
 }

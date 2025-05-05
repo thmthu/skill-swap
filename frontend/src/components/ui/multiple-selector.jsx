@@ -342,7 +342,6 @@ const MultipleSelector = forwardRef((props, ref) => {
         className={cn(
           "min-h-10 rounded-md  text-base ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 md:text-sm",
           {
-            "px-3 py-2": selected.length !== 0,
             "cursor-text": !disabled && selected.length !== 0,
           },
           className

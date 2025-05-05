@@ -113,28 +113,27 @@ export const updateUserPreference = async (req, res) => {
   }
 };
 
-export const getUserReccommendations = async (req, res) => {
-  try {
-    const user = await User.findById(req.userId).select("-password");
-    if (!user) {
-      return res.status(401).json({ message: "User not found" });
+export const getUserRecommendations = async (req, res) => {
+    try {
+        const user = await User.findById(req.userId).select('-password');
+        if (!user) {
+            return res.status(401).json({ message: 'User not found' });
+        }
+        const recommendations = await User.find({
+            skills: { $in: user.learn },
+            _id: { $ne: req.userId }
+        }).select('-password');
+        return res.status(200).json(recommendations);
     }
-    const recommendations = await User.find({
-      skills: { $in: user.learn },
-      _id: { $ne: req.userId },
-    }).select("-password");
-    return res.status(200).json(recommendations);
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
-  }
-};
-export default {
-  getAllUsers,
-  getUserProfile,
-  addSkill,
-  addLearn,
-  deleteSkill,
-  deleteLearn,
-  updateUserPreference,
-  getUserReccommendations,
-};
+    catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+}
+export default { getAllUsers, 
+                getUserProfile, 
+                addSkill, 
+                addLearn, 
+                deleteSkill, 
+                deleteLearn, 
+                updateUserPreference,
+                getUserRecommendations };

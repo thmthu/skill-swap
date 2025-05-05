@@ -1,3 +1,5 @@
+"use client";
+
 import { Tilt } from "@/components/ui/tilt";
 import { useNavigate } from "react-router-dom";
 import {
@@ -13,16 +15,20 @@ import {
 } from "@/components/ui/morphing-dialog";
 import { ChatBubbleLeftEllipsisIcon } from "@heroicons/react/24/solid";
 import ActiveButton from "@/components/Button/ActiveButton";
+import { useState } from "react";
 
 export default function UserCard({
   image,
   name,
   tags = [],
-  description = "",
   department,
   userId,
   handleConnect,
+  isLoggedIn,
+  isConnected,
+  isRequested,
 }) {
+  const [isClicked, setIsClicked] = useState(false);
   const navigate = useNavigate();
 
   const handleChatClick = (e) => {
@@ -32,6 +38,7 @@ export default function UserCard({
       state: { receiverId: userId, username: name, profilePic: image || "" },
     });
   };
+  // console.log("UserId", userId);
 
   return (
     <Tilt rotationFactor={8} isReverse>
@@ -44,7 +51,7 @@ export default function UserCard({
       >
         <MorphingDialogTrigger
           style={{ borderRadius: "12px" }}
-          className="group relative flex w-full h-full max-w-[300px] flex-col overflow-hidden border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-gray-800 !p-0"
+          className="group relative flex w-full max-w-[300px] flex-col overflow-hidden border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-gray-800 !p-0"
         >
           {/* Image */}
           <MorphingDialogImage
@@ -126,14 +133,26 @@ export default function UserCard({
                   exit: { opacity: 0, scale: 0.8, y: 100 },
                 }}
               >
-                <p className="pt-2 text-body1 md:text-body1 text-zinc-600 dark:text-zinc-400 leading-relaxed">
-                  {description}
-                </p>
-                <ActiveButton
-                  onClick={() => handleConnect(userId)}
-                  children="Connect"
-                  className="text-text-dark"
-                />
+                {/* <p className="pt-2 text-body1 md:text-body1 text-zinc-600 dark:text-zinc-400 leading-relaxed">
+									{department}
+								</p> */}
+                {!isLoggedIn || (
+                  <ActiveButton
+                    onClick={() => {
+                      handleConnect(userId);
+                      setIsClicked(true);
+                    }}
+                    children={
+                      isConnected
+                        ? "Connected"
+                        : isRequested || isClicked
+                        ? "Requested"
+                        : "Connect"
+                    }
+                    disabled={isConnected || isClicked || isRequested}
+                    className="bg-primary text-white hover:bg-primary-dark dark:bg-primary-medium dark:text-text-light dark:hover:bg-red-300 rounded-md mt-4 px-8 py-3 "
+                  />
+                )}
               </MorphingDialogDescription>
             </div>
 

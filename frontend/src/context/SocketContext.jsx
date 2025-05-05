@@ -11,6 +11,7 @@ const SocketContext = createContext();
 export const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
   const { user, isAuthenticated } = useAuth();
+  const [unreadMessagesCount, setUnreadMessagesCount] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,7 +38,7 @@ export const SocketProvider = ({ children }) => {
               ),
               {
                 duration: 1700,
-                position: "bottom-right",
+                position: "top-left",
               }
             );
 
@@ -45,6 +46,15 @@ export const SocketProvider = ({ children }) => {
           }
         }
       );
+
+      socketInstance.on("updateUnreadCount", ({ type, count = 1 }) => {
+        setUnreadMessagesCount((prev) => {
+          if (type === "increment") return prev + count;
+          if (type === "decrement") return Math.max(0, prev - count);
+          if (type === "reset") return 0;
+          return prev;
+        });
+      });
 
       return () => {
         socketInstance.disconnect();
@@ -81,7 +91,14 @@ export const SocketProvider = ({ children }) => {
 
   return (
     <SocketContext.Provider
-      value={{ socket, joinRoom, sendMessage, markAsRead }}
+      value={{
+        socket,
+        joinRoom,
+        sendMessage,
+        markAsRead,
+        unreadMessagesCount,
+        setUnreadMessagesCount,
+      }}
     >
       {children}
     </SocketContext.Provider>
