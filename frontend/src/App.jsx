@@ -1,6 +1,6 @@
 import { useRoutes, useLocation } from "react-router-dom";
 import { navRoutes } from "@/routes/NavRoutes";
-import Navbar from "@/components/Navbar/Navbar";
+import Navbar from "@/components/Navbar/navbar";
 import { Toaster } from "react-hot-toast";
 import { useTheme } from "@/context/ThemeContext";
 import { SocketProvider } from "./context/SocketContext";

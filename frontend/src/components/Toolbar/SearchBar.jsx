@@ -2,7 +2,7 @@
 
 import { Input } from "@/components/ui/input";
 import MultipleSelector from "@/components/ui/multiple-selector";
-import { OPTIONS } from "@/components/ToolBar/skill-options";
+import { OPTIONS } from "@/components/Toolbar/skill-options";
 import { useEffect, useState } from "react";
 import PreferenceService from "@/services/PreferenceService";
 

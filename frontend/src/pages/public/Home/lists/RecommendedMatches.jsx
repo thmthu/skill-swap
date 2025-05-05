@@ -6,6 +6,8 @@ import GradientHeading from "@/components/Text/GradientHeading";
 import { useAuth } from "../../../../context/AuthContext";
 import axios from "axios";
 import { toast, Toaster } from "react-hot-toast";
+import { API_CONFIG } from "../../../../lib/config";
+
 import { cn } from "@/lib/utils";
 import {
 	Pagination,
@@ -56,8 +58,8 @@ export default function RecommendedMatches({ connections, sentRequest }) {
 			const token = getCookie("accessToken");
 			if (!token) throw new Error("Missing auth token");
 
-			// setLoading(true); // Set loading state when connecting
-			const endpoint = `http://localhost:3000/api/connections/create/${receiverId}`;
+			setLoading(true); // Set loading state when connecting
+			const endpoint = `${API_CONFIG.BASE_URL_SOCKET}/api/connections/create/${receiverId}`;
 			const response = await axios.post(
 				endpoint,
 				{},
@@ -85,10 +87,12 @@ export default function RecommendedMatches({ connections, sentRequest }) {
 				const token = getCookie("accessToken");
 				if (!token) throw new Error("Missing auth token");
 
-				let endpoint = "http://localhost:3000/api/users/recommendations";
-
+				let endpoint = `${API_CONFIG.BASE_URL_SOCKET}/api/users/recommendations`;
 				const response = await axios.get(endpoint, {
-					headers: { Authorization: `Bearer ${token}` },
+					headers: {
+						Authorization: `Bearer ${token}`
+					},
+					withCredentials: true
 				});
 				setUsers(response.data);
 			} catch (error) {
@@ -232,5 +236,6 @@ export default function RecommendedMatches({ connections, sentRequest }) {
 				</>
 			)}
 		</section>
+
 	);
 }

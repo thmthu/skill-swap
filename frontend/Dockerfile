@@ -1,18 +1,27 @@
-FROM node:18-alpine
+FROM node:18-alpine AS build
 
 WORKDIR /app
 
-# Copy package files
 COPY package*.json ./
 
-# Xóa node_modules nếu tồn tại và cài đặt dependencies
-RUN rm -rf node_modules && npm install
+RUN npm install
 
-# Copy rest of the application
 COPY . .
 
-# Expose port 5173 for Vite
-EXPOSE 5173
+RUN npm run build
 
-# Start development server
-CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
+FROM nginx:alpine
+
+# Copy built files from build stage
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# Copy nginx config template
+COPY nginx.conf /etc/nginx/templates/default.conf.template
+
+# Nginx in Alpine uses this env var to substitute variables in template files
+ENV NGINX_ENVSUBST_OUTPUT_DIR=/etc/nginx/conf.d
+ENV PORT=8080
+
+EXPOSE 8080
+
+CMD ["nginx", "-g", "daemon off;"]

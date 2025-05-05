@@ -17,6 +17,7 @@ import {
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { useState } from "react";
+import { API_CONFIG } from "../../lib/config";
 
 export default function NetworkCard({
   avatarUrl,
@@ -29,7 +30,7 @@ export default function NetworkCard({
 
   const handleDelete = async () => {
     try {
-      const endpoint = `http://localhost:3000/api/connections/delete/user/${userId}`;
+      const endpoint = `${API_CONFIG.BASE_URL_SOCKET}/api/connections/delete/user/${userId}`;
       const response = await axios.delete(endpoint, {
         headers: {
           "Content-Type": "application/json",

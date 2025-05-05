@@ -7,8 +7,8 @@ import { io } from "socket.io-client";
 import { toast, Toaster } from "react-hot-toast";
 import axios from "axios";
 import { useAuth } from "../../../context/AuthContext";
-
-const socket = io("http://localhost:3000");
+import { API_CONFIG } from "../../../lib/config";
+const socket = io(`${API_CONFIG.BASE_URL_SOCKET}`);
 
 const MyNetworkPage = () => {
 	const [activeTab, setActiveTab] = useState("Sent Requests");
@@ -180,9 +180,9 @@ const MyNetworkPage = () => {
 				if (!token) throw new Error("Missing auth token");
 
 				let endpoint;
-				if (activeTab === "Sent Requests") {
-					endpoint = "http://localhost:3000/api/connections/sent";
-				} else if (activeTab === "Received Requests") {
+				if (activeTab === "Sent") {
+					endpoint = `${API_CONFIG.BASE_URL_SOCKET}/api/connections/sent`;
+				} else if (activeTab === "Received") {
 					endpoint = "/api/connections/received";
 				} else if (activeTab === "New Connections") {
 					endpoint = "/api/connections/recent";

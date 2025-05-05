@@ -44,10 +44,25 @@ export const addToBlacklist = async (token, expiry) => {
 
 export const isBlacklisted = async (token) => {
     try {
-        const result = await redisClient.get(`bl_${token}`);
+        // Đặt timeout 3 giây cho truy vấn Redis
+        const timeoutPromise = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Redis timeout')), 3000)
+        );
+        
+        const redisPromise = redisClient.get(`bl_${token}`);
+        
+        // Race giữa truy vấn Redis và timeout
+        const result = await Promise.race([redisPromise, timeoutPromise])
+            .catch(error => {
+                console.error('Redis blacklist check timeout or error:', error);
+                return null; // Fallback: Cho phép request đi qua nếu Redis không phản hồi
+            });
+            
         return result !== null;
     } catch (error) {
         console.error('Error checking blacklist:', error);
-        throw error;
+        // Fallback: Cho phép request đi qua trong trường hợp lỗi 
+        // để đảm bảo trang web không bị block
+        return false;
     }
 };

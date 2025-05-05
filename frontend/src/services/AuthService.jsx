@@ -10,7 +10,9 @@ export const authService = {
       const response = await axios.post("/auth/login", {
         email,
         password,
-      });
+      },
+      { withCredentials: true }
+      );
       return response.data;
     } catch (error) {
       throw new Error(error.response?.data?.message || "Failed to login");
@@ -22,7 +24,8 @@ export const authService = {
         username: fullName,
         email: email,
         password: password,
-      });
+      },
+      { withCredentials: true });
       return response.data;
     } catch (error) {
       throw new Error(error.response?.data?.message || "Failed to signup");
@@ -66,15 +69,16 @@ export const authService = {
     try {
       const response = await axios.get("/users/me", {
         headers: {
-          'Cache-Control': 'no-cache', // Prevent caching issues
-        }
+          'Cache-Control': 'no-cache',
+        },
+        withCredentials: true  // Thêm dòng này
       });
 
-			return response.data;
-		} catch (error) {
-			console.error("getCurrentUser error:", error);
-			localStorage.removeItem("user");
-			return null;
-		}
-	},
+      return response.data;
+    } catch (error) {
+      console.error("getCurrentUser error:", error);
+      localStorage.removeItem("user");
+      return null;
+    }
+  },
 };

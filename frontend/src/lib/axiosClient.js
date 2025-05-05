@@ -6,6 +6,7 @@ const DEBUG = true;
 const axiosClient = axios.create({
   baseURL: API_CONFIG.BASE_URL,
   withCredentials: true,
+  timeout: 10000, // 10 seconds timeout
 });
 
 let isRefreshing = false;
@@ -55,7 +56,7 @@ const handleTokenRefreshFailure = () => {
 if (DEBUG) {
   window.testRefreshToken = () => {
     debugLog("Manually testing refresh token", {});
-    fetch(`${API_CONFIG.BASE_URL}/auth/refresh`, {
+    fetch(`${API_CONFIG.BACKEND_URL}/api/auth/refresh`, {
       method: "POST",
       credentials: "include",
       headers: {
@@ -104,7 +105,6 @@ axiosClient.interceptors.response.use(
         })
           .then(() => {
             debugLog("⏩ Retrying queued request after refresh", {});
-            // ✅ CHO PHÉP RETRY — đã bỏ if (_unauthorized)
             return axiosClient(originalRequest);
           })
           .catch((err) => {
@@ -128,7 +128,7 @@ axiosClient.interceptors.response.use(
       try {
         debugLog("🔑 Attempting to refresh token", {});
         const refreshResponse = await fetch(
-          `${API_CONFIG.BASE_URL}/auth/refresh`,
+          `${API_CONFIG.BACKEND_URL}/api/auth/refresh`,
           {
             method: "POST",
             credentials: "include",
@@ -137,7 +137,7 @@ axiosClient.interceptors.response.use(
             },
           }
         );
-
+        console.log("URL", `${API_CONFIG.BACKEND_URL}/api/auth/refresh`);
         let responseData = {};
         if (refreshResponse.ok) {
           responseData = await refreshResponse.json().catch(() => ({}));

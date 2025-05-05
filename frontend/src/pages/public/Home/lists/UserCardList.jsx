@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import UserCard from "@/pages/public/Home/lists/UserCard";
 import GradientHeading from "@/components/Text/GradientHeading";
 import { LoadingSkeleton } from "@/components/Skeleton/LoadingSkeleton";
-import SearchBar from "@/components/ToolBar/SearchBar";
+import SearchBar from "@/components/Toolbar/SearchBar";
 import { useSearchUser } from "@/hooks/useSearchUser";
 
 import Spinner from "@/components/Skeleton/Spinner";
@@ -20,6 +20,7 @@ import {
 	PaginationNext,
 	PaginationPrevious,
 } from "@/components/ui/pagination";
+import { API_CONFIG } from "../../../../lib/config";
 
 export default function UserCardList({ connections, sentRequest }) {
 	const {
@@ -69,7 +70,7 @@ export default function UserCardList({ connections, sentRequest }) {
 		const token = getCookie("accessToken");
 		// console.log(token);
 		if (!token) throw new Error("Missing auth token");
-		const endpoint = `http://localhost:3000/api/connections/create/${receiverId}`;
+		const endpoint = `${API_CONFIG.BASE_URL_SOCKET}/api/connections/create/${receiverId}`;
 		const response = await axios.post(
 			endpoint,
 			{},
