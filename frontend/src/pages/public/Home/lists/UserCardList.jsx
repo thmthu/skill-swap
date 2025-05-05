@@ -21,7 +21,7 @@ import {
 	PaginationPrevious,
 } from "@/components/ui/pagination";
 
-export default function UserCardList() {
+export default function UserCardList({ connections, sentRequest }) {
 	const {
 		users,
 		loading,
@@ -215,6 +215,8 @@ export default function UserCardList() {
 									userId={user.id}
 									handleConnect={handleConnect}
 									isLoggedIn={isAuthenticated}
+									isConnected={connections.includes(user.id)}
+									isRequested={sentRequest.includes(user.id)}
 								/>
 							))
 						) : (

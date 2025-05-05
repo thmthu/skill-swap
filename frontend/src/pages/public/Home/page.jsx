@@ -8,9 +8,68 @@ import UserCardList from "./lists/UserCardList";
 import RecommendedMatches from "./lists/RecommendedMatches";
 
 import { useAuth } from "../../../context/AuthContext";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function HomePage() {
 	const { isAuthenticated } = useAuth();
+
+	const [connections, setConnections] = useState([]);
+	const [sentRequest, setSentRequest] = useState([]);
+
+	const getCookie = (cookieName) => {
+		const cookies = document.cookie.split("; ");
+		const tokenCookie = cookies.find((cookie) =>
+			cookie.startsWith(`${cookieName}=`)
+		);
+		return tokenCookie ? tokenCookie.split("=")[1] : null;
+	};
+
+	useEffect(() => {
+		try {
+			const fetchConnections = async () => {
+				if (isAuthenticated) {
+					const token = getCookie("accessToken");
+					let endpoint = "/api/connections/";
+					const response = await axios.get(endpoint, {
+						headers: {
+							Authorization: `Bearer ${token}`,
+						},
+					});
+					if (response && response.data.length > 0) {
+						setConnections(response.data.map((data) => data._id));
+						console.log(response.data);
+					}
+				}
+			};
+			fetchConnections();
+		} catch (error) {
+			console.log(error);
+		}
+	}, []);
+
+	useEffect(() => {
+		try {
+			const fetchSentRequest = async () => {
+				if (isAuthenticated) {
+					const token = getCookie("accessToken");
+					let endpoint = "/api/connections/sent";
+					const response = await axios.get(endpoint, {
+						headers: {
+							Authorization: `Bearer ${token}`,
+						},
+					});
+					if (response && response.data.length > 0) {
+						setSentRequest(response.data.map((data) => data._id));
+						console.log(response.data);
+					}
+				}
+			};
+			fetchSentRequest();
+		} catch (error) {
+			console.log(error);
+		}
+	}, []);
 	// const mockUsers = [
 	//   {
 	//     id: 1,
@@ -59,7 +118,7 @@ export default function HomePage() {
 			<div className="min-h-screen bg-background dark:bg-black">
 				<HeroSection />
 				{isAuthenticated && <RecommendedMatches />}
-				<UserCardList />
+				<UserCardList connections={connections} sentRequest={sentRequest} />
 				<WhyChoose />
 				<HowItWorks />
 				<FAQ />

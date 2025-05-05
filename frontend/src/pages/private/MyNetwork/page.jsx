@@ -19,124 +19,124 @@ const MyNetworkPage = () => {
 	const userId = user._id;
 	// console.log(userId);
 
-  const getCookie = (cookieName) => {
-    const cookies = document.cookie.split("; ");
-    const tokenCookie = cookies.find((cookie) =>
-      cookie.startsWith(`${cookieName}=`)
-    );
-    return tokenCookie ? tokenCookie.split("=")[1] : null;
-  };
+	const getCookie = (cookieName) => {
+		const cookies = document.cookie.split("; ");
+		const tokenCookie = cookies.find((cookie) =>
+			cookie.startsWith(`${cookieName}=`)
+		);
+		return tokenCookie ? tokenCookie.split("=")[1] : null;
+	};
 
-  const handleWithdraw = async (data) => {
-    try {
-      const token = getCookie("accessToken");
-      if (!token) throw new Error("Missing auth token");
+	const handleWithdraw = async (data) => {
+		try {
+			const token = getCookie("accessToken");
+			if (!token) throw new Error("Missing auth token");
 
-      await axios.delete(`/api/connections/withdraw/${data.connectionId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      // Update the data state by removing the withdrawn connection
-      setData((prevData) =>
-        prevData.filter((item) => item.connectionId !== data.connectionId)
-      );
-      toast.success("Connection withdrawn successfully");
-    } catch (error) {
-      console.error(
-        "Error withdrawing request:",
-        error.response?.data || error.message
-      );
-    }
-  };
+			await axios.delete(`/api/connections/withdraw/${data.connectionId}`, {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			});
+			// Update the data state by removing the withdrawn connection
+			setData((prevData) =>
+				prevData.filter((item) => item.connectionId !== data.connectionId)
+			);
+			toast.success("Connection withdrawn successfully");
+		} catch (error) {
+			console.error(
+				"Error withdrawing request:",
+				error.response?.data || error.message
+			);
+		}
+	};
 
-  const handleAccept = async (data) => {
-    try {
-      const token = getCookie("accessToken");
-      if (!token) throw new Error("Missing auth token");
-      await axios.post(
-        `/api/connections/accept/${data.connectionId}`,
-        {
-          userId: data.receiver,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      socket.emit("acceptConnectRequest", {
-        connectionId: data.connectionId,
-        userId: data._id,
-      });
-      // Update the data state by removing the accepted connection
-      // setData((prevData) =>
-      // 	prevData.filter((item) => item.connectionId !== data.connectionId)
-      // );
-    } catch (error) {
-      console.error(
-        "Error accepting request:",
-        error.response?.data || error.message
-      );
-    }
-  };
+	const handleAccept = async (data) => {
+		try {
+			const token = getCookie("accessToken");
+			if (!token) throw new Error("Missing auth token");
+			await axios.post(
+				`/api/connections/accept/${data.connectionId}`,
+				{
+					userId: data.receiver,
+				},
+				{
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			);
+			socket.emit("acceptConnectRequest", {
+				connectionId: data.connectionId,
+				userId: data._id,
+			});
+			// Update the data state by removing the accepted connection
+			// setData((prevData) =>
+			// 	prevData.filter((item) => item.connectionId !== data.connectionId)
+			// );
+		} catch (error) {
+			console.error(
+				"Error accepting request:",
+				error.response?.data || error.message
+			);
+		}
+	};
 
-  const handleReject = async (data) => {
-    try {
-      const token = getCookie("accessToken");
-      if (!token) throw new Error("Missing auth token");
-      await axios.post(
-        `/api/connections/reject/${data.connectionId}`,
-        {
-          userId: data.receiver,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      // Update the data state by removing the rejected connection
-      // setData((prevData) =>
-      // 	prevData.filter((item) => item.connectionId !== data.connectionId)
-      // );
-    } catch (error) {
-      console.error(
-        "Error rejecting request:",
-        error.response?.data || error.message
-      );
-    }
-  };
+	const handleReject = async (data) => {
+		try {
+			const token = getCookie("accessToken");
+			if (!token) throw new Error("Missing auth token");
+			await axios.post(
+				`/api/connections/reject/${data.connectionId}`,
+				{
+					userId: data.receiver,
+				},
+				{
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			);
+			// Update the data state by removing the rejected connection
+			// setData((prevData) =>
+			// 	prevData.filter((item) => item.connectionId !== data.connectionId)
+			// );
+		} catch (error) {
+			console.error(
+				"Error rejecting request:",
+				error.response?.data || error.message
+			);
+		}
+	};
 
-  const handleDelete = async (data) => {
-    try {
-      const token = getCookie("accessToken");
-      if (!token) throw new Error("Missing auth token");
-      await axios.delete(`/api/connections/delete/${data.connectionId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      // Update the data state by removing the deleted connection
-      setData((prevData) =>
-        prevData.filter((item) => item.connectionId !== data.connectionId)
-      );
-      toast.success("Connection deleted successfully");
-    } catch (error) {
-      console.error(
-        "Error deleting connection:",
-        error.response?.data || error.message
-      );
-    }
-  };
+	const handleDelete = async (data) => {
+		try {
+			const token = getCookie("accessToken");
+			if (!token) throw new Error("Missing auth token");
+			await axios.delete(`/api/connections/delete/${data.connectionId}`, {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			});
+			// Update the data state by removing the deleted connection
+			setData((prevData) =>
+				prevData.filter((item) => item.connectionId !== data.connectionId)
+			);
+			toast.success("Connection deleted successfully");
+		} catch (error) {
+			console.error(
+				"Error deleting connection:",
+				error.response?.data || error.message
+			);
+		}
+	};
 
-  const calculateTimeDifference = (updatedAt) => {
-    const now = new Date();
-    const updatedDate = new Date(updatedAt);
-    const nowUTC = new Date(now.toISOString());
-    const updatedDateUTC = new Date(updatedDate.toISOString());
+	const calculateTimeDifference = (updatedAt) => {
+		const now = new Date();
+		const updatedDate = new Date(updatedAt);
+		const nowUTC = new Date(now.toISOString());
+		const updatedDateUTC = new Date(updatedDate.toISOString());
 
-    const diffInMs = nowUTC - updatedDateUTC;
+		const diffInMs = nowUTC - updatedDateUTC;
 
 		const days = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
 		const hours = Math.floor(
@@ -156,37 +156,37 @@ const MyNetworkPage = () => {
 		}
 	};
 
-  useEffect(() => {
-    socket.emit("joinUser", userId);
-    // Listen for the "requestAccepted" event
-    socket.on("connectRequestAccepted", (data) => {
-      console.log("Rendering request accepted");
-      toast.success(
-        `Your connection request to ${data.receiverName} was accepted!`
-      );
-    });
+	useEffect(() => {
+		socket.emit("joinUser", userId);
+		// Listen for the "requestAccepted" event
+		socket.on("connectRequestAccepted", (data) => {
+			console.log("Rendering request accepted");
+			toast.success(
+				`Your connection request to ${data.receiverName} was accepted!`
+			);
+		});
 
-    return () => {
-      socket.off("connectRequestAccepted");
-    };
-  }, [userId]);
+		return () => {
+			socket.off("connectRequestAccepted");
+		};
+	}, [userId]);
 
-  // Fetch data based on the active tab
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true); // Set loading to true before fetching
-      try {
-        const token = getCookie("accessToken");
-        if (!token) throw new Error("Missing auth token");
+	// Fetch data based on the active tab
+	useEffect(() => {
+		const fetchData = async () => {
+			setLoading(true); // Set loading to true before fetching
+			try {
+				const token = getCookie("accessToken");
+				if (!token) throw new Error("Missing auth token");
 
-        let endpoint;
-        if (activeTab === "Sent") {
-          endpoint = "http://localhost:3000/api/connections/sent";
-        } else if (activeTab === "Received") {
-          endpoint = "/api/connections/received";
-        } else if (activeTab === "New Connections") {
-          endpoint = "/api/connections/recent";
-        }
+				let endpoint;
+				if (activeTab === "Sent") {
+					endpoint = "http://localhost:3000/api/connections/sent";
+				} else if (activeTab === "Received") {
+					endpoint = "/api/connections/received";
+				} else if (activeTab === "New Connections") {
+					endpoint = "/api/connections/recent";
+				}
 
 				const response = await axios.get(endpoint, {
 					headers: { Authorization: `Bearer ${token}` },
@@ -208,19 +208,19 @@ const MyNetworkPage = () => {
 		fetchData();
 	}, [activeTab]);
 
-  return (
-    <div className="w-auto flex flex-col justify-start items-center gap-12">
-      <Toaster
-        position="top-center"
-        reverseOrder={false}
-        gutter={8}
-        containerClassName=""
-        containerStyle={{}}
-        toastOptions={{
-          // Define default options
-          className: "",
-          duration: 5000,
-          removeDelay: 2000,
+	return (
+		<div className="w-auto flex flex-col justify-start items-center gap-12">
+			<Toaster
+				position="top-center"
+				reverseOrder={false}
+				gutter={8}
+				containerClassName=""
+				containerStyle={{}}
+				toastOptions={{
+					// Define default options
+					className: "",
+					duration: 5000,
+					removeDelay: 2000,
 
 					// Default options for specific types
 					success: {
@@ -242,11 +242,11 @@ const MyNetworkPage = () => {
 			<div className="flex w-[84vw]">
 				{["Sent", "Received", "New Connections"].map((item, index) => (
 					<div
-						className="w-full md:w-[33%] flex flex-col justify-start items-center gap-1"
+						className=" font-heading font-bold w-full md:w-[33%] flex flex-col justify-start items-center gap-1"
 						onClick={() => setActiveTab(item)}
 						key={index}
 					>
-						<div className="text-center text-text-dark text-lg md:text-3xl font-semibold font-['Poppins']">
+						<div className="text-center text-text-dark text-lg md:text-3xl font-semibold">
 							{item}
 						</div>
 						<div

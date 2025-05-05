@@ -25,8 +25,10 @@ export default function UserCard({
 	userId,
 	handleConnect,
 	isLoggedIn,
+	isConnected,
+	isRequested,
 }) {
-	const [isConnected, setIsConnected] = useState(false);
+	const [isClicked, setIsClicked] = useState(false);
 	const navigate = useNavigate();
 
 	const handleChatClick = (e) => {
@@ -131,14 +133,23 @@ export default function UserCard({
 									exit: { opacity: 0, scale: 0.8, y: 100 },
 								}}
 							>
-								<p className="pt-2 text-body1 md:text-body1 text-zinc-600 dark:text-zinc-400 leading-relaxed">
+								{/* <p className="pt-2 text-body1 md:text-body1 text-zinc-600 dark:text-zinc-400 leading-relaxed">
 									{department}
-								</p>
+								</p> */}
 								{!isLoggedIn || (
 									<ActiveButton
-										onClick={() => {handleConnect(userId), setIsConnected(true)}}
-										children={isConnected ? "Connected" : "Connect"}
-										disabled={isConnected}
+										onClick={() => {
+											handleConnect(userId);
+											setIsClicked(true);
+										}}
+										children={
+											isConnected || isClicked
+												? "Connected"
+												: isRequested
+												? "Requested"
+												: "Connect"
+										}
+										disabled={isConnected || isClicked || isRequested}
 										className="bg-primary text-white hover:bg-primary-dark dark:bg-primary-medium dark:text-text-light dark:hover:bg-red-300 rounded-md mt-4 px-8 py-3 "
 									/>
 								)}
