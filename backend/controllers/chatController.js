@@ -39,7 +39,7 @@ export const getChatRooms = async (req, res) => {
           user: {
             _id: otherUser?._id.toString(),
             username: otherUser?.username,
-            profilePic: otherUser?.profilePic,
+            profilePic: otherUser?.avatar,
           },
         };
       })
@@ -51,5 +51,53 @@ export const getChatRooms = async (req, res) => {
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+};
+
+
+export const getUnreadMessagesCount = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const user = await User.findById(convertToObjectId(userId));
+    
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found"
+      });
+    }
+    
+    const arrayChatRoomIds = user.chat_room_id;
+    
+    if (arrayChatRoomIds.length === 0) {
+      return res.status(200).json({
+        success: true,
+        totalUnread: 0
+      });
+    }
+    
+    const chatRooms = await ChatRoom.find({
+      chat_room_id: { $in: arrayChatRoomIds }
+    });
+    
+    let totalUnread = 0;
+    
+    chatRooms.forEach(room => {
+      const unreadCountForUser = room.unreadCount.get(userId) || 0;
+      totalUnread += unreadCountForUser;
+    });
+    
+    return res.status(200).json({
+      success: true,
+      totalUnread
+    });
+    
+  } catch (error) {
+    console.error("Error getting unread messages count:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to get unread messages count",
+      error: error.message
+    });
   }
 };

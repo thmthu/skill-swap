@@ -20,7 +20,7 @@ import passport from 'passport';
 export const register = async (req, res) => {
     try {
         const { username, email, password } = req.body;
-        const existedUser = await User.findOne({ $or: [{ username }, { email }] });
+        const existedUser = await User.findOne({ email });
         if (existedUser) {
             return res.status(400).json({ message: 'Username already exists' });
         }
@@ -61,9 +61,20 @@ export const login = async (req, res) => {
             // maxAge: parseInt(60) * 1000
         });
         res.cookie('refreshToken', refreshToken, COOKIE_OPTIONS);
-
-        return res.status(200).json({ message: 'Logged in successfully', 
-                                    user: user });
+        
+        if (user.skills.length === 0 || user.learn.length === 0) {
+            return res.status(200).json({ 
+                message: 'Logged in successfully', 
+                user: user,
+                needsPreference: true
+            });
+        }
+        
+        return res.status(200).json({ 
+            message: 'Logged in successfully', 
+            user: user,
+            needsPreference: false 
+        });
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }

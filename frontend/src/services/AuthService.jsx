@@ -18,42 +18,39 @@ export const authService = {
   },
   async register(fullName, email, password) {
     try {
-      const response = await axios.post(
-        "/auth/register",
-        {
-          username: fullName,
-          email: email,
-          password: password,
-        }
-      );
+      const response = await axios.post("/auth/register", {
+        username: fullName,
+        email: email,
+        password: password,
+      });
       return response.data;
     } catch (error) {
       throw new Error(error.response?.data?.message || "Failed to signup");
     }
   },
 
-  async loginWithGoogle() {
-    try {
-      window.location.href = `${API_CONFIG.BASE_URL}/auth/google/login`;
-    } catch (error) {
-      throw new Error(
-        error.response?.data?.message ||
-          "Failed to login with Google" + error + API_CONFIG.BASE_URL
-      );
-    }
-  },
+	async loginWithGoogle() {
+		try {
+			window.location.href = `${API_CONFIG.BASE_URL}/auth/google/login`;
+		} catch (error) {
+			throw new Error(
+				error.response?.data?.message ||
+					"Failed to login with Google" + error + API_CONFIG.BASE_URL
+			);
+		}
+	},
 
-  async signupWithGoogle() {
-    try {
-      window.location.href = `${API_CONFIG.BASE_URL}/auth/google/signup`;
-    } catch (error) {
-      console.log(error);
-      throw new Error(
-        error.response?.data?.message ||
-          "Failed to signup with Google" + error + API_CONFIG.BASE_URL
-      );
-    }
-  },
+	async signupWithGoogle() {
+		try {
+			window.location.href = `${API_CONFIG.BASE_URL}/auth/google/signup`;
+		} catch (error) {
+			console.log(error);
+			throw new Error(
+				error.response?.data?.message ||
+					"Failed to signup with Google" + error + API_CONFIG.BASE_URL
+			);
+		}
+	},
 
   // Logout user
   async logout() {
@@ -67,13 +64,17 @@ export const authService = {
 
   async getCurrentUser() {
     try {
-      const response = await axios.get("/users/me");
+      const response = await axios.get("/users/me", {
+        headers: {
+          'Cache-Control': 'no-cache', // Prevent caching issues
+        }
+      });
 
-      return response.data;
-    } catch (error) {
-      console.error("getCurrentUser error:", error);
-      localStorage.removeItem("user");
-      return null;
-    }
-  },
+			return response.data;
+		} catch (error) {
+			console.error("getCurrentUser error:", error);
+			localStorage.removeItem("user");
+			return null;
+		}
+	},
 };

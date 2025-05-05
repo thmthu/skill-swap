@@ -25,12 +25,8 @@ export default function AuthPage() {
       const decodedError = decodeURIComponent(errorMessage);
       console.log(decodedError);
       toast.error(decodedError, {
-        // duration: 5000,
+        duration: 3000,
         position: "top-center",
-        style: {
-          background: "#333",
-          color: "#fff",
-        },
       });
 
       hasHandledError.current = true;
@@ -45,12 +41,8 @@ export default function AuthPage() {
       const decodedMessage = decodeURIComponent(message);
       console.log(decodedMessage);
       toast.success(decodedMessage, {
-        // duration: 5000,
+        duration: 3000,
         position: "top-center",
-        style: {
-          background: "#333",
-          color: "#fff",
-        },
       });
 
       hasHandledError.current = true;
@@ -61,16 +53,7 @@ export default function AuthPage() {
         },
       });
     }
-
-    // Reset khi unmount
-    // return () => {
-    //   hasHandledError.current = false;
-    // };
   }, [location]);
 
-  return (
-    <div>
-      {isSignup ? <Signup /> : <Login />}
-    </div>
-  );
+  return <div>{isSignup ? <Signup /> : <Login />}</div>;
 }

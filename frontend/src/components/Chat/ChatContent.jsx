@@ -1,45 +1,43 @@
 import { Send, MessageSquare } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { io } from "socket.io-client";
-import axios from "axios";
-
-// const senderId = "6805e59935e3fe0a7c60c000";
-// const receiverId = "6805e59935e3fe0a7c60c002";
-
-// const senderId = "6805e59935e3fe0a7c60c002";
-const senderId = "6805e59935e3fe0a7c60c001";
-const socket = io("http://localhost:3000");
-//xem recieverId là selectedChatId
-const ChatContent = ({ selectedChatId }) => {
+import { useAuth } from "../../context/AuthContext";
+import axiosClient from "../../lib/axiosClient";
+import { useSocket } from "../../context/SocketContext";
+const ChatContent = ({ userFromHome, setRecentChats, chatRoomId }) => {
+  const senderId = useAuth().user._id;
+  const sender = useAuth();
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const messageContainerRef = useRef(null);
-  let receiverId;
+  const [receiverId, setReceiverId] = useState("");
+  const { socket, joinRoom, markAsRead, sendMessage, setUnreadMessagesCount } =
+    useSocket();
   useEffect(() => {
-    if (!selectedChatId) {
-      return (
-        <div className="flex-1 flex items-center justify-center bg-bg-light">
-          <div className="text-center">
-            <MessageSquare className="w-16 h-16 text-primary-medium mx-auto mb-4" />
-            <h2 className="text-h2 font-heading font-bold text-primary-dark">
-              Select a conversation
-            </h2>
-            <p className="text-body1 text-primary-medium mt-2">
-              Choose a chat from the sidebar to start messaging
-            </p>
-          </div>
-        </div>
+    if (!chatRoomId || chatRoomId === "null" || !socket) return;
+
+    joinRoom(chatRoomId);
+    markAsRead(chatRoomId, senderId);
+    setRecentChats((prevChats) => {
+      const currentChat = prevChats.find(
+        (chat) => chat.chatRoomId === chatRoomId
       );
-    }
-    socket.emit("joinRoom", selectedChatId);
-    const ids = selectedChatId.split("_");
-    receiverId = ids.find((id) => id !== senderId);
+      const unreadCount = currentChat?.unreadCount || 0;
+      if (unreadCount > 0) {
+        setUnreadMessagesCount((prev) => Math.max(0, prev - unreadCount));
+      }
+
+      return prevChats.map((chat) =>
+        chat.chatRoomId === chatRoomId ? { ...chat, unreadCount: 0 } : chat
+      );
+    });
+    const ids = chatRoomId.split("_");
+    setReceiverId(ids.find((id) => id !== senderId));
+
     const fetchMessages = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:3000/api/chat/chat-get-message/${selectedChatId}`
+        const res = await axiosClient.get(
+          `/chat/chat-get-message/${chatRoomId}`
         );
-        console.log("data:", res.data);
         if (res.data.data.messages) {
           setMessages(res.data.data.messages);
         } else {
@@ -51,69 +49,122 @@ const ChatContent = ({ selectedChatId }) => {
     };
 
     fetchMessages();
-    if (messageContainerRef.current) {
-      messageContainerRef.current.scrollTop =
-        messageContainerRef.current.scrollHeight;
-    }
-    socket.on("newMessage", (newMsg) => {
-      appendMessage(newMsg);
-    });
+    const handleNewMessage = (newMsg) => {
+      setMessages((prevMessages) => [...prevMessages, newMsg]);
+    };
+
+    socket.on("newMessage", handleNewMessage);
 
     return () => {
-      socket.off("newMessage");
+      socket.off("newMessage", handleNewMessage);
     };
-  }, [selectedChatId]);
+  }, [chatRoomId, senderId, socket]);
 
-  const appendMessage = (newMsg) => {
-    //setMessages((prev) => [...prev, newMsg]);
-
-    if (messageContainerRef.current) {
-      const msgDiv = document.createElement("div");
-      msgDiv.className = `flex ${
-        newMsg.sender_id === senderId ? "justify-end" : "justify-start"
-      }`;
-
-      msgDiv.innerHTML = `
-        <div class="max-w-[70%] rounded-lg p-3 ${
-          newMsg.sender_id === senderId
-            ? "bg-black text-white"
-            : "bg-white text-text-light"
-        }">
-          <p class="text-body1">${newMsg.text}</p>
-          <span class="text-body2 mt-1 block opacity-75">
-            ${new Date(newMsg.createdAt).toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
-          </span>
-        </div>
-      `;
-
-      messageContainerRef.current.appendChild(msgDiv);
-      messageContainerRef.current.scrollTop =
-        messageContainerRef.current.scrollHeight;
-    }
-  };
+  useEffect(() => {
+    const scrollToBottom = () => {
+      if (messageContainerRef.current) {
+        messageContainerRef.current.scrollTop =
+          messageContainerRef.current.scrollHeight;
+      }
+    };
+    scrollToBottom();
+    const timeoutId = setTimeout(scrollToBottom, 100);
+    return () => clearTimeout(timeoutId);
+  }, [messages]);
 
   const handleSend = () => {
     if (message.trim()) {
-      socket.emit("sendMessage", {
-        selectedChatId,
+      sendMessage({
+        sender: {
+          name: sender.user.username,
+          profilePic: sender.user.avatar || "./NAB.png",
+        },
+        chatRoomId,
         senderId,
         receiverId,
         text: message.trim(),
       });
 
+      const today = new Date();
+      const day = String(today.getDate()).padStart(2, "0");
+      const month = String(today.getMonth() + 1).padStart(2, "0");
+      const year = today.getFullYear();
+      const formattedDate = `${day}/${month}/${year}`;
       setMessage("");
+      if (messages.length == 0) {
+        const newChatRoom = {
+          chatRoomId,
+          latestMessage: message.trim(),
+          time: formattedDate,
+          unreadCount: 0,
+          user: { ...userFromHome },
+        };
+
+        setRecentChats((prevChats) => {
+          const exists = prevChats.some(
+            (chat) => chat.chatRoomId === chatRoomId
+          );
+          if (exists) {
+            return prevChats.map((chat) =>
+              chat.chatRoomId === chatRoomId
+                ? {
+                    ...chat,
+                    latestMessage: message.trim(),
+                    time: formattedDate,
+                  }
+                : chat
+            );
+          } else {
+            return [newChatRoom, ...prevChats];
+          }
+        });
+      } else {
+        setRecentChats((prevChats) => {
+          const existingChatIndex = prevChats.findIndex(
+            (chat) => chat.chatRoomId === chatRoomId
+          );
+          const updatedChats = [...prevChats];
+          const [existingChat] = updatedChats.splice(existingChatIndex, 1);
+          const updatedChat = {
+            ...existingChat,
+            latestMessage: message.trim(),
+            time: formattedDate,
+          };
+          return [updatedChat, ...updatedChats];
+        });
+      }
     }
   };
 
+  if (!chatRoomId || chatRoomId === "null") {
+    return (
+      <div className="h-full overflow-y-auto flex-1 flex items-center justify-center bg-bg-light dark:bg-bg-dark">
+        <div className="text-center">
+          <MessageSquare className="w-16 h-16 text-primary-medium mx-auto mb-4" />
+          <h2 className="text-h2 font-heading font-bold text-primary-dark dark:text-primary-light">
+            Select a conversation
+          </h2>
+          <p className="text-body1 text-secondary dark:text-muted-foreground mt-2">
+            Choose a chat from the sidebar to start messaging
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex-1 flex flex-col h-screen bg-bg-light">
-      {/* Chat Header */}
-      <div className="p-4 bg-white border-b border-primary-extra-light">
-        <h2 className="text-h3 font-heading font-bold text-primary-dark">
-          Chat Title
+    <div className="flex-1 flex flex-col h-full bg-bg-light dark:bg-bg-dark">
+      {/* Header */}
+      <div className="p-4 bg-white dark:bg-gray-800 border-b border-primary-extra-light dark:border-gray-700 flex items-center">
+        <div className="w-10 h-10 rounded-full overflow-hidden mr-3">
+          <img
+            src={userFromHome.profilePic || "/NAB.png"}
+            alt={`${userFromHome.username}'s avatar`}
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <h2 className="text-h3 font-heading font-bold text-primary-dark dark:text-white">
+          {userFromHome.username}
         </h2>
       </div>
 
@@ -133,7 +184,7 @@ const ChatContent = ({ selectedChatId }) => {
               className={`max-w-[70%] rounded-lg p-3 ${
                 msg.sender_id === senderId
                   ? "bg-black text-white"
-                  : "bg-white text-text-light"
+                  : "bg-gray-200 dark:bg-gray-700 text-text-light dark:text-white"
               }`}
             >
               <p className="text-body1">{msg.text}</p>
@@ -148,22 +199,22 @@ const ChatContent = ({ selectedChatId }) => {
         ))}
       </div>
 
-      {/* Message Input */}
-      <div className="p-4 bg-white border-t border-primary-extra-light">
+      {/* Input */}
+      <div className="p-4 bg-white dark:bg-gray-800 border-t border-primary-extra-light dark:border-gray-700">
         <div className="flex gap-2">
           <input
             type="text"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Type your message..."
-            className="flex-1 p-2 rounded-lg border border-primary-extra-light focus:outline-none focus:border-primary-medium text-body1"
+            className="flex-1 p-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-bg-light dark:bg-gray-700 text-black dark:text-white focus:outline-none"
             onKeyPress={(e) => e.key === "Enter" && handleSend()}
           />
           <button
             onClick={handleSend}
             className="p-2 rounded-lg bg-primary hover:bg-primary-dark"
           >
-            <Send color="#3e9392" className="w-5 h-5" />
+            <Send color="white" className="w-5 h-5" />
           </button>
         </div>
       </div>

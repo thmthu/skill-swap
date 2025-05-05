@@ -10,49 +10,90 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [needsUserPreference, setNeedsUserPreference] = useState(null);
+  const [isInitialAuthCheckDone, setIsInitialAuthCheckDone] = useState(false);
   const navigate = useNavigate();
+
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const fetchUserData = async () => {
+    try {
+      const currentUser = await authService.getCurrentUser();
+      console.log("Current user data fetched:", currentUser);
+      localStorage.setItem("user", JSON.stringify(currentUser));
+      if (currentUser) {
+        setUser(currentUser);
+        const needsPreference =
+          !currentUser.skills?.length || !currentUser.learn?.length;
+        setNeedsUserPreference(needsPreference);
+        return currentUser;
+      }
+      return null;
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+      return null;
+    }
+  };
 
   useEffect(() => {
     const checkUserLoggedIn = async () => {
       try {
-        const currentUser = await authService.getCurrentUser();
-        setUser(currentUser);
+        const url = new URL(window.location.href);
+        if (
+          url.pathname === "/auth" &&
+          (url.searchParams.get("reason") === "session_expired" ||
+            url.searchParams.get("state") === "login")
+        ) {
+          setLoading(false);
+          setIsInitialAuthCheckDone(true);
+          return;
+        }
+
+        const savedUser = localStorage.getItem("user");
+        if (savedUser) {
+          try {
+            const parsedUser = JSON.parse(savedUser);
+            setUser(parsedUser);
+          } catch (e) {
+            localStorage.removeItem("user");
+          }
+        }
+
+        await fetchUserData();
       } catch (error) {
         console.error("Auth initialization error:", error);
       } finally {
         setLoading(false);
+        setIsInitialAuthCheckDone(true);
       }
     };
 
     checkUserLoggedIn();
   }, []);
-  useEffect(() => {
-    if (!user) return;
-  
-    const checkUserPreference = async () => {
-      try {
-        const currentUser = await authService.getCurrentUser();
-        const needsPreference = !currentUser.skills?.length || !currentUser.learn?.length;
-        setNeedsUserPreference(needsPreference);
-        if (needsPreference) {
-          navigate('/user-preference')
-        } else {
-          navigate('/home')
-        }
 
-      } catch (error) {
-        console.error("Error checking user preferences", error);
-      }
-    };
-  
-    checkUserPreference();
-  }, [user]);
-  
+  const refreshUserData = async () => {
+    setIsRefreshing(true);
+    try {
+      const userData = await fetchUserData();
+      return userData;
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
+
   const login = async (userData) => {
     setLoading(true);
     try {
-      // const userData = await authService.login(email, password, rememberMe)
-      setUser(userData);
+      setUser(userData.user);
+
+      const needsPreference =
+        !userData.user?.skills?.length || !userData.user?.learn?.length;
+      // console.log("Login data:", userData.user);
+      // console.log("Skills:", userData.user?.skills, "Learn:", userData.user?.learn);
+      // console.log("needsUserPreference after login:", needsPreference);
+      setNeedsUserPreference(needsPreference);
+
+      localStorage.setItem("user", JSON.stringify(userData.user));
+
       return userData;
     } finally {
       setLoading(false);
@@ -61,9 +102,7 @@ export function AuthProvider({ children }) {
 
   const register = async (userData) => {
     try {
-      // const userData = await authService.register(fullName, email, password)
-      setUser(userData);
-      // navigate('/auth?state=login&message=Signup successful')
+      return userData;
     } catch (error) {
       console.error("Registration error:", error);
       throw error;
@@ -87,7 +126,8 @@ export function AuthProvider({ children }) {
     try {
       await authService.logout();
       setUser(null);
-      navigate("/auth?state=login&message=Logout successful");
+      localStorage.removeItem("user");
+      navigate("/home?message=Logout successful");
     } finally {
       setLoading(false);
     }
@@ -95,13 +135,16 @@ export function AuthProvider({ children }) {
 
   const value = {
     user,
+    setUser, // ✅ THÊM DÒNG NÀY ĐỂ CẬP NHẬT USER TỪ COMPONENT KHÁC
     loading,
+    isRefreshing,
     login,
     loginWithGoogle,
     logout,
     register,
     isAuthenticated: !!user,
     needsUserPreference,
+    refreshUserData,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
