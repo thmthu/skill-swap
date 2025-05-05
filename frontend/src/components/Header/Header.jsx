@@ -2,7 +2,7 @@ import React from "react";
 
 const Header = ({ title, description, buttonText }) => {
 	return (
-		<div className="w-full h-[25vh] md:h-[55vh] relative">
+		<div className="w-full h-[25vh] md:h-[55vh] relative mt-[-1rem]">
 			{/* Mobile Version */}
 			<div className="block md:hidden w-full h-full bg-[url('/header-background-mobile.jpg')] bg-cover bg-no-repeat bg-center bg-gradient-to-l from-black/0 via-black/20 to-black/40 overflow-hidden">
 				<div className="w-[13rem] left-[1.125rem] top-[2.6875rem] absolute inline-flex flex-col justify-start items-start gap-[0.25rem]">
