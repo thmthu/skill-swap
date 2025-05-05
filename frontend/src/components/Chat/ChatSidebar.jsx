@@ -3,11 +3,11 @@ import { MessageSquare, Search } from "lucide-react";
 const ChatSidebar = ({ setReceiver, chats, selectedChat, onSelectChat }) => {
   return (
     <div className="h-full border-r border-primary-extra-light bg-white md:w-auto w-16 transition-all">
-      <div className="p-4 py-6 bg-white border-b border-primary-extra-light">
+      <div className="p-4 py-6 bg-white border-b border-primary-extra-light flex justify-center">
         <h2 className="text-h3 font-heading font-bold text-primary-dark md:block hidden">
           MESSAGE
         </h2>
-        <MessageSquare className="h-6 w-6 mx-auto text-primary-dark md:hidden" />
+        <MessageSquare className="h-6 w-6 text-primary-dark md:hidden block" />
       </div>
       {/* Search - hidden on small screens */}
       <div className="p-4 md:block hidden">
@@ -34,44 +34,49 @@ const ChatSidebar = ({ setReceiver, chats, selectedChat, onSelectChat }) => {
             }}
             className={`p-4 cursor-pointer hover:bg-secondary-light-pink transition-colors ${
               selectedChat === chat.chatRoomId ? "bg-secondary-light-pink" : ""
-            }`}
+            } flex justify-center md:justify-start`}
           >
-            <div className="flex items-start gap-3">
-              <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 relative">
+            <div className="flex items-start gap-3 md:w-full w-auto">
+              <div className="w-10 h-10 rounded-full overflow-hidden md:mr-3 mr-0 flex-shrink-0 relative">
                 <img
-                  src={chat.user.profilePic || "/NAB.png"}
+                  src={chat.user.profilePic || "/default-avatar.png"}
                   alt={`${chat.user.username}'s avatar`}
-                  className="w-full h-full object-cover"
+                  className={`w-full h-full object-cover ${
+                    chat.unreadCount > 0 ? "md:opacity-100 opacity-40" : ""
+                  }`}
                   onError={(e) => {
                     e.target.onerror = null;
                     e.target.src = "/default-avatar.png";
                   }}
                 />
+                {/* Mobile unread count badge - centered over avatar */}
                 {chat.unreadCount > 0 && (
-                  <div className="absolute -top-1 -right-1 min-w-[18px] h-[18px] rounded-full bg-primary flex items-center justify-center">
-                    <span className="text-xs text-white">
+                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 min-w-[18px] h-[18px] rounded-full bg-primary flex items-center justify-center border-2 border-white z-10 md:hidden block">
+                    <span className="text-xs text-white flex items-center justify-center w-full h-full leading-none font-bold">
                       {chat.unreadCount}
                     </span>
                   </div>
                 )}
               </div>
               <div className="flex-1 min-w-0 md:block hidden">
-                <div className="flex justify-between items-start">
+                <div className="flex justify-between items-start relative">
                   <h3 className="text-subtitle1 font-semibold text-text-light truncate">
                     {chat.user.username}
                   </h3>
                   <span className="text-body1 text-gray-500">{chat.time}</span>
+
+                  {/* Desktop unread count badge - absolute positioned */}
+                  {chat.unreadCount > 0 && (
+                    <div className="absolute -right-1 -top-4 min-w-[20px] h-5 rounded-full bg-primary flex items-center justify-center">
+                      <span className="text-btn2 text-white flex items-center justify-center w-full h-full leading-none">
+                        {chat.unreadCount}
+                      </span>
+                    </div>
+                  )}
                 </div>
                 <p className="text-body2 text-primary-medium truncate mt-1">
                   {chat.lastMessage}
                 </p>
-                {chat.unreadCount > 0 && (
-                  <div className="min-w-[20px] h-5 rounded-full bg-primary flex items-center justify-center ml-auto mt-1">
-                    <span className="text-btn2 text-white">
-                      {chat.unreadCount}
-                    </span>
-                  </div>
-                )}
               </div>
             </div>
           </div>
