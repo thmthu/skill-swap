@@ -2,10 +2,9 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo, useCallback } from 'react';
 import { useAuth } from '@/context/AuthContext';
 
-// Import your Form components
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import ActiveButton from '@/components/Button/ActiveButton';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command";
@@ -27,7 +26,7 @@ const formSchema = z.object({
     .max(MAX_SKILLS+1, { message: `You can select up to ${MAX_SKILLS} skills` }),
 });
 
-export default function UserPreferencesForm() {
+const UserPreferencesForm = memo(function UserPreferencesFormBase() {
   const navigate = useNavigate();
   const { refreshUserData } = useAuth();
   const [allSkills, setSkills] = useState([]);
@@ -53,12 +52,16 @@ export default function UserPreferencesForm() {
     },
   });
 
-  async function onSubmit(values) {
+  const onSubmit = useCallback(async (values) => {
     try {
       await PreferenceService.postUserPreference({
         bio: values.department,
         skills: values.masteredSkills,
         learn: values.skillsToLearn,
+      });
+      
+      refreshUserData().then(() => {
+        console.log("User data refreshed successfully after preference update");
       });
       
       toast.success('Preferences saved successfully!\nWelcome to the community!',
@@ -68,7 +71,6 @@ export default function UserPreferencesForm() {
         }
       );
       
-      // Navigation happens automatically after refreshUserData updates the context
       setTimeout(() => {
         navigate('/home');
       }, 3000);
@@ -76,7 +78,7 @@ export default function UserPreferencesForm() {
       console.error('Submission error', error);
       toast.error(error.message || 'Failed to save preferences. Please try again.');
     }
-  }
+  }, [refreshUserData, navigate]);
 
   const handleSkillSelect = (field, skill) => {
     const currentValues = field.value;
@@ -111,7 +113,7 @@ export default function UserPreferencesForm() {
       <Form {...form}>
         <form 
           onSubmit={(e) => {
-            e.preventDefault(); // Ngăn chặn hành vi form reload mặc định
+            e.preventDefault(); 
             form.handleSubmit(onSubmit)(e);
           }} 
           className="space-y-6"
@@ -294,4 +296,6 @@ export default function UserPreferencesForm() {
       </Form>
     </div>
   );
-}
+});
+
+export default UserPreferencesForm;

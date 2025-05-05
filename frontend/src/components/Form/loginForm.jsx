@@ -38,12 +38,18 @@ export default function LoginForm() {
       console.log('Login response data:', data);
       
       await login(data);
-      // Chuyển hướng dựa trên thông tin user
-      if (data.needsPreference) {
-        navigate('/user-preference?message=Please complete your profile');
-      } else {
-        navigate('/home?message=Login successful');
-      }
+      
+      // console.log("needsUserPreference from context:", needsUserPreference);
+      
+      setTimeout(() => {
+        if (needsUserPreference) {
+          // console.log("navigate to user-preference by needsUserPreference =", needsUserPreference);
+          navigate('/user-preference?message=Please complete your profile');
+        } else {
+          // console.log("navigate to home by needsUserPreference =", needsUserPreference);
+          navigate('/home?message=Login successful');
+        }
+      }, 100);
     } catch (error) {
       console.error('Login error', error);
       toast.error(error.message || 'Login failed, please check your login information.');

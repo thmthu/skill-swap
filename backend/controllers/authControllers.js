@@ -20,7 +20,7 @@ import passport from 'passport';
 export const register = async (req, res) => {
     try {
         const { username, email, password } = req.body;
-        const existedUser = await User.findOne({ $or: [{ username }, { email }] });
+        const existedUser = await User.findOne({ email });
         if (existedUser) {
             return res.status(400).json({ message: 'Username already exists' });
         }

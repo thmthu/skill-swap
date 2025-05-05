@@ -133,5 +133,14 @@ export default {
 			},
 		},
 	},
-	plugins: [],
+	plugins: [
+		function ({ addUtilities }) {
+			addUtilities({
+				".overflow-anchor-none": {
+					"overflow-anchor": "none",
+				},
+			});
+		},
+	],
+
 };

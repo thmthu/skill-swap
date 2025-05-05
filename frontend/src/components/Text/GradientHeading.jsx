@@ -4,6 +4,9 @@ import { AnimatedGradientText } from "@/components/magicui/animated-gradient-tex
 export default function GradientHeading({ children }) {
   const { theme } = useTheme();
 
+  // If theme is not ready yet, avoid rendering
+  if (!theme) return null;
+
   const colorFrom = theme === "dark" ? "#D14444" : "#AA0000";
   const colorTo = theme === "dark" ? "#E6A38B" : "#3D0000";
 
