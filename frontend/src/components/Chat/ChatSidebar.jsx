@@ -2,14 +2,15 @@ import { MessageSquare, Search } from "lucide-react";
 
 const ChatSidebar = ({ setReceiver, chats, selectedChat, onSelectChat }) => {
   return (
-    <div className=" h-full border-r border-primary-extra-light bg-white">
-      <div className="p-4 bg-white border-b border-primary-extra-light">
-        <h2 className="text-h3 font-heading font-bold text-primary-dark">
+    <div className="h-full border-r border-primary-extra-light bg-white md:w-auto w-16 transition-all">
+      <div className="p-4 py-6 bg-white border-b border-primary-extra-light">
+        <h2 className="text-h3 font-heading font-bold text-primary-dark md:block hidden">
           MESSAGE
         </h2>
+        <MessageSquare className="h-6 w-6 mx-auto text-primary-dark md:hidden" />
       </div>
-      {/* Search */}
-      <div className="p-4">
+      {/* Search - hidden on small screens */}
+      <div className="p-4 md:block hidden">
         <div className="relative">
           <input
             type="text"
@@ -36,9 +37,9 @@ const ChatSidebar = ({ setReceiver, chats, selectedChat, onSelectChat }) => {
             }`}
           >
             <div className="flex items-start gap-3">
-              <div className="w-10 h-10 rounded-full overflow-hidden mr-3 flex-shrink-0">
+              <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 relative">
                 <img
-                  src={chat.user.profilePic || "/default-avatar.png"}
+                  src={chat.user.profilePic || "/NAB.png"}
                   alt={`${chat.user.username}'s avatar`}
                   className="w-full h-full object-cover"
                   onError={(e) => {
@@ -46,8 +47,15 @@ const ChatSidebar = ({ setReceiver, chats, selectedChat, onSelectChat }) => {
                     e.target.src = "/default-avatar.png";
                   }}
                 />
+                {chat.unreadCount > 0 && (
+                  <div className="absolute -top-1 -right-1 min-w-[18px] h-[18px] rounded-full bg-primary flex items-center justify-center">
+                    <span className="text-xs text-white">
+                      {chat.unreadCount}
+                    </span>
+                  </div>
+                )}
               </div>
-              <div className="flex-1 min-w-0">
+              <div className="flex-1 min-w-0 md:block hidden">
                 <div className="flex justify-between items-start">
                   <h3 className="text-subtitle1 font-semibold text-text-light truncate">
                     {chat.user.username}
@@ -57,14 +65,14 @@ const ChatSidebar = ({ setReceiver, chats, selectedChat, onSelectChat }) => {
                 <p className="text-body2 text-primary-medium truncate mt-1">
                   {chat.lastMessage}
                 </p>
+                {chat.unreadCount > 0 && (
+                  <div className="min-w-[20px] h-5 rounded-full bg-primary flex items-center justify-center ml-auto mt-1">
+                    <span className="text-btn2 text-white">
+                      {chat.unreadCount}
+                    </span>
+                  </div>
+                )}
               </div>
-              {chat.unreadCount > 0 && (
-                <div className="min-w-[20px] h-5 rounded-full bg-primary flex items-center justify-center">
-                  <span className="text-btn2 text-white">
-                    {chat.unreadCount}
-                  </span>
-                </div>
-              )}
             </div>
           </div>
         ))}
