@@ -7,6 +7,9 @@
 .bg-gradient-tech {
 	background: linear-gradient(90deg, #893c3e 0%, #430d0d 69%, #1b0705 100%);
 }
+.logo-link:hover {
+  color: inherit !important;
+}
 
 :root {
 	/* font-family: system-ui, Avenir, Helvetica, Arial, sans-serif; */
