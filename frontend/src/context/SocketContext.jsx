@@ -38,7 +38,7 @@ export const SocketProvider = ({ children }) => {
               ),
               {
                 duration: 1700,
-                position: "bottom-right",
+                position: "top-left",
               }
             );
 
