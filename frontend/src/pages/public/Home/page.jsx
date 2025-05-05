@@ -117,7 +117,12 @@ export default function HomePage() {
 		<>
 			<div className="min-h-screen bg-background dark:bg-black">
 				<HeroSection />
-				{isAuthenticated && <RecommendedMatches />}
+				{isAuthenticated && (
+					<RecommendedMatches
+						connections={connections}
+						sentRequest={sentRequest}
+					/>
+				)}
 				<UserCardList connections={connections} sentRequest={sentRequest} />
 				<WhyChoose />
 				<HowItWorks />

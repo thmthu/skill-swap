@@ -17,8 +17,9 @@ import {
 	PaginationEllipsis,
 } from "@/components/ui/pagination";
 
-export default function RecommendedMatches() {
-	const { isAuthenticated } = useAuth();
+export default function RecommendedMatches({ connections, sentRequest }) {
+	const { isAuthenticated, user } = useAuth();
+	const userId = user ? user._id : null;
 	const [users, setUsers] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [currentPage, setCurrentPage] = useState(1);
@@ -74,7 +75,7 @@ export default function RecommendedMatches() {
 		} catch (error) {
 			toast.error("Failed to send connection request");
 			console.error("Error:", error.response?.data || error.message);
-		} 
+		}
 	};
 
 	useEffect(() => {
@@ -199,18 +200,23 @@ export default function RecommendedMatches() {
 				<>
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-8">
 						{currentUsers.length > 0 ? (
-							currentUsers.map((user) => (
-								<UserCard
-									key={user._id}
-									image={user.image || "/NAB.png"}
-									name={user.username}
-									tags={user.skills || []}
-									department={user.department || "Unknown Department"}
-									userId={user._id}
-									handleConnect={handleConnect}
-									isLoggedIn={isAuthenticated}
-								/>
-							))
+							currentUsers.map(
+								(user) =>
+									user._id !== userId && (
+										<UserCard
+											key={user._id}
+											image={user.avatar || "/NAB.png"}
+											name={user.username}
+											tags={user.skills || []}
+											department={user.bio || "Unknown Department"}
+											userId={user._id}
+											handleConnect={handleConnect}
+											isLoggedIn={isAuthenticated}
+											isConnected={connections.includes(user._id)}
+											isRequested={sentRequest.includes(user._id)}
+										/>
+									)
+							)
 						) : (
 							<div className="col-span-full text-center mt-8 text-body1 font-medium text-text-light dark:text-text-dark">
 								No mentors found. Try another keyword!

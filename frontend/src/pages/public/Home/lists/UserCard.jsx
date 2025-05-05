@@ -143,9 +143,9 @@ export default function UserCard({
 											setIsClicked(true);
 										}}
 										children={
-											isConnected || isClicked
+											isConnected
 												? "Connected"
-												: isRequested
+												: isRequested || isClicked
 												? "Requested"
 												: "Connect"
 										}
