@@ -83,12 +83,9 @@ export default function EditSkillDialog({
         learn: type === "learn" ? skills : user?.learn || [],
       };
 
-      // ✅ 1. Gửi preference lên trước
       await PreferenceService.postUserPreference(payload);
-
-      // ✅ 2. Sau đó fetch lại user mới nhất từ backend
       const freshUser = await authService.getCurrentUser();
-      await login({ user: freshUser }); // update vào context
+      await login({ user: freshUser });
 
       toast.success("Skills updated successfully!");
       onSave(skills);
@@ -106,7 +103,7 @@ export default function EditSkillDialog({
         </button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md bg-white dark:bg-gray-900 text-black dark:text-white">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
@@ -138,8 +135,11 @@ export default function EditSkillDialog({
                 <FormItem>
                   <FormLabel>Select Skill</FormLabel>
                   <FormControl>
-                    <Command className="bg-white border rounded-md max-h-[200px] overflow-y-auto">
-                      <CommandInput placeholder="Search skill..." />
+                    <Command className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md max-h-[200px] overflow-y-auto">
+                      <CommandInput
+                        placeholder="Search skill..."
+                        className="bg-white dark:bg-gray-800 text-black dark:text-white"
+                      />
                       <CommandGroup>
                         {allSkills.map((skill) => (
                           <CommandItem
@@ -149,6 +149,7 @@ export default function EditSkillDialog({
                               addSkill(skill);
                               reset({ selectedSkill: "" });
                             }}
+                            className="dark:text-white"
                           >
                             {skill}
                           </CommandItem>
@@ -165,7 +166,7 @@ export default function EditSkillDialog({
               <DialogClose asChild>
                 <button
                   type="button"
-                  className="px-4 py-2 text-sm rounded-md border border-gray-300 hover:bg-gray-100"
+                  className="px-4 py-2 text-sm rounded-md border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800"
                 >
                   Cancel
                 </button>

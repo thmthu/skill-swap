@@ -42,7 +42,7 @@ export default function AuthPage() {
       console.log(decodedMessage);
       toast.success(decodedMessage, {
         duration: 3000,
-        position: "top-center"
+        position: "top-center",
       });
 
       hasHandledError.current = true;
@@ -53,12 +53,7 @@ export default function AuthPage() {
         },
       });
     }
-
   }, [location]);
 
-  return (
-    <div>
-      {isSignup ? <Signup /> : <Login />}
-    </div>
-  );
+  return <div>{isSignup ? <Signup /> : <Login />}</div>;
 }

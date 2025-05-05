@@ -6,9 +6,20 @@ import GradientHeading from "@/components/Text/GradientHeading";
 import { useAuth } from "../../../../context/AuthContext";
 import axios from "axios";
 import { toast, Toaster } from "react-hot-toast";
+import { cn } from "@/lib/utils";
+import {
+	Pagination,
+	PaginationContent,
+	PaginationLink,
+	PaginationItem,
+	PaginationPrevious,
+	PaginationNext,
+	PaginationEllipsis,
+} from "@/components/ui/pagination";
 
-export default function RecommendedMatches() {
-	const { isAuthenticated } = useAuth();
+export default function RecommendedMatches({ connections, sentRequest }) {
+	const { isAuthenticated, user } = useAuth();
+	const userId = user ? user._id : null;
 	const [users, setUsers] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [currentPage, setCurrentPage] = useState(1);
@@ -45,7 +56,7 @@ export default function RecommendedMatches() {
 			const token = getCookie("accessToken");
 			if (!token) throw new Error("Missing auth token");
 
-			setLoading(true); // Set loading state when connecting
+			// setLoading(true); // Set loading state when connecting
 			const endpoint = `http://localhost:3000/api/connections/create/${receiverId}`;
 			const response = await axios.post(
 				endpoint,
@@ -64,8 +75,6 @@ export default function RecommendedMatches() {
 		} catch (error) {
 			toast.error("Failed to send connection request");
 			console.error("Error:", error.response?.data || error.message);
-		} finally {
-			setLoading(false); // Reset loading state
 		}
 	};
 
@@ -91,6 +100,68 @@ export default function RecommendedMatches() {
 		};
 		fetchData();
 	}, []);
+
+	const renderPagination = () => {
+		const pageNumbers = [];
+		for (let i = 1; i <= totalPages; i++) {
+			if (i === 1 || i === totalPages || Math.abs(i - currentPage) <= 1) {
+				pageNumbers.push(i);
+			} else if (pageNumbers[pageNumbers.length - 1] !== "...") {
+				pageNumbers.push("...");
+			}
+		}
+
+		return (
+			<Pagination>
+				<PaginationContent>
+					<PaginationItem>
+						<PaginationPrevious
+							onClick={() => paginate(currentPage - 1)}
+							className={cn(
+								"rounded-md px-3 py-1.5 text-sm font-semibold transition-colors",
+								currentPage === 1
+									? "pointer-events-none opacity-50 bg-muted text-muted-foreground dark:bg-zinc-800 dark:text-zinc-500"
+									: "bg-white text-black hover:bg-primary-light dark:bg-zinc-900 dark:text-white dark:hover:bg-zinc-700"
+							)}
+						/>
+					</PaginationItem>
+
+					{pageNumbers.map((page, index) => (
+						<PaginationItem key={index}>
+							{page === "..." ? (
+								<PaginationEllipsis className="text-gray-900 dark:text-gray-400" />
+							) : (
+								<PaginationLink
+									isActive={page === currentPage}
+									onClick={() => paginate(page)}
+									className={cn(
+										"rounded-md px-3 py-1.5 text-sm font-medium transition-colors border",
+										page === currentPage
+											? "bg-primary text-white border-primary dark:bg-primary-medium dark:text-black"
+											: "bg-white text-black  hover:bg-primary-light dark:bg-zinc-900 dark:text-white dark:hover:bg-zinc-700  dark:border-zinc-600"
+									)}
+								>
+									{page}
+								</PaginationLink>
+							)}
+						</PaginationItem>
+					))}
+
+					<PaginationItem>
+						<PaginationNext
+							onClick={() => paginate(currentPage + 1)}
+							className={cn(
+								"rounded-md px-3 py-1.5 text-sm font-semibold transition-colors",
+								currentPage === totalPages || totalPages === 0
+									? "pointer-events-none opacity-50 bg-muted text-muted-foreground dark:bg-zinc-800 dark:text-zinc-500"
+									: "bg-white text-black hover:bg-primary-light dark:bg-zinc-900 dark:text-white dark:hover:bg-zinc-700"
+							)}
+						/>
+					</PaginationItem>
+				</PaginationContent>
+			</Pagination>
+		);
+	};
 
 	return (
 		<section className="max-w-6xl mx-auto px-6 space-y-8 mb-12">
@@ -129,18 +200,23 @@ export default function RecommendedMatches() {
 				<>
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-8">
 						{currentUsers.length > 0 ? (
-							currentUsers.map((user) => (
-								<UserCard
-									key={user.id}
-									image={user.image || "/NAB.png"}
-									name={user.username}
-									tags={user.skills || []}
-									department={user.department || "Unknown Department"}
-									userId={user.id}
-									handleConnect={handleConnect}
-									isLoggedIn={isAuthenticated}
-								/>
-							))
+							currentUsers.map(
+								(user) =>
+									user._id !== userId && (
+										<UserCard
+											key={user._id}
+											image={user.avatar || "/NAB.png"}
+											name={user.username}
+											tags={user.skills || []}
+											department={user.bio || "Unknown Department"}
+											userId={user._id}
+											handleConnect={handleConnect}
+											isLoggedIn={isAuthenticated}
+											isConnected={connections.includes(user._id)}
+											isRequested={sentRequest.includes(user._id)}
+										/>
+									)
+							)
 						) : (
 							<div className="col-span-full text-center mt-8 text-body1 font-medium text-text-light dark:text-text-dark">
 								No mentors found. Try another keyword!
@@ -149,67 +225,9 @@ export default function RecommendedMatches() {
 					</div>
 
 					{/* Pagination Controls */}
+					{/* Pagination Controls */}
 					{users.length > 6 && (
-						<div className="flex justify-center gap-2 pt-8">
-							<button
-								onClick={() => paginate(currentPage - 1)}
-								disabled={currentPage === 1 || loading}
-								className={`px-3 py-1 rounded ${
-									currentPage === 1 || loading
-										? "bg-gray-200 text-gray-500 cursor-not-allowed"
-										: "bg-blue-600 text-white hover:bg-blue-700"
-								}`}
-							>
-								Prev
-							</button>
-
-							<div className="flex items-center gap-1">
-								{Array.from({ length: totalPages }, (_, i) => i + 1)
-									.filter((page) => {
-										// Show current page and 1 page on each side
-										return (
-											page === 1 ||
-											page === totalPages ||
-											Math.abs(page - currentPage) <= 1
-										);
-									})
-									.map((page, index, array) => (
-										<React.Fragment key={`page-group-${page}`}>
-											{index > 0 && array[index - 1] !== page - 1 && (
-												<span key={`ellipsis-${page}`} className="px-2">
-													...
-												</span>
-											)}
-											<button
-												key={page}
-												onClick={() => paginate(page)}
-												disabled={loading}
-												className={`w-8 h-8 rounded-full flex items-center justify-center ${
-													currentPage === page
-														? "bg-blue-600 text-white"
-														: "bg-gray-200 hover:bg-gray-300"
-												} ${loading ? "cursor-not-allowed opacity-70" : ""}`}
-											>
-												{page}
-											</button>
-										</React.Fragment>
-									))}
-							</div>
-
-							<button
-								onClick={() => paginate(currentPage + 1)}
-								disabled={
-									currentPage === totalPages || totalPages === 0 || loading
-								}
-								className={`px-3 py-1 rounded ${
-									currentPage === totalPages || totalPages === 0 || loading
-										? "bg-gray-200 text-gray-500 cursor-not-allowed"
-										: "bg-blue-600 text-white hover:bg-blue-700"
-								}`}
-							>
-								Next
-							</button>
-						</div>
+						<div className="pt-8 flex justify-center">{renderPagination()}</div>
 					)}
 				</>
 			)}

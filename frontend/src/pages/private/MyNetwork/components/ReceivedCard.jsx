@@ -1,13 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import {
 	XMarkIcon,
 	CheckIcon,
 	ChatBubbleOvalLeftIcon,
 } from "@heroicons/react/24/solid";
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const ReceivedCard = ({ data, formatTime, handleAccept, handleReject }) => {
 	const [isResponse, setIsResponse] = useState("notResponsed");
+	const navigate = useNavigate();
+	const handleChatClick = (e) => {
+		e.preventDefault();
+		e.stopPropagation();
+		console.log("Daya at connection", data);
+		navigate("/chat", {
+			state: {
+				receiverId: data._id,
+				username: data.username,
+				profilePic: data.avatar || "",
+			},
+		});
+	};
 	return (
 		<div
 			data-property-1="Received"
@@ -17,9 +30,7 @@ const ReceivedCard = ({ data, formatTime, handleAccept, handleReject }) => {
 			<div className="flex flex-row justify-start items-center gap-4 md:gap-8">
 				{/* Profile Image */}
 				<img
-					src={
-						"https://www.bellavistahotel.com.au/wp-content/uploads/sites/3/2017/05/Grey-Box.jpeg"
-					}
+					src={data.avatar || "/NAB.png"}
 					alt={data.username}
 					className="w-20 h-20 md:w-36 md:h-36 bg-neutral-200 rounded-3xl"
 				/>
@@ -42,7 +53,10 @@ const ReceivedCard = ({ data, formatTime, handleAccept, handleReject }) => {
 			{isResponse == "notResponsed" ? (
 				<div className="flex flex-row justify-end items-center gap-4 md:gap-6">
 					{/* Chat Icon */}
-					<div className="w-10 h-10 md:w-14 md:h-14 flex justify-center items-center rounded-full border-2 border-blue-600">
+					<div
+						className="w-10 h-10 md:w-14 md:h-14 flex justify-center items-center rounded-full border-2 border-blue-600"
+						onClick={handleChatClick}
+					>
 						<ChatBubbleOvalLeftIcon className="w-6 md:w-8 text-semantic-blue" />
 					</div>
 
@@ -52,24 +66,23 @@ const ReceivedCard = ({ data, formatTime, handleAccept, handleReject }) => {
 							await handleReject(data);
 							setIsResponse("Rejected");
 						}}
-						className="w-10 h-10 md:w-14 md:h-14 flex justify-center items-center border-primary border-2 rounded-full"
+						className="w-10 h-10 md:w-14 md:h-14 flex justify-center items-center border-2 border-red-600 rounded-full cursor-pointer"
 					>
-						<XMarkIcon className="w-6 md:w-8 text-primary" />
+						<XMarkIcon className="w-6 md:w-8 text-red-600" />
 					</div>
 
-					{/* Accept Icon */}
 					<div
 						onClick={async () => {
 							await handleAccept(data);
 							setIsResponse("Accepted");
 						}}
-						className="w-10 h-10 md:w-14 md:h-14 flex justify-center items-center border-semantic-green border-2 rounded-full"
+						className="w-10 h-10 md:w-14 md:h-14 flex justify-center items-center border-2 border-green-600 rounded-full cursor-pointer"
 					>
-						<CheckIcon className="w-6 md:w-8 text-semantic-green" />
+						<CheckIcon className="w-6 md:w-8 text-green-600" />
 					</div>
 				</div>
 			) : (
-				<div className="text-text-light">{isResponse}</div>
+				<div className="text-gray-800 dark:text-gray-200">{isResponse}</div>
 			)}
 		</div>
 	);

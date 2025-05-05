@@ -4,36 +4,26 @@ import ActiveButton from "../../../../components/Button/ActiveButton";
 
 const SentCard = ({ data, formatTime, handleWithdraw }) => {
 	return (
-		<div
-			data-property-1="Sent"
-			className="w-full px-6 py-4 md:px-11 md:py-7 bg-transparent border-b-2 flex flex-row justify-between items-center gap-6 md:gap-14"
-		>
-			{/* Card Content */}
-			<div className="flex flex-row justify-start items-center gap-4 md:gap-8">
-				{/* Profile Image */}
+		<div className="w-full px-6 py-4 md:px-11 md:py-7 bg-white dark:bg-gray-900 border-b border-gray-300 dark:border-gray-700 flex justify-between items-center gap-6 md:gap-14">
+			<div className="flex items-center gap-4 md:gap-8">
 				<img
-					src={
-						"https://www.bellavistahotel.com.au/wp-content/uploads/sites/3/2017/05/Grey-Box.jpeg"
-					}
+					src={data.avatar || "/NAB.png"}
 					alt={data.username}
-					className="w-20 h-20 md:w-36 md:h-36 bg-neutral-200 rounded-3xl"
+					className="w-20 h-20 md:w-36 md:h-36 bg-gray-200 rounded-3xl object-cover"
 				/>
-
-				{/* Card Data */}
-				<div className="flex flex-col justify-center items-start gap-2 md:gap-3 font-sans">
-					<div className="text-text-light text-xl md:text-3xl font-bold">
+				<div className="flex flex-col gap-1 text-left">
+					<div className="text-xl md:text-3xl font-bold text-gray-900 dark:text-white">
 						{data.username}
 					</div>
-					<div className="text-text-light text-sm md:text-base font-semibold">
+					<div className="text-sm md:text-base font-semibold text-gray-700 dark:text-gray-300">
 						{data.department}
 					</div>
-					<div className="text-text-light text-xs md:text-sm font-normal">
+					<div className="text-xs md:text-sm text-gray-500 dark:text-gray-400">
 						Sent {formatTime(data.timestamp)}
 					</div>
 				</div>
 			</div>
 
-			{/* Action Button */}
 			<div className="flex justify-end items-center">
 				<AlertPopup
 					handleWithdraw={handleWithdraw}
@@ -47,7 +37,7 @@ const SentCard = ({ data, formatTime, handleWithdraw }) => {
 					onCancel={() => console.log("Cancelled")}
 					onConfirm={() => handleWithdraw(data)}
 				>
-					<ActiveButton children="Withdraw" className="text-text-dark" />
+					<ActiveButton children="Withdraw" className="text-white" />
 				</AlertPopup>
 			</div>
 		</div>
