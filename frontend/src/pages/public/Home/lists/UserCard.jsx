@@ -51,7 +51,7 @@ export default function UserCard({
 			>
 				<MorphingDialogTrigger
 					style={{ borderRadius: "12px" }}
-					className="group relative flex w-full max-w-[300px] flex-col overflow-hidden border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-gray-800 !p-0"
+					className="group relative flex w-full h-full max-w-[300px] flex-col overflow-hidden border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-gray-800 !p-0"
 				>
 					{/* Image */}
 					<MorphingDialogImage
