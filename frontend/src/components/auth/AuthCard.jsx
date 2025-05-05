@@ -17,7 +17,7 @@ export default function AuthCard({
   footerLinkText,
 }) {
   return (
-    <Card className="border-none shadow-lg bg-white/10 text-text-dark">
+    <Card className="border-none shadow-lg bg-white/10 text-white">
       <CardHeader>
         <CardTitle className="text-h1-0 md:text-display font-bold font-heading text-center">
           {title}
@@ -25,7 +25,7 @@ export default function AuthCard({
             NAB Skillswap!
           </span>
         </CardTitle>
-        <CardDescription className="text-body1 text-text-dark/80 text-center mb-2">
+        <CardDescription className="text-body1 text-white/80 text-center mb-2">
           {subtitle}
         </CardDescription>
       </CardHeader>
@@ -33,7 +33,7 @@ export default function AuthCard({
         {children}
 
         {footerText && (
-          <div className="mt-6 text-center text-sm text-text-dark/80">
+          <div className="mt-6 text-center text-sm text-white/80">
             {footerText}{" "}
             <Link
               to={footerLink}

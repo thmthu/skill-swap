@@ -352,12 +352,12 @@ const MultipleSelector = forwardRef((props, ref) => {
           inputRef?.current?.focus();
         }}
       >
-        <div className="flex items-center flex-nowrap gap-2 px-3 py-2 min-h-[48px] rounded-md border border-input bg-background overflow-hidden">
+        <div className="flex items-center flex-nowrap gap-2 px-3 py-2 min-h-[48px] rounded-md  border border-input dark:border-white/20 bg-background dark:bg-gray-800/50 overflow-hidden">
           {selected.map((option) => (
             <Badge
               key={option.value}
               className={cn(
-                "bg-bg-dark text-text-dark rounded-full px-3 py-1 text-xs font-medium flex items-center gap-1 border-none shadow-none",
+                "dark:bg-gray-800/70 dark:text-white/80 rounded-full px-3 py-1 text-xs font-medium flex items-center gap-1 border-none shadow-none",
                 badgeClassName
               )}
               data-fixed={option.fixed}
@@ -366,7 +366,7 @@ const MultipleSelector = forwardRef((props, ref) => {
               <span>{option.label}</span>{" "}
               <button
                 type="button"
-                className="!ml-1 !p-0 !bg-transparent border-none shadow-none rounded-full !focus:outline-none text-text-dark hover!text-primary-medium flex items-center"
+                className="!ml-1 !p-0 !bg-transparent border-none shadow-none rounded-full !focus:outline-none dark:text-white/70 dark:hover:text-white flex items-center"
                 style={{
                   fontSize: "12px",
                   lineHeight: "1",
@@ -405,7 +405,7 @@ const MultipleSelector = forwardRef((props, ref) => {
                 : placeholder
             }
             className={cn(
-              "flex-2 !min-w-0 !p-0 bg-transparent outline-none placeholder:text-muted-foreground",
+              "flex-2 !min-w-0 !p-0 bg-transparent outline-none dark:text-white/80 dark:placeholder-white/50",
 
               inputProps?.className
             )}
