@@ -15,7 +15,7 @@ const ChatSidebar = ({ setReceiver, chats, selectedChat, onSelectChat }) => {
 					<input
 						type="text"
 						placeholder="Search conversations..."
-						className="w-full pl-10 pr-4 py-2 rounded-lg border border-primary-extra-light bg-bg-light text-body1 focus:outline-none focus:border-primary-medium text-white dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+						className="w-full pl-10 pr-4 py-2 rounded-lg border border-primary-extra-light bg-bg-light text-body1 focus:outline-none focus:border-primary-medium text-black dark:bg-gray-800 dark:border-gray-700 dark:text-white"
 					/>
 					<Search className="absolute left-3 top-2.5 h-5 w-5 text-primary-medium" />
 				</div>
