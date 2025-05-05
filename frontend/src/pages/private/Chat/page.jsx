@@ -49,19 +49,23 @@ const Chat = () => {
   }, [receiverId, userId]);
 
   return (
-    <div className="flex w-full h-[calc(100vh-120px)] mx-auto  bg-bg-light shadow-lg rounded-lg overflow-hidden">
-      <ChatSidebar
-        chats={recentChats}
-        selectedChat={selectedChat}
-        onSelectChat={setSelectedChat}
-        setReceiver={setReceiver}
-      />
-      <ChatContent
-        userFromHome={receiver}
-        setRecentChats={setRecentChats}
-        chatRoomId={selectedChat}
-        chats={recentChats}
-      />
+    <div className="pt-20 pb-4 px-4 min-h-screen bg-gradient-to-br from-bg-light to-slate-100">
+      {/* Container chính của trang Chat */}
+      <div className="flex w-full h-[calc(100vh-120px)] mx-auto bg-bg-light shadow-lg rounded-lg overflow-hidden">
+        {" "}
+        <ChatSidebar
+          chats={recentChats}
+          selectedChat={selectedChat}
+          onSelectChat={setSelectedChat}
+          setReceiver={setReceiver}
+        />
+        <ChatContent
+          userFromHome={receiver}
+          setRecentChats={setRecentChats}
+          chatRoomId={selectedChat}
+          chats={recentChats}
+        />
+      </div>
     </div>
   );
 };

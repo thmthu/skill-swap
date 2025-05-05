@@ -39,7 +39,7 @@ const ChatSidebar = ({ setReceiver, chats, selectedChat, onSelectChat }) => {
             <div className="flex items-start gap-3 md:w-full w-auto">
               <div className="w-10 h-10 rounded-full overflow-hidden md:mr-3 mr-0 flex-shrink-0 relative">
                 <img
-                  src={chat.user.profilePic || "/default-avatar.png"}
+                  src={chat.user.profilePic || "/NAB.png"}
                   alt={`${chat.user.username}'s avatar`}
                   className={`w-full h-full object-cover ${
                     chat.unreadCount > 0 ? "md:opacity-100 opacity-40" : ""
