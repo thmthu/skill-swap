@@ -51,7 +51,7 @@ $ cd ./frontend
 $ npm install
 
 $ cd ./backend
-$ docker-compose run build
+$ docker-compose build
 ```
 
 3. Run the development server on both **frontend** and **backend**
